@@ -1,0 +1,14 @@
+﻿@model IEnumerable<MPMAR.Data.HomePageModels.HomePageVideo>
+@{ var data = Model.ToList();}
+
+<div class="row">
+    <div class="col-md-12 padding-5">
+        <div class="animate-onscroll">
+            <iframe id="video" class="hidehomeimgonmobile" width="100%" height="315"
+                    src="@data[0].VideoUrl"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen></iframe>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,440 @@
+﻿@model CityPlanEditViewModel
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+<div>
+    <h4><a asp-controller="StaticPageRoute" asp-action="Index">Static Page</a> >  <a asp-controller="CityPlan" asp-action="Index">Citizen Plan</a> > Edit</h4>
+</div>
+
+<form enctype="multipart/form-data" asp-controller="CityPlan" asp-action="Edit" method="post" class="mt-3">
+
+    <input asp-for="Id" type="hidden" />
+    <input asp-for="VersionStatusEnum" type="hidden" />
+    <input asp-for="CityPlanId" type="hidden" />
+    <input asp-for="IsDeleted" type="hidden" />
+    <input asp-for="ChangeActionEnum" type="hidden" />
+    <input asp-for="CreatedById" type="hidden" />
+    <input asp-for="CreationDate" type="hidden" />
+    <input asp-for="IsActive" type="hidden" />
+
+    <div class="form-group row">
+        <label asp-for="EnPageDescription" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            @Html.TextAreaFor(model => model.EnPageDescription, new { @class = "form-control summernote" })
+            <span asp-validation-for="EnPageDescription" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="ArPageDescription" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            @Html.TextAreaFor(model => model.ArPageDescription, new { @class = "form-control summernote" })
+            <span asp-validation-for="ArPageDescription" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="EnAlexandria" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="EnAlexandria" class="form-control" />
+            <span asp-validation-for="EnAlexandria" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="ArAlexandria" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="ArAlexandria" class="form-control" />
+            <span asp-validation-for="ArAlexandria" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="EnAswan" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="EnAswan" class="form-control" />
+            <span asp-validation-for="EnAswan" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="ArAswan" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="ArAswan" class="form-control" />
+            <span asp-validation-for="ArAswan" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="EnAsyut" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="EnAsyut" class="form-control" />
+            <span asp-validation-for="EnAsyut" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="ArAsyut" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="ArAsyut" class="form-control" />
+            <span asp-validation-for="ArAsyut" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="EnBeheira" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="EnBeheira" class="form-control" />
+            <span asp-validation-for="EnBeheira" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="ArBeheira" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="ArBeheira" class="form-control" />
+            <span asp-validation-for="ArBeheira" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="EnBeniSuef" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="EnBeniSuef" class="form-control" />
+            <span asp-validation-for="EnBeniSuef" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="ArBeniSuef" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="ArBeniSuef" class="form-control" />
+            <span asp-validation-for="ArBeniSuef" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="EnCairo" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="EnCairo" class="form-control" />
+            <span asp-validation-for="EnCairo" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="ArCairo" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="ArCairo" class="form-control" />
+            <span asp-validation-for="ArCairo" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="EnDakahlia" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="EnDakahlia" class="form-control" />
+            <span asp-validation-for="EnDakahlia" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="ArDakahlia" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="ArDakahlia" class="form-control" />
+            <span asp-validation-for="ArDakahlia" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="EnDamietta" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="EnDamietta" class="form-control" />
+            <span asp-validation-for="EnDamietta" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="ArDamietta" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="ArDamietta" class="form-control" />
+            <span asp-validation-for="ArDamietta" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="EnFaiyum" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="EnFaiyum" class="form-control" />
+            <span asp-validation-for="EnFaiyum" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="ArFaiyum" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="ArFaiyum" class="form-control" />
+            <span asp-validation-for="ArFaiyum" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="EnGharbia" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="EnGharbia" class="form-control" />
+            <span asp-validation-for="EnGharbia" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="ArGharbia" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="ArGharbia" class="form-control" />
+            <span asp-validation-for="ArGharbia" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="EnGiza" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="EnGiza" class="form-control" />
+            <span asp-validation-for="EnGiza" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="ArGiza" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="ArGiza" class="form-control" />
+            <span asp-validation-for="ArGiza" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="EnIsmailia" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="EnIsmailia" class="form-control" />
+            <span asp-validation-for="EnIsmailia" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="ArIsmailia" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="ArIsmailia" class="form-control" />
+            <span asp-validation-for="ArIsmailia" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="EnKafrElSheikh" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="EnKafrElSheikh" class="form-control" />
+            <span asp-validation-for="EnKafrElSheikh" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="ArKafrElSheikh" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="ArKafrElSheikh" class="form-control" />
+            <span asp-validation-for="ArKafrElSheikh" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="EnLuxor" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="EnLuxor" class="form-control" />
+            <span asp-validation-for="EnLuxor" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="ArLuxor" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="ArLuxor" class="form-control" />
+            <span asp-validation-for="ArLuxor" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="EnMatruh" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="EnMatruh" class="form-control" />
+            <span asp-validation-for="EnMatruh" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="ArMatruh" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="ArMatruh" class="form-control" />
+            <span asp-validation-for="ArMatruh" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="EnMinya" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="EnMinya" class="form-control" />
+            <span asp-validation-for="EnMinya" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="ArMinya" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="ArMinya" class="form-control" />
+            <span asp-validation-for="ArMinya" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="EnMonufia" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="EnMonufia" class="form-control" />
+            <span asp-validation-for="EnMonufia" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="ArMonufia" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="ArMonufia" class="form-control" />
+            <span asp-validation-for="ArMonufia" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="EnNewValley" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="EnNewValley" class="form-control" />
+            <span asp-validation-for="EnNewValley" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="ArNewValley" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="ArNewValley" class="form-control" />
+            <span asp-validation-for="ArNewValley" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="EnNorthSinai" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="EnNorthSinai" class="form-control" />
+            <span asp-validation-for="EnNorthSinai" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="ArNorthSinai" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="ArNorthSinai" class="form-control" />
+            <span asp-validation-for="ArNorthSinai" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="EnPortSaid" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="EnPortSaid" class="form-control" />
+            <span asp-validation-for="EnPortSaid" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="ArPortSaid" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="ArPortSaid" class="form-control" />
+            <span asp-validation-for="ArPortSaid" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="EnQalyubia" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="EnQalyubia" class="form-control" />
+            <span asp-validation-for="EnQalyubia" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="ArQalyubia" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="ArQalyubia" class="form-control" />
+            <span asp-validation-for="ArQalyubia" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="EnQena" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="EnQena" class="form-control" />
+            <span asp-validation-for="EnQena" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="ArQena" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="ArQena" class="form-control" />
+            <span asp-validation-for="ArQena" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="EnRedSea" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="EnRedSea" class="form-control" />
+            <span asp-validation-for="EnRedSea" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="ArRedSea" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="ArRedSea" class="form-control" />
+            <span asp-validation-for="ArRedSea" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="EnSharqia" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="EnSharqia" class="form-control" />
+            <span asp-validation-for="EnSharqia" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="ArSharqia" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="ArSharqia" class="form-control" />
+            <span asp-validation-for="ArSharqia" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="EnSohag" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="EnSohag" class="form-control" />
+            <span asp-validation-for="EnSohag" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="ArSohag" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="ArSohag" class="form-control" />
+            <span asp-validation-for="ArSohag" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="EnSouthSinai" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="EnSouthSinai" class="form-control" />
+            <span asp-validation-for="EnSouthSinai" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="ArSouthSinai" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="ArSouthSinai" class="form-control" />
+            <span asp-validation-for="ArSouthSinai" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="EnSuez" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="EnSuez" class="form-control" />
+            <span asp-validation-for="EnSuez" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="ArSuez" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="ArSuez" class="form-control" />
+            <span asp-validation-for="ArSuez" class="text-danger"></span>
+        </div>
+    </div>
+
+
+
+
+
+
+    <div class="item form-group">
+        <div class="col-md-6 col-sm-6 offset-md-2">
+            <button type="submit" class="btn btn-success">Submit</button>
+            <a asp-controller="CityPlan" asp-action="Index" type="button" class="btn btn-primary">Cancel</a>
+        </div>
+    </div>
+</form>
+
+@section Scripts{
+    <script>
+        /* Enable html editor */
+        $(document).ready(function () {
+            $('.summernote').summernote({
+                height: 200,
+                toolbar: [['style', ['style']], ['font', ['bold', 'underline', 'clear']], ['fontname', ['fontname']], ['color', ['color']], ['para', ['ul', 'ol', 'paragraph']], ['table', ['table']], ['insert', ['link']], ['view', ['fullscreen', 'codeview', 'help']]]
+            });
+        });
+
+    </script>
+}

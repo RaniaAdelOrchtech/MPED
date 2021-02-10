@@ -1,0 +1,130 @@
+﻿@model FormerMinistriesPageInfoVersions
+@using MPMAR.Common
+@{
+    ViewData["Title"] = "Edit Former Ministries Page Info";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+
+        string approvalId = Context.Request.Query["approvalId"];
+    int approvalIdInt = 0;
+    int.TryParse(approvalId, out approvalIdInt);
+
+    var bEUsersPrivilegesViewModel = bEUsersPrivilegesService.ValidateIBEUsersPrivilegesViewService(PrivilegesPageType.StaticPage, this.User.FindFirstValue(ClaimTypes.NameIdentifier), this.User.IsInRole(UserRolesConst.SuperAdmin), StaticPagesIdsConst.FormerMinistries, approvalIdInt);
+}
+
+<div>
+    <h4><a asp-controller="StaticPageRoute" asp-action="Index">Static Page</a> > <a asp-controller="FormerMinistries" asp-action="Index" asp-route-id="@ViewBag.pageRouteVersionId">Former Ministries</a> > Edit</h4>
+</div>
+@if (ViewBag.DisableEditFlage == true && bEUsersPrivilegesViewModel.CanSubmit && !bEUsersPrivilegesViewModel.IsFromApprovalPage)
+{
+<div class="alert alert-warning">
+    <strong>NOTE!</strong> Your old changes haven't been approved yet, and your new changes will be auto-submitted.
+</div>
+}
+<form enctype="multipart/form-data" method="post" class="mt-3">
+    <input asp-for="Id" type="hidden" />
+    <input asp-for="CreationDate" type="hidden" />
+    <input asp-for="IsActive" type="hidden" />
+    <input asp-for="IsDeleted" type="hidden" />
+    <input asp-for="VersionStatusEnum" type="hidden" />
+    <input asp-for="FormerMinistriesPageInfo" type="hidden" />
+    <input asp-for="ChangeActionEnum" type="hidden" />
+    <input name="pageRouteVersionId" value="@ViewBag.pageRouteVersionId" hidden />
+
+    <div class="form-group row">
+        <label asp-for="Title1Ar" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="Title1Ar" class="form-control" />
+            <span asp-validation-for="Title1Ar" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="Title1En" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="Title1En" class="form-control" />
+            <span asp-validation-for="Title1En" class="text-danger"></span>
+        </div>
+    </div>
+
+
+
+
+    <div class="form-group row">
+        <label asp-for="DescriptionAr" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            @Html.TextAreaFor(model => model.DescriptionAr, new { @class = "form-control summernote" })
+            <span asp-validation-for="DescriptionAr" class="text-danger"></span>
+        </div>
+    </div>
+
+
+    <div class="form-group row">
+        <label asp-for="DescriptionEn" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            @Html.TextAreaFor(model => model.DescriptionEn, new { @class = "form-control summernote" })
+            <span asp-validation-for="DescriptionEn" class="text-danger"></span>
+        </div>
+    </div>
+
+
+    <div class="form-group row">
+        <label asp-for="Title2Ar" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="Title2Ar" class="form-control" />
+            <span asp-validation-for="Title2Ar" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="Title2En" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="Title2En" class="form-control" />
+            <span asp-validation-for="Title2En" class="text-danger"></span>
+        </div>
+    </div>
+
+
+    <div class="item form-group">
+        <div class="col-md-6 col-sm-6 offset-md-2">
+
+
+            @if (bEUsersPrivilegesViewModel.CanSubmit && !bEUsersPrivilegesViewModel.IsFromApprovalPage)
+            {
+                <button type="submit" class="btn btn-success" formaction="EditPageInfo">Save</button>
+                <a asp-action="Index" type="button" class="btn btn-primary" asp-route-id="@ViewBag.pageRouteVersionId">Cancel</a>
+            }
+
+
+
+
+        </div>
+    </div>
+
+</form>
+
+@section Scripts{
+    <script>
+        /* Enable html editor */
+        $(document).ready(function () {
+            $('.summernote').summernote({
+                height: 200,
+                toolbar: [['style', ['style']], ['font', ['bold', 'underline', 'clear']], ['fontname', ['fontname']], ['color', ['color']], ['para', ['ul', 'ol', 'paragraph']], ['table', ['table']], ['insert', ['link']], ['view', ['fullscreen', 'codeview', 'help']]]
+            });
+        });
+
+    </script>
+
+    @if (this.User.IsInRole(UserRolesConst.ApprovalUser))
+    {
+
+        <script>
+            $(document).ready(function () {
+
+                $("input").attr("disabled", "true")
+                $("select").attr("disabled", "true")
+            })
+        </script>
+
+    }
+}
+

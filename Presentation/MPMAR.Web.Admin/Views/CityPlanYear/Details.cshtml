@@ -1,0 +1,71 @@
+﻿@model CityPlanYearEditViewModel
+@{
+    ViewBag.Title = "City Plan Details";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<style>
+    td.h5 {
+        white-space: -moz-pre-wrap !important;
+        white-space: -webkit-pre-wrap;
+        white-space: -pre-wrap;
+        white-space: -o-pre-wrap;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        word-break: break-all;
+        white-space: normal;
+        PADDING: 8px;
+    }
+
+    td.h6 {
+        line-height: 1.4 !important;
+        PADDING: 8px;
+    }
+
+    table, th, td {
+        border: 1px solid black;
+    }
+</style>
+
+
+
+<div>
+    <h4><a asp-controller="StaticPageRoute" asp-action="Index">Static Page</a> >  <a asp-controller="CityPlan" asp-action="Index" asp-route-approvalId="@ViewBag.approvalId" asp-route-cityPlanVerId="@ViewBag.cityPlanVerId">Citizen Plan</a> > <a asp-controller="CityPlanYear" asp-action="Index" asp-route-cityPlanId="@Model.CityPlanId" asp-route-approvalId="@ViewBag.approvalId" asp-route-cityPlanVerId="@ViewBag.cityPlanVerId">Year Plan</a> > Detail</h4>
+</div>
+
+
+<table class="pull-left col-md-12 ">
+    <tbody>
+        <tr>
+            <td class="h6" style="width: 30%"><strong><label asp-for="GovName"></label></strong></td>
+            <td class="h5">@Model.GovName</td>
+        </tr>
+        <tr>
+            <td class="h6"><strong>Card <label asp-for="GovYear"></label></strong></td>
+            <td class="h5">@Model.GovYear</td>
+        </tr>
+        <tr>
+            <td class="h6" style="width: 30%"><strong><label asp-for="EnFileUrl"></label></strong></td>
+            <td class="h5"><a href="@Model.EnFileUrl" target="_blank">@Model.EnFileUrl</a></td>
+        </tr>
+        <tr>
+            <td class="h6" style="width: 30%"><strong><label asp-for="ArFileUrl"></label></strong></td>
+            <td class="h5"><a href="@Model.ArFileUrl" target="_blank">@Model.ArFileUrl</a></td>
+        </tr>
+        <tr>
+            <td class="h6"><strong><label asp-for="IsMapActive"></label></strong></td>
+            <td class="h5">@(Model.IsMapActive ? "Yes" : "No") </td>
+        </tr>
+        <tr>
+            <td class="h6"><strong><label asp-for="IsActive"></label></strong></td>
+            <td class="h5">@(Model.IsActive ? "Yes" : "No") </td>
+        </tr>
+
+    </tbody>
+</table>
+
+<div>
+    <div class="col-md-4 col-sm-4" style="padding-top: 10px;">
+        <a asp-controller="CityPlanYear" asp-action="Index"  asp-route-approvalId="@ViewBag.approvalId" asp-route-cityPlanVerId="@ViewBag.cityPlanVerId" type="button" class="btn btn-success">Back to previous page</a>
+    </div>
+</div>

@@ -1,0 +1,20 @@
+﻿@model string
+@{
+    var isblank = "Index" + ViewBag.IsBlank;
+}
+<div style="min-width: 175px;">
+    <div class="btn-group" style="
+    margin-top: 5px;
+    margin-bottom: 5px;
+">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="background-color: #28a5a3;font-size: 18px;color: white; text-transform: capitalize;">
+            @ViewBag.RepoOpt
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" style="background-color: #f3f4f9;font-size: 18px;">
+            <li><a href="~/GrossDomestic/@isblank?lang=@Model">@ViewBag.GDP</a></li>
+            <li><a href="~/Investment/@isblank?lang=@Model">@ViewBag.Investment</a></li>
+            <li><a href="~/Governorate/@isblank?lang=@Model">@ViewBag.Governmate</a></li>
+        </ul>
+    </div>
+</div>

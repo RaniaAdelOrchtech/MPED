@@ -1,0 +1,91 @@
+﻿@model MPMAR.Data.HomePageModels.ViewModels.HP_VideoViewModel
+@using MPMAR.Common
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+
+    string approvalId = Context.Request.Query["approvalId"];
+    int approvalIdInt = 0;
+    int.TryParse(approvalId, out approvalIdInt);
+
+    var bEUsersPrivilegesViewModel = bEUsersPrivilegesService.ValidateIBEUsersPrivilegesViewService(PrivilegesPageType.HPVideo, this.User.FindFirstValue(ClaimTypes.NameIdentifier), this.User.IsInRole(UserRolesConst.SuperAdmin), approvalId: approvalIdInt);
+}
+
+@*<h4>Edit Photo</h4>*@
+
+
+<div>
+    <h4>Home Page > <a asp-controller="HP_Video" asp-action="Index">Video</a> > Edit</h4>
+</div>
+@if (ViewBag.DisableEditFlage == true && bEUsersPrivilegesViewModel.CanEdit  && !bEUsersPrivilegesViewModel.IsFromApprovalPage)
+{
+    <div class="alert alert-warning">
+        <strong>NOTE!</strong> your old changes Your old changes haven't been approved yet, and your new changes will be auto-submitted.
+    </div>
+}
+<form enctype="multipart/form-data" asp-controller="HP_Video" asp-action="Edit" method="post" class="mt-3">
+
+    <input asp-for="Id" type="hidden" />
+    <input asp-for="IsActive" type="hidden" />
+    <input asp-for="IsDeleted" type="hidden" />
+    <input asp-for="ChangeActionEnum" type="hidden" />
+    <input asp-for="VideoId" type="hidden" />
+    <input asp-for="VersionStatusEnum" type="hidden" />
+    <input asp-for="CreationDate" type="hidden" />
+    <input asp-for="CreatedById" type="hidden" />
+    <input asp-for="ApprovedById" type="hidden" />
+    <input asp-for="ApprovalDate" type="hidden" />
+    <input asp-for="ModifiedById" type="hidden" />
+    <input asp-for="ModificationDate" type="hidden" />
+
+    <div class="form-group row">
+        <label asp-for="VideoUrl" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="@Model.VideoUrl" class="form-control"  pattern="[Hh][Tt][Tt][Pp][Ss]?:\/\/(?:(?:[a-zA-Z\u00a1-\uffff0-9]+-?)*[a-zA-Z\u00a1-\uffff0-9]+)(?:\.(?:[a-zA-Z\u00a1-\uffff0-9]+-?)*[a-zA-Z\u00a1-\uffff0-9]+)*(?:\.(?:[a-zA-Z\u00a1-\uffff]{2,}))(?::\d{2,5})?(?:\/[^\s]*)?"
+                   oninvalid="this.setCustomValidity('You must enter a valid URL')" oninput="this.setCustomValidity('')"/>
+            <span asp-validation-for="VideoUrl" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="item form-group">
+        <div class="col-md-6 col-sm-6 offset-md-2">
+            <button type="submit" class="btn btn-success">Submit</button>
+            <a asp-controller="HP_Video" asp-action="Index" type="button" class="btn btn-primary">Cancel</a>
+        </div>
+    </div>
+
+</form>
+
+@section Scripts{
+    <script>
+        /* Enable html editor */
+        $(document).ready(function () {
+            $('.summernote').summernote({
+                height: 200,
+                toolbar: [['style', ['style']], ['font', ['bold', 'underline', 'clear']], ['fontname', ['fontname']], ['color', ['color']], ['para', ['ul', 'ol', 'paragraph']], ['table', ['table']], ['insert', ['link']], ['view', ['fullscreen', 'codeview', 'help']]]
+            });
+        });
+
+        $(document).ready(function () {
+            $('.custom-file-input').on('change', function () {
+                var fileName = $(this).val().split('\\').pop();
+                $(this).next('.custom-file-label').html(fileName);
+            });
+
+            $('#PhotoArchiveType').on('change', function () {
+                if ($(this).val() == "Other") {
+                    $('#EnPhotoArchiveType,#ArPhotoArchiveType').attr("readonly", false);
+                    $('#EnPhotoArchiveType').text("");
+                    $('#AnPhotoArchiveType').text("");
+                }
+                else {
+                    $('#EnPhotoArchiveType').val($(this).val().split('$')[0]);
+                    $('#ArPhotoArchiveType').val($(this).val().split('$')[1]);
+                    $('#EnPhotoArchiveType').attr("readonly", "readonly");
+                    $('#ArPhotoArchiveType').attr("readonly", "readonly");
+                }
+            });
+        });
+
+    </script>
+}

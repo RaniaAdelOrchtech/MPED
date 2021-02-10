@@ -1,0 +1,107 @@
+﻿@model MPMAR.Data.HomePageModels.MinistryVissionVersion
+@using MPMAR.Common
+@{
+    ViewData["Title"] = "Ministry Vision";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+
+
+
+    string approvalId = Context.Request.Query["approvalId"];
+    int approvalIdInt = 0;
+    int.TryParse(approvalId, out approvalIdInt);
+
+    var bEUsersPrivilegesViewModel = bEUsersPrivilegesService.ValidateIBEUsersPrivilegesViewService(PrivilegesPageType.HPMinistryMessage, this.User.FindFirstValue(ClaimTypes.NameIdentifier), this.User.IsInRole(UserRolesConst.SuperAdmin), approvalId: approvalIdInt);
+}
+
+<style>
+    td.h5 {
+        white-space: -moz-pre-wrap !important;
+        white-space: -webkit-pre-wrap;
+        white-space: -pre-wrap;
+        white-space: -o-pre-wrap;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        word-break: break-all;
+        white-space: normal;
+        PADDING: 8px;
+    }
+
+    td.h6 {
+        line-height: 1.4 !important;
+        PADDING: 8px;
+    }
+
+    table, th, td {
+        border: 1px solid black;
+    }
+</style>
+
+<div>
+    <h4>Home Page > Ministry Vision</h4>
+</div>
+@if (Model != null)
+{
+    <table class="pull-left col-md-12 ">
+        <tbody>
+
+            <tr>
+                <td class="h6" style="width: 30% "><strong><label asp-for="ArTitle"></label></strong></td>
+                <td class="h5">@Model.ArTitle</td>
+            </tr>
+
+            <tr>
+                <td class="h6"><strong><label asp-for="EnTitle"></label></strong></td>
+                <td class="h5">@Model.EnTitle</td>
+            </tr>
+            <tr>
+                <td class="h6" style="width: 30% "><strong><label asp-for="ArDescription"></label></strong></td>
+                <td class="h5">@Html.Raw(@Model.ArDescription)</td>
+            </tr>
+
+            <tr>
+                <td class="h6"><strong><label asp-for="EnDescription"></label></strong></td>
+                <td class="h5">@Html.Raw(@Model.EnDescription)</td>
+            </tr>
+
+            <tr>
+                <td class="h6"><strong><label asp-for="Link"></label></strong></td>
+                <td class="h5">@Model.Link</td>
+            </tr>
+            <tr>
+                <td class="h6"><strong><label asp-for="BackGroundImage"></label></strong></td>
+                <td class="h5"><img src=@Model.BackGroundImage style="max-height:150px;max-width:200px"></td>
+            </tr>
+        </tbody>
+    </table>
+    <div>
+        @if (bEUsersPrivilegesViewModel.CanApprove && bEUsersPrivilegesViewModel.IsFromApprovalPage)
+        {
+            <div class="col-md-4 col-sm-4" style="padding-top: 10px;">
+                <a asp-action="Approve" asp-route-approvalId="@ViewBag.ApprovalId" type="button" class="btn btn-primary" onclick="DisableAfterClick(event,this)">Approve</a>
+                <a asp-action="Ignore" asp-route-approvalId="@ViewBag.ApprovalId" type="button" class="btn btn-primary" onclick="DisableAfterClick(event,this)">Ignore</a>
+            </div>
+        }
+        else if (!bEUsersPrivilegesViewModel.IsFromApprovalPage)
+        {
+    <div class="col-md-4 col-sm-4" style="padding-top: 10px;">
+        @if (bEUsersPrivilegesViewModel.CanEdit)
+        {
+
+          <a asp-controller="HP_MinistryVision" asp-action="Edit" asp-route-id="@Model.Id" type="button" class="btn btn-success">Edit</a>
+        }
+
+        @if (bEUsersPrivilegesViewModel.CanSubmit)
+        {
+            <a asp-controller="HP_MinistryVision" asp-action="SubmitChanges" asp-route-relatedId="@ViewBag.RelatedId" type="button" class="btn btn-success">Apply</a>
+        }
+
+    </div>
+        }
+    </div>
+}
+else
+{
+    <h5>No Data to show</h5>
+}
+
+

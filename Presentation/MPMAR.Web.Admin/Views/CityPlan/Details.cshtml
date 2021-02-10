@@ -1,0 +1,337 @@
+﻿@model CityPlanEditViewModel
+@{
+    ViewBag.Title = "City Plan Details";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<style>
+    td.h5 {
+        white-space: -moz-pre-wrap !important;
+        white-space: -webkit-pre-wrap;
+        white-space: -pre-wrap;
+        white-space: -o-pre-wrap;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        word-break: break-all;
+        white-space: normal;
+        PADDING: 8px;
+    }
+
+    td.h6 {
+        line-height: 1.4 !important;
+        PADDING: 8px;
+    }
+
+    table, th, td {
+        border: 1px solid black;
+    }
+</style>
+
+
+<div>
+    <h4><a asp-controller="StaticPageRoute" asp-action="Index">Static Page</a> >  <a asp-controller="CityPlan" asp-action="Index" asp-route-approvalId="@ViewBag.approvalId" asp-route-cityPlanVerId="@ViewBag.cityPlanVerId">Citizen Plan</a> > Detail</h4>
+</div>
+
+<table class="pull-left col-md-12 ">
+    <tbody>
+        <tr>
+            <td class="h6" style="width: 30%"><strong><label asp-for="EnPageDescription"></label></strong></td>
+            <td class="h5">@Html.Raw(Model.EnPageDescription)</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong>Card <label asp-for="ArPageDescription"></label></strong></td>
+            <td class="h5">@Html.Raw(Model.ArPageDescription)</td>
+        </tr>
+
+        <tr>
+            <td class="h6" style="width: 30%"><strong><label asp-for="EnAlexandria"></label></strong></td>
+            <td class="h5">@Model.EnAlexandria</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="ArAlexandria"></label></strong></td>
+            <td class="h5">@Model.ArAlexandria</td>
+        </tr>
+
+        <tr>
+            <td class="h6" style="width: 30%"><strong><label asp-for="EnAswan"></label></strong></td>
+            <td class="h5">@Model.EnAswan</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="ArAswan"></label></strong></td>
+            <td class="h5">@Model.ArAswan</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="EnAsyut"></label></strong></td>
+            <td class="h5">@Model.EnAsyut</td>
+        </tr>
+        <tr>
+            <td class="h6"><strong><label asp-for="ArAsyut"></label></strong></td>
+            <td class="h5">@Model.ArAsyut</td>
+        </tr>
+        <tr>
+            <td class="h6"><strong><label asp-for="EnBeheira"></label></strong></td>
+            <td class="h5">@Model.EnBeheira</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="ArBeheira"></label></strong></td>
+            <td class="h5">@Model.ArBeheira</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="EnBeniSuef"></label></strong></td>
+            <td class="h5">@Model.EnBeniSuef</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="ArBeniSuef"></label></strong></td>
+            <td class="h5">@Model.ArBeniSuef</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="EnCairo"></label></strong></td>
+            <td class="h5">@Model.EnCairo</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="ArCairo"></label></strong></td>
+            <td class="h5">@Model.ArCairo</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="EnDakahlia"></label></strong></td>
+            <td class="h5">@Model.EnDakahlia</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="ArDakahlia"></label></strong></td>
+            <td class="h5">@Model.ArDakahlia</td>
+        </tr>
+
+
+
+
+
+        <tr>
+            <td class="h6" style="width: 30%"><strong><label asp-for="EnDamietta"></label></strong></td>
+            <td class="h5">@Model.EnDamietta</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="ArDamietta"></label></strong></td>
+            <td class="h5">@Model.ArDamietta</td>
+        </tr>
+
+        <tr>
+            <td class="h6" style="width: 30%"><strong><label asp-for="EnFaiyum"></label></strong></td>
+            <td class="h5">@Model.EnFaiyum</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="ArFaiyum"></label></strong></td>
+            <td class="h5">@Model.ArFaiyum</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="EnGharbia"></label></strong></td>
+            <td class="h5">@Model.EnGharbia</td>
+        </tr>
+        <tr>
+            <td class="h6"><strong><label asp-for="ArGharbia"></label></strong></td>
+            <td class="h5">@Model.ArGharbia</td>
+        </tr>
+        <tr>
+            <td class="h6"><strong><label asp-for="EnGiza"></label></strong></td>
+            <td class="h5">@Model.EnGiza</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="ArGiza"></label></strong></td>
+            <td class="h5">@Model.ArGiza</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="EnIsmailia"></label></strong></td>
+            <td class="h5">@Model.EnIsmailia</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="ArIsmailia"></label></strong></td>
+            <td class="h5">@Model.ArIsmailia</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="EnKafrElSheikh"></label></strong></td>
+            <td class="h5">@Model.EnKafrElSheikh</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="ArKafrElSheikh"></label></strong></td>
+            <td class="h5">@Model.ArKafrElSheikh</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="EnLuxor"></label></strong></td>
+            <td class="h5">@Model.EnLuxor</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="ArLuxor"></label></strong></td>
+            <td class="h5">@Model.ArLuxor</td>
+        </tr>
+
+
+
+
+
+
+
+
+
+
+
+
+        <tr>
+            <td class="h6"><strong><label asp-for="EnMatruh"></label></strong></td>
+            <td class="h5">@Model.EnMatruh</td>
+        </tr>
+        <tr>
+            <td class="h6"><strong><label asp-for="ArMatruh"></label></strong></td>
+            <td class="h5">@Model.ArMatruh</td>
+        </tr>
+        <tr>
+            <td class="h6"><strong><label asp-for="EnMinya"></label></strong></td>
+            <td class="h5">@Model.EnMinya</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="ArMinya"></label></strong></td>
+            <td class="h5">@Model.ArMinya</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="EnMonufia"></label></strong></td>
+            <td class="h5">@Model.EnMonufia</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="ArMonufia"></label></strong></td>
+            <td class="h5">@Model.ArMonufia</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="EnNewValley"></label></strong></td>
+            <td class="h5">@Model.EnNewValley</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="ArNewValley"></label></strong></td>
+            <td class="h5">@Model.ArNewValley</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="EnNorthSinai"></label></strong></td>
+            <td class="h5">@Model.EnNorthSinai</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="ArNorthSinai"></label></strong></td>
+            <td class="h5">@Model.ArNorthSinai</td>
+        </tr>
+
+
+
+
+
+        <tr>
+            <td class="h6" style="width: 30%"><strong><label asp-for="EnPortSaid"></label></strong></td>
+            <td class="h5">@Model.EnPortSaid</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="ArPortSaid"></label></strong></td>
+            <td class="h5">@Model.ArPortSaid</td>
+        </tr>
+
+        <tr>
+            <td class="h6" style="width: 30%"><strong><label asp-for="EnQalyubia"></label></strong></td>
+            <td class="h5">@Model.EnQalyubia</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="ArQalyubia"></label></strong></td>
+            <td class="h5">@Model.ArQalyubia</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="EnQena"></label></strong></td>
+            <td class="h5">@Model.EnQena</td>
+        </tr>
+        <tr>
+            <td class="h6"><strong><label asp-for="ArQena"></label></strong></td>
+            <td class="h5">@Model.ArQena</td>
+        </tr>
+        <tr>
+            <td class="h6"><strong><label asp-for="EnRedSea"></label></strong></td>
+            <td class="h5">@Model.EnRedSea</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="ArRedSea"></label></strong></td>
+            <td class="h5">@Model.ArRedSea</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="EnSharqia"></label></strong></td>
+            <td class="h5">@Model.EnSharqia</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="ArSharqia"></label></strong></td>
+            <td class="h5">@Model.ArSharqia</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="EnSohag"></label></strong></td>
+            <td class="h5">@Model.EnSohag</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="ArSohag"></label></strong></td>
+            <td class="h5">@Model.ArSohag</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="EnSouthSinai"></label></strong></td>
+            <td class="h5">@Model.EnSouthSinai</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="ArSouthSinai"></label></strong></td>
+            <td class="h5">@Model.ArSouthSinai</td>
+        </tr>
+        <tr>
+            <td class="h6"><strong><label asp-for="EnSuez"></label></strong></td>
+            <td class="h5">@Model.EnSuez</td>
+        </tr>
+        <tr>
+            <td class="h6"><strong><label asp-for="ArSuez"></label></strong></td>
+            <td class="h5">@Model.ArSuez</td>
+        </tr>
+        <tr>
+            <td class="h6"><strong><label asp-for="IsActive"></label></strong></td>
+            <td class="h5">@(Model.IsActive ? "Yes" : "No") </td>
+        </tr>
+    </tbody>
+</table>
+
+<div>
+    <div class="col-md-4 col-sm-4" style="padding-top: 10px;">
+
+        <a asp-controller="CityPlan" asp-action="Index" asp-route-approvalId="@ViewBag.approvalId" asp-route-cityPlanVerId="@ViewBag.cityPlanVerId" type="button" class="btn btn-success">Back to previous page</a>
+    </div>
+</div>

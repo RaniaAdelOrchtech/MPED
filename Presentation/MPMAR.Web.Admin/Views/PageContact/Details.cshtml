@@ -1,0 +1,169 @@
+﻿@model PageContactVersions
+@using MPMAR.Common
+@{
+    ViewBag.Title = "Page Contact";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+
+         string approvalId = Context.Request.Query["approvalId"];
+    int approvalIdInt = 0;
+    int.TryParse(approvalId, out approvalIdInt);
+
+    var bEUsersPrivilegesViewModel = bEUsersPrivilegesService.ValidateIBEUsersPrivilegesViewService(PrivilegesPageType.ContactUs, this.User.FindFirstValue(ClaimTypes.NameIdentifier), this.User.IsInRole(UserRolesConst.SuperAdmin), approvalId: approvalIdInt);
+
+}
+<style>
+    td.h5 {
+        white-space: -moz-pre-wrap !important;
+        white-space: -webkit-pre-wrap;
+        white-space: -pre-wrap;
+        white-space: -o-pre-wrap;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        word-break: break-all;
+        white-space: normal;
+        PADDING: 8px;
+    }
+
+    td.h6 {
+        line-height: 1.4 !important;
+        PADDING: 8px;
+    }
+
+    table, th, td {
+        border: 1px solid black;
+    }
+</style>
+
+
+<div>
+    <h4>Contact Us > Page Contact > Details</h4>
+</div>
+@*<div>
+    <h4><a asp-controller="PageContact" asp-action="Index">Page Contact Details</a></h4>
+</div>*@
+
+<table class="pull-left col-md-12 ">
+    <tbody>
+
+        <tr>
+            <td class="h6" style="width: 30% "><strong>En Page Name</strong></td>
+            <td class="h5">@Model.EnPageName</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong>Ar Page Name</strong></td>
+            <td class="h5">@Model.ArPageName</td>
+        </tr>
+        <tr>
+            <td class="h6" style="width: 30% "><strong>En Map Title</strong></td>
+            <td class="h5">@Model.EnMapTitle</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong>Ar Map Title</strong></td>
+            <td class="h5">@Model.ArMapTitle</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong>Map Url</strong></td>
+            <td class="h5">@Model.MapUrl</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong>En Form Title</strong></td>
+            <td class="h5">@Model.EnParticipateTitle</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong>Ar Form Title</strong></td>
+            <td class="h5">@Model.ArParticipateTitle</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong>Active</strong></td>
+            <td class="h5">@(Model.IsActive ? "Yes" : "No") </td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong>Form Active</strong></td>
+            <td class="h5">@(Model.FormParticipateActive ? "Yes" : "No") </td>
+        </tr>
+        <tr>
+            <td class="h6"><strong>FaxNumber</strong></td>
+            <td class="h5">@Model.FaxNumber </td>
+        </tr>
+        <tr>
+            <td class="h6"><strong>PhoneNumber</strong></td>
+            <td class="h5">@Model.PhoneNumber </td>
+        </tr>
+        <tr>
+            <td class="h6"><strong>EnAddress</strong></td>
+            <td class="h5">@Model.EnAddress </td>
+        </tr>
+        <tr>
+            <td class="h6"><strong>ArAddress</strong></td>
+            <td class="h5">@Model.ArAddress </td>
+        </tr>
+        <tr>
+            <td class="h6"><strong>eEmail</strong></td>
+            <td class="h5">@Model.EmailParticipateEmail </td>
+        </tr>
+
+
+        <tr>
+            <td class="h6"><strong>En Seo Title</strong></td>
+            <td class="h5">@Model.SeoTitleEN</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong>Ar Seo Title</strong></td>
+            <td class="h5">@Model.SeoTitleAR</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong>En Seo Description</strong></td>
+            <td class="h5">@Model.SeoDescriptionEN</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong>Ar Seo Description</strong></td>
+            <td class="h5">@Model.SeoDescriptionAR</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="SeoOgTitleEN"></label></strong></td>
+            <td class="h5">@Model.SeoOgTitleEN</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="SeoOgTitleAR"></label></strong></td>
+            <td class="h5">@Model.SeoOgTitleAR</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="SeoTwitterCardEN"></label></strong></td>
+            <td class="h5">@Model.SeoTwitterCardEN</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="SeoTwitterCardAR"></label></strong></td>
+            <td class="h5">@Model.SeoTwitterCardAR</td>
+        </tr>
+    </tbody>
+</table>
+<div>
+    @if (bEUsersPrivilegesViewModel.CanApprove && bEUsersPrivilegesViewModel.IsFromApprovalPage)
+    {
+        <div class="col-md-4 col-sm-4" style="padding-top: 10px;">
+            <a asp-action="Approve" asp-route-approvalId="@ViewBag.ApprovalId" type="button" class="btn btn-primary" onclick="DisableAfterClick(event,this)">Approve</a>
+            <a asp-action="Ignore" asp-route-approvalId="@ViewBag.ApprovalId" type="button" class="btn btn-primary" onclick="DisableAfterClick(event,this)">Ignore</a>
+        </div>
+    }
+    else if (!bEUsersPrivilegesViewModel.IsFromApprovalPage && bEUsersPrivilegesViewModel.CanSubmit)
+    {
+        <div class="col-md-4 col-sm-4" style="padding-top: 10px;">
+            <a asp-controller="PageContact" asp-action="Edit" asp-route-id="@Model.Id" type="button" class="btn btn-success">Edit</a>
+            <a asp-controller="PageContact" asp-action="SubmitChanges" asp-route-relatedId="@ViewBag.RelatedId" type="button" class="btn btn-success">Apply</a>
+        </div>
+    }
+</div>

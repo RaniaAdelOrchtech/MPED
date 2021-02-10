@@ -1,0 +1,229 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+@{
+    string lang = Context.Request.Query["lang"];
+}
+<head>
+
+    <!-- Meta Tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1">
+
+    <!-- Title -->
+    <title>@ViewData["Title"]</title>
+    <meta name="description" content=" @ViewData["Description"]">
+    <meta name="og:title" property="og:title" content="@ViewData["ogtitle"]">
+    <meta name="twitter:card" content=" @ViewData["twittercard"]">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="canonical" href="http://apps.orchtech.com/MPMAR-Website-QC">
+
+    <!-- Google Fonts -->
+    @*<link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Great+Vibes' rel='stylesheet' type='text/css'>*@
+
+
+    <!-- Google Fonts -->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,300,600,700,800'
+          rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Great+Vibes' rel='stylesheet' type='text/css'>
+    <link href="https://fonts.googleapis.com/css?family=Tajawal&display=swap" rel="stylesheet">
+
+    <!-- Favicon -->
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    @if (lang != "en")
+    {
+
+        <link rel="stylesheet" href="//cdn.rawgit.com/morteza/bootstrap-rtl/v3.3.4/dist/css/bootstrap-rtl.min.css">
+    }
+
+    @*<link href="~/css/bootstrap.min.css" rel="stylesheet" type="text/css">*@
+    <link href="~/css/fontello.css" rel="stylesheet" type="text/css">
+    <link href="~/css/flexslider.css" rel="stylesheet" type="text/css">
+    <link href="~/js/revolution-slider/css/settings.css" rel="stylesheet" type="text/css" media="screen" />
+    <link href="~/css/owl.carousel.css" rel="stylesheet" type="text/css">
+    <link href="~/css/responsive-calendar.css" rel="stylesheet" type="text/css">
+    <link href="~/css/chosen.css" rel="stylesheet" type="text/css">
+    <link href="~/jackbox/css/jackbox.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/cloud-zoom.css" rel="stylesheet" type="text/css" />
+
+    <link href="~/css/style@(lang == "en" ? "_en" : "").css" rel="stylesheet" type="text/css">
+
+    <!--Analytics-->
+    <link href="~/css/comboTreePlugin.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
+
+    @if (lang == "en")
+    { }
+    else
+    {
+        <link href="~/css/rtl.css" rel="stylesheet" type="text/css" />
+    }
+
+
+    <!--[if IE 9]>
+        <link rel="stylesheet" href="css/ie9.css">
+    <![endif]-->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <link href="css/jackbox-ie8.css" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="css/ie.css">
+    <![endif]-->
+    <!--[if gt IE 8]>
+        <link href="css/jackbox-ie9.css" rel="stylesheet" type="text/css" />
+    <![endif]-->
+    <!--[if IE 7]>
+        <link rel="stylesheet" href="css/fontello-ie7.css">
+    <![endif]-->
+
+    <style type="text/css">
+
+        .no-fouc {
+            display: none;
+        }
+
+
+
+
+        #main-footer iframe {
+            width: 54.3% !important;
+        }
+    </style>
+    <link href="~/css/other.css" rel="stylesheet" type="text/css">
+
+
+    <!-- jQuery -->
+    <script src="~/js/jquery-1.11.0.min.js"></script>
+    <script src="~/js/jquery-ui-1.10.4.min.js"></script>
+
+    @*<script src="https://code.jquery.com/jquery-1.12.4.min.js"
+                integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ"
+                crossorigin="anonymous">
+        </script>*@
+
+    <!-- Preloader -->
+    <script src="~/js/jquery.queryloader2.min.js"></script>
+
+
+
+</head>
+<body class="sticky-header-on tablet-sticky-header">
+
+
+
+
+    <div class="container" style="min-height:50vh">
+        @*  <partial name="_CookieConsentPartial" />*@
+        @if (lang == null || lang == "" || lang == "ar")
+        {
+
+
+            <div style="min-width: 175px;direction:ltr">
+                <div class="btn-group" style="
+    margin-top: 5px;
+    margin-bottom: 5px;
+    float:left
+">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="background-color: #28a5a3;font-size: 18px;color: white;">
+                        @ViewBag.LangOpt
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" style="background-color: #f3f4f9;font-size: 18px;">
+                        <li><a id="EnLang" style="cursor:pointer">@ViewBag.LangEn</a></li>
+                        <li><a id="ARLang" style="cursor:pointer">@ViewBag.LangAr</a></li>
+                    </ul>
+                </div>
+            </div>
+        }
+        else
+        {
+
+
+            <div style="min-width: 175px;direction:rtl">
+                <div class="btn-group" style="
+    margin-top: 5px;
+    margin-bottom: 5px;
+    float:right
+">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="background-color: #28a5a3;font-size: 18px;color: white; text-transform: capitalize;">
+                        @ViewBag.LangOpt
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" style="background-color: #f3f4f9;font-size: 18px;">
+                        <li><a id="EnLang" style="cursor:pointer">@ViewBag.LangEn</a></li>
+                        <li><a id="ARLang" style="cursor:pointer">@ViewBag.LangAr</a></li>
+                    </ul>
+                </div>
+            </div>
+        }
+        <main role="main" class="pb-3">
+
+            @RenderBody()
+        </main>
+    </div>
+
+    <!-- /Footer -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    @*<script type="text/javascript" src="~/js/bootstrap.min.js"></script>*@
+    <!-- Modernizr -->
+    <script type="text/javascript" src="~/js/modernizr.js"></script>
+    <!-- Sliders/Carousels -->
+    <script type="text/javascript" src="~/js/jquery.flexslider-min.js"></script>
+    <script type="text/javascript" src="~/js/owl.carousel.min.js"></script>
+    <!-- Revolution Slider  -->
+    <script type="text/javascript" src="~/js/revolution-slider/js/jquery.themepunch.plugins.min.js"></script>
+    <script type="text/javascript" src="~/js/revolution-slider/js/jquery.themepunch.revolution.min.js"></script>
+    <!-- Calendar -->
+    <script type="text/javascript" src="~/js/responsive-calendar.min.js"></script>
+    <!-- Raty -->
+    <script type="text/javascript" src="~/js/jquery.raty.min.js"></script>
+    <!-- Chosen -->
+    <script type="text/javascript" src="~/js/chosen.jquery.min.js"></script>
+    <!-- jFlickrFeed -->
+    <script type="text/javascript" src="~/js/jflickrfeed.min.js"></script>
+    <!-- InstaFeed -->
+    <script type="text/javascript" src="~/js/instafeed.min.js"></script>
+
+    <!-- Twitter -->
+    <script type="text/javascript" src="~/js/jquery.tweet.min.js"></script>
+    <!-- MixItUp -->
+    <script type="text/javascript" src="~/js/jquery.mixitup.js"></script>
+    <!-- JackBox -->
+    <script type="text/javascript" src="~/js/jackbox-packed.min.js"></script>
+    <!-- CloudZoom -->
+    <script type="text/javascript" src="~/js/zoomsl-3.0.min.js"></script>
+    <!-- Main Script -->
+    <script type="text/javascript" src="~/js/script.js"></script>
+    <!--Analytics-->
+    <script src="~/js/comboTreePlugin.js"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.flash.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.print.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.print.min.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/series-label.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+    <script>
+        $("#EnLang").click(function () {
+    debugger;
+    var url = window.location.href.substring(0, window.location.href.indexOf('?'));
+    window.location = url + "?lang=en"
+});
+$("#ARLang").click(function () {
+    debugger;
+    var url = window.location.href.substring(0, window.location.href.indexOf('?'));
+    window.location = url + "?lang=ar";
+});
+    </script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

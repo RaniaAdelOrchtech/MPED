@@ -1,0 +1,232 @@
+﻿@model PageSectionCreateViewModel
+@using MPMAR.Common
+@{
+    ViewData["Title"] = "Section";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+
+
+    string approvalId = Context.Request.Query["approvalId"];
+    string pageRouteVersionId = Context.Request.Query["pageRouteVersionId"];
+
+    int pageRouteVersionIdInt = 0;
+    var pageRouteVersionIdIsFromRoute = int.TryParse(pageRouteVersionId, out pageRouteVersionIdInt);
+    if (!pageRouteVersionIdIsFromRoute)
+    {
+        pageRouteVersionIdInt = Model.pageRouteVersionId;
+    }
+
+    int approvalIdInt = 0;
+    int.TryParse(approvalId, out approvalIdInt);
+
+    var bEUsersPrivilegesViewModel = bEUsersPrivilegesService.ValidateIBEUsersPrivilegesViewService(PrivilegesPageType.DynamicPage, this.User.FindFirstValue(ClaimTypes.NameIdentifier), this.User.IsInRole(UserRolesConst.SuperAdmin),pageRouteVersionIdInt, approvalId: approvalIdInt);
+}
+
+
+
+<div>
+    <h4><a asp-controller="DynamicPageRoute" asp-action="Index">Dynamic Page</a> > @(ViewBag.DynamicPageName) > <a asp-controller="DynamicPageSection" asp-action="Index" asp-route-pageRouteVersionId="@Model.pageRouteVersionId">Sections </a> > Add</h4>
+</div>
+@if (ViewBag.DisableEditFlage == true && bEUsersPrivilegesViewModel.CanAdd && !bEUsersPrivilegesViewModel.IsFromApprovalPage)
+{
+    <div class="alert alert-warning">
+        <strong>NOTE!</strong> Your old changes haven't been approved yet, and your new changes will be auto-submitted.
+    </div>
+}
+<form enctype="multipart/form-data" asp-controller="DynamicPageSection" asp-action="Create" method="post" class="mt-3" onsubmit="DisableAfterClick(event,this)">
+    <input asp-for="pageRouteVersionId" type="hidden" />
+    <div class="form-group row">
+        <label asp-for="SectionTypeId" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <select asp-for="SectionTypeId" asp-items="Model.AllSectionTypes" class="form-control">
+                <option value="">Select Section Type</option>
+            </select>
+            <span asp-validation-for="SectionTypeId" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="Section.EnTitle" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="Section.EnTitle" class="form-control" placeholder="English Title" />
+            <span asp-validation-for="Section.EnTitle" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="Section.ArTitle" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="Section.ArTitle" class="form-control" placeholder="Arabic Title" />
+            <span asp-validation-for="Section.ArTitle" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="Section.EnDescription" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            @Html.TextAreaFor(model => model.Section.EnDescription, new { @class = "form-control summernote" })
+            <span asp-validation-for="Section.EnDescription" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="Section.ArDescription" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            @Html.TextAreaFor(model => model.Section.ArDescription, new { @class = "form-control summernote" })
+            <span asp-validation-for="Section.ArDescription" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="imagePartial">
+        <div class="form-group row">
+            <label asp-for="Section.EnImageAlt" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="Section.EnImageAlt" class="form-control" placeholder="English Image Alternative" />
+                <span asp-validation-for="Section.EnImageAlt" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="Section.ArImageAlt" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="Section.ArImageAlt" class="form-control" placeholder="Arabic Image Alternative" />
+                <span asp-validation-for="Section.ArImageAlt" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="Section.Photo" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <div class="custom-file">
+                    <input asp-for="Section.Photo" class="form-control custom-file-input imageFile" accept=".png, .jpg, .jpeg" />
+                    <label class="custom-file-label">Choose File...</label>
+                    <span asp-validation-for="Section.Photo" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="videoPartial">
+        <div class="form-group row">
+            <label asp-for="Section.Url" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="Section.Url" class="form-control" placeholder="Video URL" />
+                <span asp-validation-for="Section.Url" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="Section.Order" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="Section.Order" class="form-control" placeholder="Order from left to right" />
+            <span asp-validation-for="Section.Order" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="Section.IsActive" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="Section.IsActive" class="flat" />
+            <span asp-validation-for="Section.IsActive" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="item form-group">
+        <div class="col-md-6 col-sm-6 offset-md-2">
+            <button name="submit" type="submit" class="btn btn-success">Submit</button>
+            <input id="submitCards" name="submit" type="submit" class="btn btn-success" value="Submit And Manage Cards">
+            <a asp-controller="DynamicPageSection" asp-action="Index" asp-route-pageRouteVersionId="@Model.pageRouteVersionId" type="button" class="btn btn-primary">Cancel</a>
+        </div>
+    </div>
+</form>
+
+@section Scripts{
+    <script>
+        /* Enable html editor */
+        $(document).ready(function () {
+            $('.summernote').summernote({
+                height: 200,
+                toolbar: [['style', ['style']], ['font', ['bold', 'underline', 'clear']], ['fontname', ['fontname']], ['color', ['color']], ['para', ['ul', 'ol', 'paragraph']], ['table', ['table']], ['insert', ['link']], ['view', ['fullscreen', 'codeview', 'help']]]
+            });
+        });
+
+        /* Show and hide form inputs depend on selected section type */
+        $('.imagePartial').css("display", "none");
+        $('.videoPartial').css("display", "none");
+        $('#submitCards').css("display", "none");
+
+        var selectedSectionType = $('#SectionTypeId').val();
+        togglePartialViews(selectedSectionType);
+
+        $('#SectionTypeId').change(function () {
+            /* Get the selected value of dropdownlist */
+            togglePartialViews($(this).val());
+        });
+
+        function togglePartialViews(selectedSectionType) {
+            var getSectionUrl = '@Url.Action("GetSectionTypes", "DynamicPageSection")';
+            var selectedTypeId = selectedSectionType;
+
+            if (selectedTypeId != null && selectedTypeId != "") {
+                $('.imagePartial').css("display", "block");
+                $('.videoPartial').css("display", "block");
+
+                $.get((getSectionUrl + '?id=' + selectedTypeId), function (data) {
+                    if (data.data != null) {
+                        if (data.data.hasCards) {
+                            $('#submitCards').css("display", "inline-block");
+                        }
+                        else {
+                            $('#submitCards').css("display", "none");
+                        }
+
+                        if (data.data.mediaType == "None") {
+                            $('.imagePartial').css("display", "none");
+                            $('.videoPartial').css("display", "none");
+                        }
+                        else if (data.data.mediaType == "Image") {
+                            $('.videoPartial').css("display", "none");
+
+                            $('.imagePartial').css("display", "block");
+                        }
+                        else if (data.data.mediaType == "Video") {
+                            $('.imagePartial').css("display", "none");
+
+                            $('.videoPartial').css("display", "block");
+                        }
+                    }
+                });
+            }
+            else {
+                $('.imagePartial').css("display", "none");
+                $('.videoPartial').css("display", "none");
+            }
+        }
+
+        $(document).ready(function () {
+
+            $('.imageFile').on('change', function () {
+                var fileName = $(this).val().split('\\').pop();
+                var ext = $(this).val().split('.').pop().toLowerCase();
+                if (ext == 'jpeg' || ext == 'jpg' || ext == 'png') {
+                    $(this).next('.custom-file-label').html(fileName);
+                }
+                else {
+                    $(this).val("")
+                    if (fileName != "") {
+
+                        alert('Please upload photo only.');
+                    } else {
+                         $(this).next('.custom-file-label').html("Choose File...");
+                    }
+                    return false;
+                }
+            });
+
+
+        });
+
+
+
+    </script>
+}

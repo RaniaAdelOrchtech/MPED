@@ -1,0 +1,85 @@
+﻿
+@{
+    ViewData["Title"] = "Approval Notifications";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    var subApplicationName = Configuration.GetSection("SubApplicationName").Value;
+}
+
+
+
+<table id="data_table" class="table table-striped table-bordered" style="width:100%">
+    <thead>
+        <tr>
+            <th style="width: 20%">Content Manager</th>
+            <th style="width: 10%">Date of changes</th>
+            <th style="width: 10%">Time of changes</th>
+            <th style="width: 15%">Page Name</th>
+            <th style="width: 10%">Action</th>
+            <th style="width: 15%">Type of change</th>
+            <th style="width: 10%">Page Type</th>
+            <th style="width: 10%">Status</th>
+            <th style="width: 5%"></th>
+        </tr>
+    </thead>
+</table>
+
+@section scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            window.table = $('#data_table').DataTable({
+                "scrollX": true,
+                "searching": true,
+                  "paging":   true,
+        "ordering": false,
+                "ajax": { "url": '@Url.Action("GetAllIndex", "ApprovalNotifications")', "dataSrc": "data" },
+                "columns": [
+                    {
+                        "data": "contentManagerName", "name": "ContentManagerName", render:  $.fn.dataTable.render.ellipsis()
+                    },
+                    {
+                        "data": "changesDate", "name": "ChangesDate",render:  $.fn.dataTable.render.ellipsis()
+                    },
+                    {
+                        "data": "changesTime", "name": "ChangesTime",render:  $.fn.dataTable.render.ellipsis()
+                    },
+                    {
+                        "data": "pageName", "name": "PageName",render:  $.fn.dataTable.render.ellipsis()
+                    },
+
+                    {
+                        "data": "changeAction", "name": "ChangeAction",render:  $.fn.dataTable.render.ellipsis()
+                    },
+                    {
+                        "data": "changeType", "name": "ChangeType",render:  $.fn.dataTable.render.ellipsis()
+                    },
+                    {
+                        "data": "pageType", "name": "PageType",render:  $.fn.dataTable.render.ellipsis()
+                    },
+                    {
+                        "data": "versionStatusEnum", "name": "VersionStatusEnum",render:  $.fn.dataTable.render.ellipsis()
+                    },
+                    {
+                    "data": "pageLink", "orderable": false, "render": function (data, type, row) {
+
+                            var approvalChar = "?";
+                            if (data.includes("?")) {
+                                approvalChar = "&";
+                            }
+                            var addSlash=data[0]=="/"?"":"/"
+                            return '<a href="@subApplicationName'+addSlash + data + approvalChar + 'approvalId=' + row.id + '" title="Edit" class="anchorActionLink"><i class="fa fa-pencil"></i></a>';
+                        }
+                    },
+                ]
+                ,"fnInitComplete": function (oSettings, json) {
+                    var table = $('#data_table').DataTable();
+                    if (table.data().count() <= 10) {
+                       document.getElementById("data_table_paginate").style.display = "none";
+                            document.getElementById("data_table_length").style.display = "none";
+                            document.getElementById("data_table_filter").style.display = "none";
+                    }
+                }
+            });
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9.10.9/dist/sweetalert2.all.min.js"></script>
+}

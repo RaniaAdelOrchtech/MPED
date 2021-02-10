@@ -1,0 +1,121 @@
+﻿@model DynamicPageSectionDetailsViewModel
+@{
+    ViewBag.Title = "Section";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+
+  //  var photoPath = Url.Content("~/Uploads/Images/") + Model.SectionViewModel.Url ?? "noImage.png";
+    // var photoPath = "~/Uploads/Images/" + Model.Url ?? "noImage.png";
+}
+
+<style>
+    td.h5 {
+        white-space: -moz-pre-wrap !important;
+        white-space: -webkit-pre-wrap;
+        white-space: -pre-wrap;
+        white-space: -o-pre-wrap;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        word-break: break-all;
+        white-space: normal;
+        PADDING: 8px;
+    }
+
+    td.h6 {
+        line-height: 1.4 !important;
+        PADDING: 8px;
+    }
+
+    table, th, td {
+        border: 1px solid black;
+    }
+</style>
+
+
+
+<div>
+    <h4><a asp-controller="DynamicPageRoute" asp-action="Index">Dynamic Page</a> > @Model.PageRouteVersion.EnName > <a asp-controller="DynamicPageSection" asp-action="Index" asp-route-pageRouteVersionId="@Model.PageRouteVersion.Id" asp-route-approvalId="@Model.ApprovalId">Sections </a> > Details</h4>
+</div>
+
+
+<table class="pull-left col-md-12 ">
+    <tbody>
+        <tr>
+            <td class="h6" style="width: 30%"><strong><label>English Title</label></strong></td>
+            <td class="h5">@Model.SectionViewModel.EnTitle</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label>Arabic Title</label></strong></td>
+            <td class="h5">@Model.SectionViewModel.ArTitle</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label>English Description</label></strong></td>
+            <td class="h5">@Html.Raw(Model.SectionViewModel.EnDescription)</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label>Arabic Description</label></strong></td>
+            <td class="h5">@Html.Raw(Model.SectionViewModel.ArDescription)</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label>English Page Name</label></strong></td>
+            <td class="h5">@Model.PageRouteVersion.EnName</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label>Arabic Page Name</label></strong></td>
+            <td class="h5">@Model.PageRouteVersion.ArName</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="SectionViewModel.Order"></label></strong></td>
+            <td class="h5">@Model.SectionViewModel.Order</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label>Is Active</label></strong></td>
+            <td class="h5">@(Model.SectionViewModel.IsActive ? "Yes" : "No") </td>
+        </tr>
+
+        @if (Model.SectionViewModel.MediaType == "Image")
+        {
+            <tr>
+                <td class="h6"><strong><label>English Image Alt</label></strong></td>
+                <td class="h5">@Model.SectionViewModel.EnImageAlt</td>
+            </tr>
+
+            <tr>
+                <td class="h6"><strong><label>Arabic Image Alt</label></strong></td>
+                <td class="h5">@Model.SectionViewModel.ArImageAlt</td>
+            </tr>
+
+            <tr>
+                <td class="h6"><strong><label>Image</label></strong></td>
+                <td>
+                    <img src="@Model.SectionViewModel.Url" class="thumpnail-edit-image" asp-append-version="true" />
+                </td>
+            </tr>
+        }
+
+        @if (Model.SectionViewModel.MediaType == "Video")
+        {
+            <tr>
+                <td class="h6"><strong><label>Video Url</label></strong></td>
+                <td class="h5">@Model.SectionViewModel.Url</td>
+            </tr>
+            // Video viewer goes here
+        }
+
+    </tbody>
+</table>
+
+<div>
+    <div class="col-md-4 col-sm-4" style="padding-top: 10px;">
+        
+        <strong><a asp-controller="DynamicPageSection" asp-action="Index"
+                   asp-route-pageRouteVersionId="@Model.SectionViewModel.PageRouteVersionId" 
+                   asp-route-approvalId="@Model.ApprovalId">Back to previous page</a></strong>
+    </div>
+</div>

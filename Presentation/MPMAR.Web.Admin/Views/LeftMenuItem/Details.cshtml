@@ -1,0 +1,54 @@
+﻿@model FooterMenuItem
+@{
+    ViewBag.Title = "Footer Menu Details";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+
+}
+
+@*<h1>Footer Menu Details</h1>*@
+
+<div>
+    <h4>Definitions > <a asp-controller="LeftMenuItem" asp-action="Index">Left Menu Item </a> > Detail</h4>
+</div>
+
+<table class="pull-left col-md-12 ">
+    <tbody>
+        <tr>
+            <td class="h6" style="width: 30%"><strong><label asp-for="EnTitle"></label></strong></td>
+            <td class="h5">@Model.EnTitle</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="ArTitle"></label></strong></td>
+            <td class="h5">@Model.ArTitle</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="Link"></label></strong></td>
+            <td class="h5">@Model.Link</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="Order"></label></strong></td>
+            <td class="h5">@Model.Order</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="IsActive"></label></strong></td>
+            <td class="h5">@(Model.IsActive ? "Yes" : "No") </td>
+        </tr>
+
+        <tr>
+            <td class="btn-mais-info text-primary">
+                <br />
+                <p>
+                    <strong><a asp-controller="FooterMenuItem" asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |</strong>
+                    <strong><a asp-controller="FooterMenuItem" asp-action="Index">Back to previous page</a></strong>
+                </p>
+            </td>
+            <td> </td>
+            <td class="h5"></td>
+        </tr>
+
+    </tbody>
+</table>

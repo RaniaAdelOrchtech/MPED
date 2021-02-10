@@ -1,0 +1,149 @@
+﻿@model List<MPMAR.Business.Models.GlobalSearchModel>
+@addTagHelper "*, Microsoft.AspNetCore.Mvc.TagHelpers"
+@{
+    string lang = Context.Request.Query["lang"];
+    string langVal = lang == "en" ? "en" : "ar";
+    ViewData["Title"] = lang == "en" ? "Search Results" : "نتائج البحث";
+}
+<style>
+    .active .pag {
+        background-color: #28a5a3 !important;
+        color: white !important;
+    }
+
+    .pag {
+        color: #28a5a3 !important;
+    }
+</style>
+<!-- Page Heading -->
+<section class="section page-heading">
+
+    <h1>@ViewData["Title"]</h1>
+    <p class="breadcrumb"><a href="/?lang=@langVal">@(lang == "en" ? "Home" : "الرئيسية")</a> / @ViewData["Title"]</p>
+
+</section>
+<!-- Page Heading -->
+<!-- Section -->
+<section class="section full-width-bg gray-bg">
+
+    <div class="row">
+
+        <div class="col-lg-9 col-md-9 col-sm-8">
+
+            @if (lang == "en")
+            {
+                <h2 class="centermobile" style="margin-top: -5px;"> Search Results For "@ViewBag.SearchText"</h2>
+            }
+            else
+            {
+
+                <h2 class="centermobile" style="margin-top: -5px;"> نتائج البحث عن "@ViewBag.SearchText"</h2>
+            }
+
+            <div id="searchContainerDiv">
+                <partial name="~/Views/Home/_GlobalSearchContainer.cshtml" model="Model">
+            </div>
+
+
+
+
+
+
+        </div>
+
+
+
+        <!-- Sidebar -->
+        @await Component.InvokeAsync("Sidebar")
+        <!-- /Sidebar -->
+
+
+
+    </div>
+
+</section>
+<!-- /Section -->
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $("#@ViewBag.pageNum").addClass("active-button")
+        })
+    </script>
+
+    <script>
+        $(function () {
+            window.globalPageNum = 1
+            PaginatorStyle()
+        })
+
+        function UpdateGlobalSearchPaginate(pageNum) {
+
+            UpdateGlobalSearchList(pageNum)
+
+            window.scroll({
+                top: 0,
+                left: 0,
+                behavior: 'smooth'
+            });
+
+        }
+
+
+        function UpdateGlobalSearchList(pageNum) {
+
+            globalPageNum = pageNum
+
+            $.ajax({
+                url: "/Home/GlobalSearchPaginate",
+                type: "GET",
+                data: { searchText: $("#globalSearchText").val(), pageNum }
+            }).done(function (partialViewResult) {
+                $("#searchContainerDiv").html(partialViewResult);
+                PaginatorStyle()
+            });
+
+
+
+        }
+
+        function PaginatorStyle() {
+            debugger
+            var totalPagesCount = Math.floor(((parseInt($("#totalCount").val()) + 10 - 1) / 10))
+            if (globalPageNum == 1) {
+                $('.prev').addClass('disabled').children("a").css("cursor", "not-allowed").attr("disabled", true);
+                if (totalPagesCount > 1) {
+                    $('.next').removeClass('disabled').children("a").css("cursor", "pointer").attr("disabled", false);
+                }
+            }
+
+            if (globalPageNum == totalPagesCount) {
+                $('.next').addClass('disabled').children("a").css("cursor", "not-allowed").attr("disabled", true);
+                if (totalPagesCount > 1) {
+                    $('.prev').removeClass('disabled').children("a").css("cursor", "pointer").attr("disabled", false);
+                }
+            }
+
+            $('.page-item').removeClass('active')
+
+            $('.p-' + globalPageNum).addClass('active')
+        }
+
+        function Next() {
+            if ($("#nextLink").attr("disabled") != "disabled") {
+                UpdateGlobalSearchPaginate((globalPageNum + 1))
+            }
+        }
+
+        function Previous() {
+            if ($("#prevLink").attr("disabled") != "disabled") {
+                UpdateGlobalSearchPaginate((globalPageNum - 1))
+            }
+        }
+
+        function Search() {
+            globalSearchFlag = true;
+            UpdateNewsList(0, 1)
+        }
+
+    </script>
+}

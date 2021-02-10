@@ -1,0 +1,382 @@
+﻿@model MPMAR.Web.Site.ViewModels.PageNewsListViewModel
+@addTagHelper "*, Microsoft.AspNetCore.Mvc.TagHelpers"
+@{
+    string lang = Context.Request.Query["lang"];
+    string globalSearchText = Context.Request.Query["searchText"];
+
+    ViewBag.NewsSearchText = string.IsNullOrWhiteSpace(globalSearchText) ? ViewBag.NewsSearchText : globalSearchText;
+    string langVal = lang == "en" ? "en" : "ar";
+    ViewData["Title"] = ViewBag.Title;
+}
+<style>
+    @@media (max-width: 767px) {
+        .media-filters label {
+            display: block;
+            margin-top: 20px;
+            margin-bottom: 20px !important;
+            margin-left: 3px !important;
+        }
+    }
+
+    .active .pag {
+        background-color: #28a5a3 !important;
+        color: white !important;
+    }
+
+    .pag {
+        color: #28a5a3 !important;
+    }
+
+    .swal2-container {
+        zoom: 1.5;
+    }
+</style>
+
+
+<head>
+    <link href="~/paginationScripts/jquery.paginate.css" rel="stylesheet" />
+</head>
+<div>
+
+
+    <!-- Header -->
+    <section id="content" class="@lang">
+        <input type="hidden" id="languageVal" value="@lang" />
+        <!-- Page Heading -->
+        <section class="section page-heading animate-onscroll">
+            <h1>
+                @ViewBag.Title
+            </h1>
+            <p class="breadcrumb"> <a href="home">@(lang == "en" ? "Main" : "الرئيسية")</a>/  @ViewBag.Nav / @ViewBag.Title</p>
+
+        </section>
+        <!-- Page Heading -->
+        <!-- Section -->
+        <section class="section full-width-bg gray-bg">
+            <div class="row">
+
+                <div class="col-lg-9 col-md-9 col-sm-8">
+
+                    <!-- Media Filters -->
+                    <div class="media-filters animate-onscroll">
+
+
+                        <div class="filter-filtering" style="margin-bottom:5px">
+
+
+                            <ul class="filter-dropdown">
+                                <li>
+
+                                    <span>@ViewBag.NewsSearchTypeText</span>
+
+                                    <ul id="typeMenue">
+                                        @if (lang == "en")
+                                        {
+                                            <li value="0" onclick="updateTypeVal('0')">All</li>
+                                        }
+                                        else
+                                        {
+
+                                            <li value="0" onclick="updateTypeVal('0')">كل</li>
+                                        }
+                                        @foreach (var item in Model.PageNewsTypes)
+                                        {
+                                            if (lang == "en")
+                                            {
+
+                                                <li value="@item.Id" onclick="updateTypeVal('@item.Id')">@item.EnName</li>
+                                            }
+                                            else
+                                            {
+                                                <li value="@item.Id" onclick="updateTypeVal('@item.Id')">@item.ArName</li>
+                                            }
+                                        }
+                                        <input name="type" type="hidden" id="type" value="@ViewBag.NewsSearchTypeValue" />
+
+                                    </ul>
+                                </li>
+                            </ul>
+
+                        </div>
+
+
+
+                        @if (langVal == "en")
+                        {
+                            <label> Search </label>
+                        }
+                        else
+                        {
+                            <label> ابحث </label>
+                        }
+
+                        <div style="
+        display: inline-block;
+        margin-bottom: -12px;
+">
+
+                            <div class="newsletter-form formnewssearch">
+
+                                <div class="newsletter-email">
+                                    <input name="searchText" class="searchonmoile" id="searchText" type="text" style="background: #fff;color:black" value="@ViewBag.NewsSearchText">
+                                </div>
+
+                                <div class="newsletter-submit">
+                                    <input type="submit" onclick="Search()" value="">
+                                    <i class="icons icon-search search-icon"></i>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+                    <!-- /Media Filters -->
+
+
+                    <h2 style="margin-top: 0px;display:none;" id="SearchResult">
+                    </h2>
+
+                    <div id="newsContainerDiv">
+
+                        <partial name="~/Views/News/_newsContainer.cshtml" model="Model.NewsList">
+
+                    </div>
+
+
+
+
+                </div>
+
+                @await Component.InvokeAsync("Sidebar")
+            </div>
+
+        </section>
+        <!-- /Section -->
+    </section>
+
+
+    <!-- Back To Top -->
+    <a href="#" id="button-to-top"><i class="icons icon-up-dir"></i></a>
+
+
+    @*<div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="z-index:5000">
+        <div class="modal-dialog">
+            <div class="modal-content" style="margin-top:20%">
+                <div class="modal-body">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <img src="" class="imagepreview" style="width: 100%;">
+                </div>
+            </div>
+        </div>
+    </div>*@
+
+
+
+
+    <style>
+        .paginate-pagination ul > li {
+
+	float:@(lang == "en" ?"left":"right");
+	margin-right: 3px;
+
+}
+        .en {
+            direction: ltr;
+        }
+    </style>
+
+    <!-- Chosen -->
+
+</div>
+
+
+
+@section Scripts{
+
+    
+
+    @if (Model.NewsList.Any())
+    {
+        <script>
+            // window.onload = function () {
+            //     $('#example').paginate();
+            //  }
+
+        </script>
+
+    }
+
+    @if (!string.IsNullOrWhiteSpace(globalSearchText))
+    {
+        <script>
+            $(function () {
+
+                window.globaltypeId = 0
+                window.globalPageNum = 1
+                window.globalSearchFlag = false
+
+                Search()
+
+            })
+
+
+        </script>
+    }
+    else
+    {
+        <script>
+            $(function () {
+
+                window.globaltypeId = 0
+                window.globalPageNum = 1
+                window.globalSearchFlag = false
+                UpdateNewsList(0, 1)
+
+
+            })
+
+
+        </script>
+
+    }
+
+    <script>
+
+
+        function UpdateNewsListPaginate(pageNum) {
+            UpdateNewsList(globaltypeId, pageNum)
+
+             window.scroll({
+                   top: 0,
+                   left: 0,
+                   behavior: 'smooth'
+             });
+
+        }
+
+
+        function UpdateNewsList(id, pageNum) {
+            var ajax;
+            console.log("from update: "+ globalSearchFlag)
+            if (globalSearchFlag) {
+              ajax=  $.ajax({
+                    url: "/News/SearchNews",
+                    type: "GET",
+                    data: { searchText: $("#searchText").val(), type:   $("#type").val(), lang:'@(langVal)',pageNum }
+                })
+            } else {
+               ajax=      $.ajax({
+                url: "/News/NewsList",
+                type: "GET",
+                data: { typeId: id,lang:'@langVal' ,pageNum}
+            })
+            }
+
+            globalPageNum = pageNum
+
+            ajax.done(function (partialViewResult) {
+                $("#newsContainerDiv").html(partialViewResult);
+
+                PaginatorStyle(pageNum)
+            });
+
+        }
+
+        function PaginatorStyle(pageNum) {
+                   var totalPagesCount = Math.floor(((parseInt($("#totalCount").val())+10-1)/10))
+                if (pageNum == 1) {
+                    $('.prev').addClass('disabled').children("a").css("cursor", "not-allowed").attr("disabled", true);
+                if (totalPagesCount > 1) {
+                    $('.next').removeClass('disabled').children("a").css("cursor", "pointer").attr("disabled", false);
+                }
+            }
+
+                if (pageNum == totalPagesCount) {
+                    $('.next').addClass('disabled').children("a").css("cursor", "not-allowed").attr("disabled", true);
+                   if (totalPagesCount > 1) {
+                    $('.prev').removeClass('disabled').children("a").css("cursor","pointer").attr("disabled", false);
+                }
+            }
+
+            $('.page-item').removeClass('active')
+
+            $('.p-' + pageNum).addClass('active')
+        }
+
+        function updateTypeVal(id) {
+
+            $("#type").val(id)
+            globaltypeId= id;
+          //  globalSearchFlag = false;
+            UpdateNewsList(id,1)
+
+        }
+
+        function Next() {
+
+            if ($("#nextLink").attr("disabled") != "disabled") {
+            UpdateNewsListPaginate((globalPageNum+1))
+            }
+        }
+
+        function Previous() {
+
+            if ($("#prevLink").attr("disabled") != "disabled") {
+                UpdateNewsListPaginate((globalPageNum - 1))
+            }
+
+        }
+
+        function Search() {
+            globalSearchFlag = true;
+            UpdateNewsList(0, 1)
+        }
+
+
+        function newsDetails(id, isContentEmpty) {
+            console.log("sss "+isContentEmpty)
+            if (isContentEmpty == "True" && '@langVal' == "en") {
+
+
+
+                   Swal.fire({
+                        // title: 'Are you sure?',
+                        text: 'The English translation of this text is unavailable',
+                        icon: 'warning',
+                        confirmButtonColor: '#28a5a3',
+                        confirmButtonText: "OK",
+
+                    })
+
+
+
+            } else  {
+                window.location.href = '/singlenews?id=' + id + '&lang=@langVal';
+            }
+        }
+
+        //function OpenImageModal(e) {
+        //    debugger
+        //        $('.imagepreview').attr('src', $(e).find('img').attr('src'));
+        //    window.position = e.getBoundingClientRect()
+        //    $('#imagemodal').modal('show');
+        //}
+
+        //$("#imagemodal").on("show.bs.modal", function () {
+        //    $('#imagemodal').css('overflow', 'hidden');
+        //    $('#imagemodal').css('position', 'fixed');
+        //}).on("hide.bs.modal", function () {
+        //    $('#imagemodal').css('overflow', 'auto');
+        //    $('#imagemodal').css('position', 'unset');
+        //});
+
+      
+
+    </script>
+
+
+
+}

@@ -1,0 +1,556 @@
+﻿@model List<BEUsersPrivilegesEntityViewModel>
+@using MPMAR.Data.Consts;
+@{
+    var staticPageGlobal = Model.FirstOrDefault(x => x.PageTypeId == PrivilegesPageType.StaticPage && x.PageRouteId == null);
+    var dynamicPageGlobal = Model.FirstOrDefault(x => x.PageTypeId == PrivilegesPageType.DynamicPage && x.PageRouteId == null);
+    var staticPages = Model.Where(x => x.PageTypeId == PrivilegesPageType.StaticPage && x.PageRouteId != null).ToList();
+    var dynamicPages = Model.Where(x => x.PageTypeId == PrivilegesPageType.DynamicPage && x.PageRouteId != null).ToList();
+    var homePages = Model.Where(x => x.PageTypeId >= PrivilegesPageType.HPBasicInfo && x.PageTypeId <= PrivilegesPageType.HPAffiliates).ToList();
+    var contactUs = Model.FirstOrDefault(x => x.PageTypeId == PrivilegesPageType.ContactUs);
+    var socialMediaLinks = Model.FirstOrDefault(x => x.PageTypeId == PrivilegesPageType.SocialMediaLinks);
+    var definitions = Model.Where(x => x.PageTypeId >= PrivilegesPageType.NavItems && x.PageTypeId <= PrivilegesPageType.NewsType).ToList();
+    var nationalAccountsData = Model.Where(x => x.PageTypeId >= PrivilegesPageType.ComponentConstant && x.PageTypeId <= PrivilegesPageType.Governorate).ToList();
+
+    var indexOfStaticPageGlobal = Model.IndexOf(staticPageGlobal);
+    var indexOfDynamicPageGlobal = Model.IndexOf(dynamicPageGlobal);
+    var indexOfContactUs = Model.IndexOf(contactUs);
+    var indexOfSocialMediaLinks = Model.IndexOf(socialMediaLinks);
+
+    var hpNames = ViewBag.HPNames as Dictionary<PrivilegesPageType, string>;
+}
+<style>
+    .panel-heading a:after {
+        font-family: 'Glyphicons Halflings';
+        content: "\e114";
+        float: right;
+        color: grey;
+    }
+
+    .panel-heading a.collapsed:after {
+        content: "\e080";
+    }
+
+    .myDataTable {
+        zoom: 1.3
+    }
+</style>
+<h1>@ViewBag.msg</h1>
+@if (Model.Any())
+{
+    <form method="post" id="privilegeFormId">
+        <div class="panel-group" id="accordion">
+            <div class="panel panel-default" id="panel8" style="margin-top:20px">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-target="#collapseEight"
+                           href="#collapseEight"
+                           class="collapsed">
+                            Static Pages Basic Info
+                        </a>
+                    </h4>
+
+                </div>
+                <div id="collapseEight" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <table id="homeSectionsTable" class="myDataTable display table-striped" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th hidden></th>
+                                    <th></th>
+                                    <th>View</th>
+                                    <th>Edit</th>
+                                    <th>Approve/Ignore</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td hidden>
+                                        <input asp-for="@Model[indexOfStaticPageGlobal].Id" hidden />
+                                        <input asp-for="@Model[indexOfStaticPageGlobal].PageRouteId" hidden />
+                                        <input asp-for="@Model[indexOfStaticPageGlobal].PageTypeId" hidden />
+                                        <input asp-for="@Model[indexOfStaticPageGlobal].ApplicationUserId" hidden />
+                                        <input asp-for="@Model[indexOfStaticPageGlobal].PageName" hidden />
+                                        <input asp-for="@Model[indexOfStaticPageGlobal].CanAdd" hidden />
+                                        <input asp-for="@Model[indexOfStaticPageGlobal].CanDelete" hidden />
+                                    </td>
+                                    <td><input class="trPageName" style="border:0;background-color:transparent" type="text" value=" Static Pages Basic Info" disabled /></td>
+                                    <td><input class="SPGlobalView" type="checkbox" asp-for="@Model[indexOfStaticPageGlobal].CanView" disabled="@(Model[indexOfStaticPageGlobal].CanEdit || Model[indexOfStaticPageGlobal].CanApprove)" /></td>
+                                    <td><input class="SPGlobalEdit" onclick="ActiveView(this)" type="checkbox" asp-for="@Model[indexOfStaticPageGlobal].CanEdit" /></td>
+                                    <td><input class="SPGlobalApprove" onclick="ActiveView(this)" type="checkbox" asp-for="@Model[indexOfStaticPageGlobal].CanApprove" /></td>
+                                    <td><input class="SPGlobalOldView" type="checkbox" asp-for="@Model[indexOfStaticPageGlobal].OldCanView" hidden /></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default" id="panel1">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-target="#collapseOne"
+                           href="#collapseOne" class="collapsed">
+                            Static Pages Content
+                        </a>
+                    </h4>
+
+                </div>
+                <div id="collapseOne" class="panel-collapse collapse ">
+                    <div class="panel-body">
+                        <table id="staticPagesTable" class="myDataTable display table-striped" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th hidden></th>
+                                    <th></th>
+                                    <th>View</th>
+                                    <th>Add</th>
+                                    <th>Edit</th>
+                                    <th>Delete</th>
+                                    <th>Approve/Ignore</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @for (int i = 0; i < staticPages.Count(); i++)
+                                {
+                                    var currentIndex = Model.IndexOf(staticPages[i]);
+                                    <tr>
+                                        <td hidden>
+                                            <input asp-for="@Model[currentIndex].Id" hidden />
+                                            <input asp-for="@Model[currentIndex].PageRouteId" hidden />
+                                            <input asp-for="@Model[currentIndex].PageTypeId" hidden />
+                                            <input asp-for="@Model[currentIndex].ApplicationUserId" hidden />
+                                            <input asp-for="@Model[currentIndex].PageName" hidden />
+                                        </td>
+                                        <td><input class="trPageName" style="border:0;background-color:transparent" type="text" asp-for="@Model[currentIndex].PageRoute.EnName" disabled /></td>
+                                        <td><input type="checkbox" asp-for="@Model[currentIndex].CanView" disabled="@(Model[currentIndex].CanAdd ||Model[currentIndex].CanEdit || Model[currentIndex].CanDelete|| Model[currentIndex].CanApprove)" /></td>
+                                        @{
+                                            var currentId = Model[currentIndex].PageRouteId;
+                                            var onlyEditPage = StaticPagesIdsConst.EgyptVision2030 == currentId ||
+                                                StaticPagesIdsConst.MinisterySpeech == currentId ||
+                                                StaticPagesIdsConst.MinistryMission == currentId ||
+                                                StaticPagesIdsConst.ContactUs == currentId ||
+                                                StaticPagesIdsConst.MinistryVision == currentId ||
+                                                StaticPagesIdsConst.EconomicIndicators == currentId;
+                                        }
+                                        <td><input onclick="ActiveView(this)" type="checkbox" asp-for="@Model[currentIndex].CanAdd" disabled="@onlyEditPage" /></td>
+                                        <td><input onclick="ActiveView(this)" type="checkbox" asp-for="@Model[currentIndex].CanEdit" /></td>
+                                        <td><input onclick="ActiveView(this)" type="checkbox" asp-for="@Model[currentIndex].CanDelete" disabled="@onlyEditPage" /></td>
+                                        <td><input onclick="ActiveView(this)" type="checkbox" asp-for="@Model[currentIndex].CanApprove" /></td>
+                                        <td><input type="checkbox" asp-for="@Model[currentIndex].OldCanView" hidden /></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="panel panel-default" id="panel9" style="margin-top:20px">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-target="#collapseNine"
+                           href="#collapseNine" class="collapsed">
+                            Dynamic Pages Basic Info
+                        </a>
+                    </h4>
+
+                </div>
+                <div id="collapseNine" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <table id="homeSectionsTable" class="myDataTable display table-striped" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th hidden></th>
+                                    <th>Page Name</th>
+                                    <th>View Basic Info</th>
+                                    <th>Add Dynamic Page</th>
+                                    <th>Edit Basic Info</th>
+                                    <th>Delete Dynamic Page</th>
+                                    <th>Approve/Ignore Dynamic Page</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+
+                                <tr>
+                                    <td hidden>
+                                        <input asp-for="@Model[indexOfDynamicPageGlobal].Id" hidden />
+                                        <input asp-for="@Model[indexOfDynamicPageGlobal].PageRouteId" hidden />
+                                        <input asp-for="@Model[indexOfDynamicPageGlobal].PageTypeId" hidden />
+                                        <input asp-for="@Model[indexOfDynamicPageGlobal].ApplicationUserId" hidden />
+                                        <input asp-for="@Model[indexOfDynamicPageGlobal].PageName" hidden />
+                                    </td>
+                                    <td><input class="trPageName" style="border:0;background-color:transparent" type="text" value="Dynamic Page Basic Info" disabled /></td>
+                                    <td><input type="checkbox" asp-for="@Model[indexOfDynamicPageGlobal].CanView" disabled="@(Model[indexOfDynamicPageGlobal].CanAdd ||Model[indexOfDynamicPageGlobal].CanEdit || Model[indexOfDynamicPageGlobal].CanDelete|| Model[indexOfDynamicPageGlobal].CanApprove)" /></td>
+                                    <td><input onclick="ActiveView(this)" type="checkbox" asp-for="@Model[indexOfDynamicPageGlobal].CanAdd" /></td>
+                                    <td><input onclick="ActiveView(this)" type="checkbox" asp-for="@Model[indexOfDynamicPageGlobal].CanEdit" /></td>
+                                    <td><input class="DpGlobalDelete" onclick="ActiveView(this)" type="checkbox" asp-for="@Model[indexOfDynamicPageGlobal].CanDelete" /></td>
+                                    <td><input class="DpGlobalApprove" onclick="ActiveView(this)" type="checkbox" asp-for="@Model[indexOfDynamicPageGlobal].CanApprove" /></td>
+                                    <td><input type="checkbox" asp-for="@Model[indexOfDynamicPageGlobal].OldCanView" hidden /></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default" id="panel2" style="margin-top:20px">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-target="#collapseTwo"
+                           href="#collapseTwo" class="collapsed">
+                            Dynamic Pages Sections
+                        </a>
+                    </h4>
+
+                </div>
+                <div id="collapseTwo" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <table id="dynamicPagesTable" class="myDataTable display table-striped" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th hidden></th>
+                                    <th>Page Name</th>
+                                    <th>View</th>
+                                    <th>Add</th>
+                                    <th>Edit</th>
+                                    <th>Delete</th>
+                                    <th></th>
+                                    <th></th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @for (int i = 0; i < dynamicPages.Count(); i++)
+                                {
+                                    var currentIndex = Model.IndexOf(dynamicPages[i]);
+                                    <tr>
+                                        <td hidden>
+                                            <input asp-for="@Model[currentIndex].Id" hidden />
+                                            <input asp-for="@Model[currentIndex].PageRouteId" hidden />
+                                            <input asp-for="@Model[currentIndex].PageTypeId" hidden />
+                                            <input asp-for="@Model[currentIndex].ApplicationUserId" hidden />
+                                            <input asp-for="@Model[currentIndex].PageName" hidden />
+                                            <input asp-for="@Model[currentIndex].CanApprove" hidden />
+                                        </td>
+                                        <td><input class="trPageName" style="border:0;background-color:transparent" type="text" asp-for="@Model[currentIndex].PageRoute.EnName" disabled /></td>
+                                        <td><input class="DbViewCheck" type="checkbox" asp-for="@Model[currentIndex].CanView" disabled="@(Model[currentIndex].CanAdd ||Model[currentIndex].CanEdit || Model[currentIndex].CanDelete|| Model[currentIndex].CanApprove || Model[indexOfDynamicPageGlobal].CanApprove|| Model[indexOfDynamicPageGlobal].CanDelete)" /></td>
+                                        <td><input class="DbCheck" onclick="ActiveView(this)" type="checkbox" asp-for="@Model[currentIndex].CanAdd" /></td>
+                                        <td><input class="DbCheck" onclick="ActiveView(this)" type="checkbox" asp-for="@Model[currentIndex].CanEdit" /></td>
+                                        <td><input class="DbCheck" onclick="ActiveView(this)" type="checkbox" asp-for="@Model[currentIndex].CanDelete" /></td>
+                                        <td><input hidden /></td>
+                                        <td><input type="checkbox" asp-for="@Model[currentIndex].OldCanView" hidden /></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+
+            <hr />
+            <div class="panel panel-default" id="panel3" style="margin-top:20px">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-target="#collapseThree"
+                           href="#collapseThree" class="collapsed">
+                            Home Page
+                        </a>
+                    </h4>
+
+                </div>
+                <div id="collapseThree" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <table id="homeSectionsTable" class="myDataTable display table-striped" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th hidden></th>
+                                    <th>Home page Section</th>
+                                    <th>View</th>
+                                    <th>Add</th>
+                                    <th>Edit</th>
+                                    <th>Delete</th>
+                                    <th>Approve/Ignore</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+
+                                @for (int i = 0; i < homePages.Count(); i++)
+                                {
+                                    var currentIndex = Model.IndexOf(homePages[i]);
+
+                                    var onlyEditPage =
+                                     PrivilegesPageType.HPBasicInfo == Model[currentIndex].PageTypeId ||
+                                     PrivilegesPageType.HPCitizenPlan == Model[currentIndex].PageTypeId ||
+                                     PrivilegesPageType.HPLogoLinks == Model[currentIndex].PageTypeId ||
+                                     PrivilegesPageType.HPMinistryMessage == Model[currentIndex].PageTypeId ||
+                                     PrivilegesPageType.HPMonitoringAndPlanning == Model[currentIndex].PageTypeId ||
+                                     PrivilegesPageType.HPPhotos == Model[currentIndex].PageTypeId ||
+                                     PrivilegesPageType.HPPublications == Model[currentIndex].PageTypeId ||
+                                     PrivilegesPageType.HPVideo == Model[currentIndex].PageTypeId ||
+                                     PrivilegesPageType.HPEconomicDevelopment == Model[currentIndex].PageTypeId;
+
+                                    var isBasicInfo = PrivilegesPageType.HPBasicInfo == Model[currentIndex].PageTypeId;
+                                    <tr>
+                                        <td hidden>
+                                            <input asp-for="@Model[currentIndex].Id" hidden />
+                                            <input asp-for="@Model[currentIndex].PageRouteId" hidden />
+                                            <input asp-for="@Model[currentIndex].PageTypeId" hidden />
+                                            <input asp-for="@Model[currentIndex].ApplicationUserId" hidden />
+                                            <input asp-for="@Model[currentIndex].PageName" hidden />
+                                        </td>
+                                        <td><label class="trPageName" style="border:0;background-color:transparent;color:black" type="text" disabled>@hpNames.GetValueOrDefault(Model[currentIndex].PageTypeId)</label></td>
+                                        @if (isBasicInfo)
+                                        {
+                                            <td><input type="checkbox" asp-for="@Model[currentIndex].CanView" disabled /></td>
+                                        }
+                                        else
+                                        {
+
+                                            <td><input type="checkbox" asp-for="@Model[currentIndex].CanView" disabled="@(Model[currentIndex].CanAdd ||Model[currentIndex].CanEdit || Model[currentIndex].CanDelete|| Model[currentIndex].CanApprove)" /></td>
+                                        }
+                                        <td><input onclick="ActiveView(this)" type="checkbox" asp-for="@Model[currentIndex].CanAdd" disabled="@onlyEditPage" /></td>
+                                        <td><input class="@(isBasicInfo?"hpBasicInfo":"")" onclick="ActiveView(this)" type="checkbox" asp-for="@Model[currentIndex].CanEdit" /></td>
+                                        <td><input onclick="ActiveView(this)" type="checkbox" asp-for="@Model[currentIndex].CanDelete" disabled="@onlyEditPage" /></td>
+                                        <td><input onclick="ActiveView(this)" type="checkbox" asp-for="@Model[currentIndex].CanApprove" disabled="@isBasicInfo" /></td>
+                                        <td><input type="checkbox" asp-for="@Model[currentIndex].OldCanView" hidden /></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div class="panel panel-default" id="panel4" style="margin-top:20px">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-target="#collapseFour"
+                           href="#collapseFour" class="collapsed">
+                            National Accounts Data
+                        </a>
+                    </h4>
+
+                </div>
+                <div id="collapseFour" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <table id="homeSectionsTable" class="myDataTable display table-striped" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th hidden></th>
+                                    <th>Report</th>
+                                    <th>View</th>
+                                    <th>Add</th>
+                                    <th>Edit</th>
+                                    <th>Delete</th>
+                                    <th>Approve/Ignore</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+
+                                @for (int i = 0; i < nationalAccountsData.Count(); i++)
+                                {
+                                    var currentIndex = Model.IndexOf(nationalAccountsData[i]);
+
+
+                                    <tr>
+                                        <td hidden>
+                                            <input asp-for="@Model[currentIndex].Id" hidden />
+                                            <input asp-for="@Model[currentIndex].PageRouteId" hidden />
+                                            <input asp-for="@Model[currentIndex].PageTypeId" hidden />
+                                            <input asp-for="@Model[currentIndex].ApplicationUserId" hidden />
+                                            <input asp-for="@Model[currentIndex].PageName" hidden />
+                                        </td>
+                                        <td><label class="trPageName" style="border:0;background-color:transparent;color:black" type="text" disabled>@Model[currentIndex].PageTypeId.GetDescription()</label></td>
+                                        <td><input type="checkbox" asp-for="@Model[currentIndex].CanView" disabled="@(Model[currentIndex].CanAdd ||Model[currentIndex].CanEdit || Model[currentIndex].CanDelete|| Model[currentIndex].CanApprove)" /></td>
+                                        <td><input onclick="ActiveView(this)" type="checkbox" asp-for="@Model[currentIndex].CanAdd" /></td>
+                                        <td><input onclick="ActiveView(this)" type="checkbox" asp-for="@Model[currentIndex].CanEdit" /></td>
+                                        <td><input onclick="ActiveView(this)" type="checkbox" asp-for="@Model[currentIndex].CanDelete" /></td>
+                                        <td><input onclick="ActiveView(this)" type="checkbox" asp-for="@Model[currentIndex].CanApprove" /></td>
+                                        <td><input type="checkbox" asp-for="@Model[currentIndex].OldCanView" hidden /></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div class="panel panel-default" id="panel5" style="margin-top:20px">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-target="#collapseFive"
+                           href="#collapseFive" class="collapsed">
+                            Definitions
+                        </a>
+                    </h4>
+
+                </div>
+                <div id="collapseFive" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <table id="homeSectionsTable" class="myDataTable display table-striped" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th hidden></th>
+                                    <th>Definitions</th>
+                                    <th>View</th>
+                                    <th>Add</th>
+                                    <th>Edit</th>
+                                    <th>Delete</th>
+                                    <th>Approve/Ignore</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+
+                                @for (int i = 0; i < definitions.Count(); i++)
+                                {
+                                    var currentIndex = Model.IndexOf(definitions[i]);
+
+                                    var onlyEditPage = PrivilegesPageType.FooterMenuTitles == Model[currentIndex].PageTypeId ||
+                                     PrivilegesPageType.LeftMenuItems == Model[currentIndex].PageTypeId;
+
+                                    var notApprovePage = PrivilegesPageType.NewsType == Model[currentIndex].PageTypeId;
+                                    <tr>
+                                        <td hidden>
+                                            <input asp-for="@Model[currentIndex].Id" hidden />
+                                            <input asp-for="@Model[currentIndex].PageRouteId" hidden />
+                                            <input asp-for="@Model[currentIndex].PageTypeId" hidden />
+                                            <input asp-for="@Model[currentIndex].ApplicationUserId" hidden />
+                                            <input asp-for="@Model[currentIndex].PageName" hidden />
+                                        </td>
+                                        <td><label class="trPageName" style="border:0;background-color:transparent;color:black" type="text" disabled>@Model[currentIndex].PageTypeId.GetDescription()</label></td>
+                                        <td><input type="checkbox" asp-for="@Model[currentIndex].CanView" disabled="@(Model[currentIndex].CanAdd ||Model[currentIndex].CanEdit || Model[currentIndex].CanDelete|| Model[currentIndex].CanApprove)" /></td>
+                                        <td><input onclick="ActiveView(this)" type="checkbox" asp-for="@Model[currentIndex].CanAdd" disabled="@onlyEditPage" /></td>
+                                        <td><input onclick="ActiveView(this)" type="checkbox" asp-for="@Model[currentIndex].CanEdit" /></td>
+                                        <td><input onclick="ActiveView(this)" type="checkbox" asp-for="@Model[currentIndex].CanDelete" disabled="@onlyEditPage" /></td>
+                                        <td><input onclick="ActiveView(this)" type="checkbox" asp-for="@Model[currentIndex].CanApprove" disabled="@notApprovePage" /></td>
+                                        <td><input type="checkbox" asp-for="@Model[currentIndex].OldCanView" hidden /></td>
+
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div class="panel panel-default" id="panel6" style="margin-top:20px">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-target="#collapseSix"
+                           href="#collapseSix" class="collapsed">
+                            Contact Us
+                        </a>
+                    </h4>
+
+                </div>
+                <div id="collapseSix" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <table id="homeSectionsTable" class="myDataTable display table-striped" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th hidden></th>
+                                    <th>Page Name</th>
+                                    <th>View</th>
+                                    <th></th>
+                                    <th>Edit</th>
+                                    <th></th>
+                                    <th>Approve/Ignore</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+
+                                <tr>
+                                    <td hidden>
+                                        <input asp-for="@Model[indexOfContactUs].Id" hidden />
+                                        <input asp-for="@Model[indexOfContactUs].PageRouteId" hidden />
+                                        <input asp-for="@Model[indexOfContactUs].PageTypeId" hidden />
+                                        <input asp-for="@Model[indexOfContactUs].ApplicationUserId" hidden />
+                                        <input asp-for="@Model[indexOfContactUs].PageName" hidden />
+                                        <input asp-for="@Model[indexOfContactUs].CanDelete" hidden />
+                                        <input asp-for="@Model[indexOfContactUs].CanAdd" hidden />
+                                    </td>
+                                    <td><input class="trPageName" style="border:0;background-color:transparent" type="text" value="Contact Us" disabled /></td>
+                                    <td><input type="checkbox" asp-for="@Model[indexOfContactUs].CanView" disabled="@(Model[indexOfContactUs].CanEdit || Model[indexOfContactUs].CanApprove)" /></td>
+                                    <td><input hidden /></td>
+                                    <td><input onclick="ActiveView(this)" type="checkbox" asp-for="@Model[indexOfContactUs].CanEdit" /></td>
+                                    <td><input hidden /></td>
+                                    <td><input onclick="ActiveView(this)" type="checkbox" asp-for="@Model[indexOfContactUs].CanApprove" /></td>
+                                    <td><input type="checkbox" asp-for="@Model[indexOfContactUs].OldCanView" hidden /></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div class="panel panel-default" id="panel7" style="margin-top:20px">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-target="#collapseSeven"
+                           href="#collapseSeven" class="collapsed">
+                            Social Media Links
+                        </a>
+                    </h4>
+
+                </div>
+                <div id="collapseSeven" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <table id="homeSectionsTable" class="myDataTable display table-striped" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th hidden></th>
+                                    <th>Links</th>
+                                    <th>View</th>
+                                    <th>Add</th>
+                                    <th>Edit</th>
+                                    <th>Delete</th>
+                                    <th>Approve/Ignore</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+
+                                <tr>
+                                    <td hidden>
+                                        <input asp-for="@Model[indexOfSocialMediaLinks].Id" hidden />
+                                        <input asp-for="@Model[indexOfSocialMediaLinks].PageRouteId" hidden />
+                                        <input asp-for="@Model[indexOfSocialMediaLinks].PageTypeId" hidden />
+                                        <input asp-for="@Model[indexOfSocialMediaLinks].ApplicationUserId" hidden />
+                                        <input asp-for="@Model[indexOfSocialMediaLinks].PageName" hidden />
+                                    </td>
+                                    <td><input class="trPageName" style="border:0;background-color:transparent" type="text" value="Social Media Links" disabled /></td>
+                                    <td><input type="checkbox" asp-for="@Model[indexOfSocialMediaLinks].CanView" disabled="@(Model[indexOfSocialMediaLinks].CanAdd ||Model[indexOfSocialMediaLinks].CanEdit || Model[indexOfSocialMediaLinks].CanDelete|| Model[indexOfSocialMediaLinks].CanApprove)" /></td>
+                                    <td><input onclick="ActiveView(this)" type="checkbox" asp-for="@Model[indexOfSocialMediaLinks].CanAdd" /></td>
+                                    <td><input onclick="ActiveView(this)" type="checkbox" asp-for="@Model[indexOfSocialMediaLinks].CanEdit" /></td>
+                                    <td><input onclick="ActiveView(this)" type="checkbox" asp-for="@Model[indexOfSocialMediaLinks].CanDelete" /></td>
+                                    <td><input onclick="ActiveView(this)" type="checkbox" asp-for="@Model[indexOfSocialMediaLinks].CanApprove" /></td>
+                                    <td><input type="checkbox" asp-for="@Model[indexOfSocialMediaLinks].OldCanView" hidden /></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <input type="button" onclick="SubmitPrivilegeForm()" style="margin-top:10px" class="btn btn-primary" value="Save">
+    </form>
+}
+
+

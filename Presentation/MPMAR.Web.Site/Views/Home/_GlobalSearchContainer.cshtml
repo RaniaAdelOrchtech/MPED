@@ -1,0 +1,93 @@
+﻿@model IEnumerable<MPMAR.Business.Models.GlobalSearchModel>
+@using MPMAR.Business.Models;
+@{
+    string lang = Context.Request.Query["lang"];
+    string langVal = lang == "en" ? "en" : "ar";
+}
+@foreach (var item in Model)
+{
+    <article style="
+    background-color: #fff;
+    padding: 15px;
+">
+        @{ 
+            var url = $"{item.URL}&lang={langVal}";
+            if (item.PageEnum == PageNameEnum.News)
+                url += $"&searchText={ViewBag.SearchText}";
+            else if(item.PageEnum == PageNameEnum.PhotoArchive)
+            {
+                url += $"&searchText={ViewBag.SearchText}";
+                url = url.Split("?")[0]+"/SearchArchive?"+url.Split("?")[1];
+
+            }
+        }
+        <a href="@url">
+            <h3>@(lang == "en" ? item.EnTitle : item.ArTitle)</h3>
+
+            @if (lang == "en")
+            {
+                if (item.GlobalSearchContentModels != null && item.GlobalSearchContentModels.Any() && item.GlobalSearchContentModels.FirstOrDefault(x => x.ShowInResult) != null)
+                {
+                    string enContent = item.GlobalSearchContentModels.FirstOrDefault(x => x.ShowInResult).EnContent.Replace("<div>", "").Replace("</div>", "").Replace("<p>", "").Replace("</p>", "").Replace("</ul>", "").Replace("<ul>", "").Replace("</li>", "").Replace("<li", "").Replace("style=\"text-align: right;\">", "").Replace("style=\"text-align: left;\">", "");
+                    if (enContent.Length > 500)
+                    {
+                        <p>@Html.Raw(enContent.Substring(0, 500))...</p>
+                        <p hidden>@Html.Raw(enContent.Substring(500))...</p>
+                    }
+                    else
+                    {
+                        <p>@Html.Raw(enContent)</p>
+                    }
+
+
+                }
+            }
+            else
+            {
+                if (item.GlobalSearchContentModels != null && item.GlobalSearchContentModels.Any() && item.GlobalSearchContentModels.FirstOrDefault(x => x.ShowInResult).ArContent != null)
+                {
+                    string arContent = item.GlobalSearchContentModels.FirstOrDefault(x => x.ShowInResult).ArContent.Replace("<div>", "").Replace("</div>", "").Replace("<p>", "").Replace("</p>", "").Replace("</ul>", "").Replace("<ul>", "").Replace("</li>", "").Replace("<li", "").Replace("style=\"text-align: right;\">", "").Replace("style=\"text-align: left;\">", "");
+                    if (arContent.Length > 500)
+                    {
+                        <p>@Html.Raw(arContent.Substring(0, 500) + "...")...</p>
+                        <p hidden>@Html.Raw(arContent.Substring(500))...</p>
+                    }
+                    else
+                    {
+                        <p>@Html.Raw(arContent)</p>
+                    }
+                }
+            }
+
+        </a>
+    </article>
+    <br class="clearfix">
+
+}
+
+@if (((ViewBag.TotalCount + 10 - 1) / 10) > 1)
+{
+    <nav aria-label="...">
+        <ul class="pagination">
+            <li class="page-item prev">
+                <a  id="prevLink" class="page-link pag" style="cursor:pointer" onclick="Previous()">@(langVal == "en" ? "Previous" : "السابق")</a>
+            </li>
+            @for (int i = 0; i < (ViewBag.TotalCount + 10 - 1) / 10; i++)
+            {
+                <li class="page-item p-@(i+1)"><a class="page-link pag" style="cursor:pointer" onclick="UpdateGlobalSearchPaginate(@(i+1))">@(i + 1)</a></li>
+            }
+
+            <li class="page-item next">
+                <a  id="nextLink" class="page-link pag" style="cursor:pointer" onclick="Next()">@(langVal == "en" ? "Next" : "التالي")</a>
+            </li>
+        </ul>
+    </nav>
+}
+
+@if (ViewBag.TotalCount == null || ViewBag.TotalCount == 0)
+{
+    <p>@(langVal == "en" ? "No Search Results" : "لا يوجد نتائج للبحث")</p>
+
+}
+
+<input id="totalCount" value="@ViewBag.TotalCount" hidden />

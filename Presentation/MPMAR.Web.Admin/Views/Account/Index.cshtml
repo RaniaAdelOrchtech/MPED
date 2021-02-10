@@ -1,0 +1,105 @@
+﻿@model IEnumerable<MPMAR.Data.ApplicationUser>
+
+@{
+    ViewData["Title"] = "UserManagment";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+<div>
+
+    <div>
+        <h4>Super Admin > User Managment</h4>
+    </div>
+    <p>
+        <a type="button" class="btn btn-primary" asp-action="Create">Create New</a>
+    </p>
+    <table class="table" id="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Email)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.UserName)
+                </th>
+
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UserName)
+                    </td>
+
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        @Html.ActionLink("Delete",
+                            "DeleteConfirmed",
+                            "Account",
+                            new { id = item.Id },
+                            new { onclick = "return confirm('Are you sure you wish to delete this user?');" })
+                    </td>
+                    <td>
+                        <a href="#" data-id="@item.Id" class="delete">
+                            @(item.TwoFactorEnabled == true ? "Reset 2FA" : "Enable 2FA")
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+    var item_to_delete;
+        $('#table').on('click', '.delete', function () {
+            item_to_delete = $(this).data('id');
+            console.log("id: "+ item_to_delete)
+                                     Swal.fire({
+  title: 'Are you sure?',
+  text: "You want to change 2FA for this row",
+  icon: 'warning',
+  showCancelButton: true,
+  confirmButtonColor: '#3085d6',
+  cancelButtonColor: '#d33',
+  confirmButtonText: 'Change'
+}).then((result) => {
+  if (result.value) {
+
+
+      $.ajax({
+                            type: "POST",
+          url: '@Url.Action("ChangeTwoFactorAuth", "Account")',
+          data: {
+              id: item_to_delete
+          },
+                        }).done(function (res) {
+                            if (res) {
+                                Swal.fire(
+                                    'Changed!',
+                                    " has been Changed.",
+                                    'success'
+                                )
+                                location.reload(true);
+                            } else {
+                                   Swal.fire(
+                                    'Failed',
+                                    "Failed to Change this row",
+                                    'error'
+                                )
+                            }
+                        });
+  }
+})
+
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9.10.9/dist/sweetalert2.all.min.js"></script>
+}

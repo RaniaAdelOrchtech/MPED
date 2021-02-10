@@ -1,0 +1,120 @@
+﻿@model PageRouteCreateViewModel
+@{
+    ViewBag.Title = "Page";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h1>Create Page</h1>
+<h3>Main Data</h3>
+
+<form asp-controller="DynamicPageRoute" asp-action="Create" method="post" class="mt-3" onsubmit="DisableAfterClick(event,this)">
+    @Html.HiddenFor(m => m.Id)
+    <div class="form-group row">
+        <label asp-for="EnName" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="EnName" class="form-control" placeholder="English Name" />
+            <span asp-validation-for="EnName" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="ArName" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="ArName" class="form-control" placeholder="Arabic Name" />
+            <span asp-validation-for="ArName" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="Order" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="Order" class="form-control" placeholder="Order from left to right" />
+            <span asp-validation-for="Order" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="NavItemId" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <select asp-for="NavItemId" asp-items="Model.AllNavItems" class="form-control">
+                <option value="">Select Nav Item</option>
+            </select>
+            <span asp-validation-for="NavItemId" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="IsActive" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="IsActive" class="flat" />
+            <span asp-validation-for="IsActive" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="ln_solid"></div>
+    <h3>Search Engine Optimization Data</h3>
+
+    <div class="form-group row">
+        <label asp-for="SeoTitleEN" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="SeoTitleEN" class="form-control" placeholder="English Page Title" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="SeoTitleAR" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="SeoTitleAR" class="form-control" placeholder="Arabic Page Title" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="SeoDescriptionEN" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="SeoDescriptionEN" class="form-control" placeholder="English Page Description" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="SeoDescriptionAR" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="SeoDescriptionAR" class="form-control" placeholder="Arabic Page Description" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="SeoOgTitleEN" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="SeoOgTitleEN" class="form-control" placeholder="English Facebook Og Title" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="SeoOgTitleAR" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="SeoOgTitleAR" class="form-control" placeholder="Arabic Facebook Og Title" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="SeoTwitterCardEN" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="SeoTwitterCardEN" class="form-control" placeholder="English Twitter Card" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="SeoTwitterCardAR" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="SeoTwitterCardAR" class="form-control" placeholder="Arabic Twitter Card" />
+        </div>
+    </div>
+
+    <div class="item form-group">
+        <div class="col-md-6 col-sm-6 offset-md-2">
+            <button type="submit" class="btn btn-success">Submit</button>
+            <a asp-controller="DynamicPageRoute" asp-action="Index" type="button" class="btn btn-primary">Cancel</a>
+        </div>
+    </div>
+</form>
+

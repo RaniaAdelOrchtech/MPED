@@ -1,0 +1,291 @@
+﻿@using MPMAR.Common
+@{
+    ViewData["Title"] = "Ministries";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+
+        string approvalId = Context.Request.Query["approvalId"];
+    int approvalIdInt = 0;
+    int.TryParse(approvalId, out approvalIdInt);
+
+    var bEUsersPrivilegesViewModel = bEUsersPrivilegesService.ValidateIBEUsersPrivilegesViewService(PrivilegesPageType.StaticPage, this.User.FindFirstValue(ClaimTypes.NameIdentifier), this.User.IsInRole(UserRolesConst.SuperAdmin), StaticPagesIdsConst.FormerMinistries, approvalIdInt);
+
+}
+
+<div>
+    <h4><a asp-controller="StaticPageRoute" asp-action="Index">Static Page</a> > <a asp-controller="FormerMinistries" asp-action="Index" asp-route-id="@ViewBag.pageRouteVersionId"  asp-route-approvalId="@ViewBag.approvalId">Former Ministries</a> > Ministries</h4>
+</div>
+@if (bEUsersPrivilegesViewModel.CanAdd && !bEUsersPrivilegesViewModel.IsFromApprovalPage)
+{
+    <a asp-controller="FormerMinistries" asp-route-pageRouteVersionId="@ViewBag.pageRouteVersionId" asp-action="CreateMinistr" type="button" class="btn btn-primary index-create-button">Add</a>
+}
+<a asp-controller="FormerMinistries" asp-action="Index" asp-route-id="@ViewBag.pageRouteVersionId" asp-route-approvalId="@ViewBag.approvalId" type="button" class="btn btn-primary index-create-button">Back to List</a>
+<table id="data_table" class="table table-striped table-bordered" style="width:100%">
+    <thead>
+        <tr>
+            <th style="width: 20%">Name Ar</th>
+            <th style="width: 20%">Name En</th>
+            <th style="width: 10%">Period Ar</th>
+            <th style="width: 11%">Period En</th>
+            <th style="width: 20%">Description Ar</th>
+            <th style="width: 20%">Description En</th>
+            @*<th style="width: 20%">Image</th>*@
+            <th style="width: 20%">Active</th>
+            @*<th style="width: 20%">Deleted</th>*@
+            <th style="width: 20%"></th>
+            <th style="width: 20%"></th>
+            <th style="width: 20%"></th>
+            <th style="width: 20%"></th>
+            @*<th style="width: 10%">Is Active</th>
+                <th style="width: 10%">Is Deleted</th>
+                <th style="width: 10%">Actions</th>*@
+        </tr>
+    </thead>
+</table>
+
+
+<!--model dialog-->
+<div class="modal1">
+    <div class="modalWrap">
+        <span id="close"> X </span>
+
+        <div id="yourDiv"></div>
+    </div>
+</div>
+
+
+@section scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            window.table = $('#data_table').DataTable({
+                  "scrollX": true,
+                "ajax": { "url": '@Url.Action("GetAllMinistries", "FormerMinistries")', "dataSrc": "data" },
+                "columns": [
+                    { "data": "arName",render:  $.fn.dataTable.render.ellipsis()  },
+                    { "data": "enName",render:  $.fn.dataTable.render.ellipsis()  },
+                    { "data": "periodAr",render:  $.fn.dataTable.render.ellipsis()  },
+                    { "data": "periodEn" ,render:  $.fn.dataTable.render.ellipsis() },
+                    { "data": "arDescription",render:  $.fn.dataTable.render.ellipsis()  },
+                    { "data": "enDescription",render:  $.fn.dataTable.render.ellipsis()  },
+
+                    //{
+                    //    "data": "profileImageUrl", "orderable": false, "render": function (data, type, row) {
+                    // return '<img style="height: 200px;"  src="'+row.profileImageUrl+'">';
+                    //        return '<a href="#" title="View Image" data-placement="right" id="imageItem" class="imageItem anchorActionLink" data-id="' + row.profileImageUrl + '">Image</a>';
+                    //    }
+                    //},
+                     { "data": "isActive" },
+                    //{ "data": "isDeleted" },
+                {
+                    "data": "id", "orderable": false, "render": function (data, type, row) {
+                        var details = '@Url.Action("DetailsMinistr", "FormerMinistries")';
+                        return '<a href="' + details + '?id=' + data + '&pageRouteVersionId=' + '@ViewBag.pageRouteVersionId' + '&approvalId=' + '@ViewBag.approvalId'+'" title="Details" class="anchorActionLink"><i class="fa fa-eye"></i></a>';
+                    }
+                  },
+                  {
+                    "data": "id", "orderable": false, "render": function (data, type, row) {
+                          var edit = '@Url.Action("EditMinistr", "FormerMinistries")';
+                             var isContentManager='@(bEUsersPrivilegesViewModel.CanEdit && !bEUsersPrivilegesViewModel.IsFromApprovalPage)';
+                        return  isContentManager=="True" ? '<a href="' + edit + '?id=' + data + '&pageRouteVersionId=' + '@ViewBag.pageRouteVersionId' +'" title="Edit"  class="anchorActionLink"><i class="fa fa-pencil"></i></a>':''
+                    }
+                    },
+                    {
+                        "data": "id", "orderable": false, "render": function (data, type, row) {
+                            var title = row.isActive?"Deactive":"Active"
+                            var icon = row.isActive ? "ban" : "check-circle"
+                               var isContentManager='@(bEUsersPrivilegesViewModel.CanEdit && !bEUsersPrivilegesViewModel.IsFromApprovalPage)';
+                            return isContentManager=="True" ?  '<a href="#" title="'+title+'" data-placement="right"  class="activDeactive anchorActionLink" data-target="#basic" data-toggle="modal" data-id="' + data + '"><i class="fa fa-'+icon+'"></i></a>':''
+                        }
+                    },
+                    {
+                        "data": "id", "orderable": false, "render": function (data, type, row) {
+                            var isContentManager='@(bEUsersPrivilegesViewModel.CanDelete && !bEUsersPrivilegesViewModel.IsFromApprovalPage)';
+                            return isContentManager=="True" ? '<a href="#" title="Delete" data-placement="right"   class="delete anchorActionLink" data-target="#basic" data-toggle="modal" data-id="' + data + '"><i class="fa fa-trash"></i></a>':''
+                        }
+                    }
+
+
+                ]
+                ,"fnInitComplete": function (oSettings, json) {
+                    var table = $('#data_table').DataTable();
+                    if (table.data().count() <= 10) {
+                       document.getElementById("data_table_paginate").style.display = "none";
+                            document.getElementById("data_table_length").style.display = "none";
+                            document.getElementById("data_table_filter").style.display = "none";
+                    }
+
+                }
+            });
+        });
+
+
+          $("#close").click(function () {
+        $(".modal1").fadeOut("fast");
+        $("#yourDiv").css({
+            "overflow": "hidden",
+            "height": "auto"
+        });
+    });
+
+    $(".modalWrap").on("click", function (e) {
+        e.stopPropagation();
+    });
+        $('#data_table').on('click', '.imageItem', function () {
+
+                var img = $('<img id="dynamic">');
+                img.attr('src', $(this).data('id'));
+        $(".modal1").fadeIn("fast");
+        $("#yourDiv img").remove();
+        img.clone().appendTo("#yourDiv");
+        var hyt = $("#yourDiv").height();
+        if (hyt > 400) {
+            $("#yourDiv").css({
+                "overflow": "hidden",
+                "height": "400px"
+            });
+            $("#yourDiv img").css({
+                "max-height": "98%"
+            });
+        } else if (hyt <= 400) {
+            $("#yourDiv").css({
+                "overflow": "hidden",
+                "height": "auto"
+            });
+        }
+    });
+
+        var item_to_delete;
+        $('#data_table').on('click', '.activDeactive', function () {
+            item_to_delete = $(this).data('id');
+            var data = table.row($(this).parents('tr')).data();
+            if (data.isActive) {
+                 DeActive(data.enName,item_to_delete)
+            } else {
+                Active(data.enName,item_to_delete)
+            }
+
+        });
+
+           var item_to_delete;
+        $('#data_table').on('click', '.delete', function () {
+            item_to_delete = $(this).data('id');
+            var data = table.row($(this).parents('tr')).data();
+                                     Swal.fire({
+  title: 'Are you sure?',
+  text: "You want to delete '"+ data.enName+"'"+('@ViewBag.DisableEditFlage' == 'True'?' NOTE! your old changes do not approved yet, and your new changes will be auto submitted.':''),
+  icon: 'warning',
+  showCancelButton: true,
+  confirmButtonColor: '#3085d6',
+  cancelButtonColor: '#d33',
+  confirmButtonText: 'delete'
+}).then((result) => {
+  if (result.value) {
+
+
+      $.ajax({
+                            type: "POST",
+          url: '@Url.Action("DeleteMinistr", "FormerMinistries")',
+          data: { id: item_to_delete, pageRouteVersionId:@ViewBag.pageRouteVersionId },
+                        }).done(function (res) {
+                            if (res) {
+                                Swal.fire(
+                                    'Deleted!',
+                                    "'" + data.enName + "'" + " has been Deleted.",
+                                    'success'
+                                )
+                                table.ajax.reload();
+                            } else {
+                                   Swal.fire(
+                                    'Failed',
+                                    "Failed to Delete '" + data.enName + "'" + " .",
+                                    'error'
+                                )
+                            }
+                        });
+  }
+})
+
+        });
+
+        function DeActive(name,id) {
+                         Swal.fire({
+  title: 'Are you sure?',
+  text: "You want to deactive '"+ name+"'"+('@ViewBag.DisableEditFlage' == 'True'?' NOTE! your old changes do not approved yet, and your new changes will be auto submitted.':''),
+  icon: 'warning',
+  showCancelButton: true,
+  confirmButtonColor: '#3085d6',
+  cancelButtonColor: '#d33',
+  confirmButtonText: 'Deactive'
+}).then((result) => {
+  if (result.value) {
+
+
+      $.ajax({
+                            type: "POST",
+          url: '@Url.Action("ChangeActiveMinistr", "FormerMinistries")',
+          data: { id: id, active: false },
+                        }).done(function (res) {
+                            if (res) {
+                                Swal.fire(
+                                    'Deactived!',
+                                    "'" + name + "'" + " has been Deactived.",
+                                    'success'
+                                )
+                                table.ajax.reload();
+                            } else {
+                                   Swal.fire(
+                                    'Failed',
+                                    "Failed to Deactive '" + name + "'" + " .",
+                                    'error'
+                                )
+                            }
+                        });
+  }
+})
+        }
+
+          function Active(name,id) {
+                         Swal.fire({
+  title: 'Are you sure?',
+  text: "You want to Activate '"+ name+"'"+('@ViewBag.DisableEditFlage' == 'True'?' NOTE! your old changes do not approved yet, and your new changes will be auto submitted.':''),
+  icon: 'warning',
+  showCancelButton: true,
+  confirmButtonColor: '#3085d6',
+  cancelButtonColor: '#d33',
+  confirmButtonText: 'Active'
+}).then((result) => {
+  if (result.value) {
+
+
+      $.ajax({
+                            type: "POST",
+                              url: '@Url.Action("ChangeActiveMinistr", "FormerMinistries")',
+                              data: { id: id,active:true },
+                        }).done(function (res) {
+                            if (res) {
+                                Swal.fire(
+                                    'Activated!',
+                                    "'" + name + "'" + " has been Activated.",
+                                    'success'
+                                )
+                                table.ajax.reload();
+                            } else {
+                                   Swal.fire(
+                                    'Failed',
+                                    "Failed to Activate '" + name + "'" + " .",
+                                    'error'
+                                )
+                            }
+                        });
+  }
+})
+        }
+
+
+
+
+
+
+
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9.10.9/dist/sweetalert2.all.min.js"></script>
+}

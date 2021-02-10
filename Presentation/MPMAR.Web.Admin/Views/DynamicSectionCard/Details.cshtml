@@ -1,0 +1,85 @@
+﻿@model MPMAR.Business.ViewModels.SectionCardEditViewModel
+@{
+    ViewBag.Title = "Card";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+
+    var photoPath = Url.Content("~/Uploads/Images/") + Model.ImageUrl ?? "noImage.png";
+    // var photoPath = "~/Uploads/Images/" + Model.ImageUrl ?? "noImage.png";
+}
+
+<h1>Card Details</h1>
+
+<table class="pull-left col-md-12 ">
+    <tbody>
+        <tr>
+            <td class="h6" style="width: 30%"><strong><label asp-for="EnTitle"></label></strong></td>
+            <td class="h5">@Model.EnTitle</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong>Card <label asp-for="ArTitle"></label></strong></td>
+            <td class="h5">@Model.ArTitle</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong>Card <label asp-for="EnDescription"></label></strong></td>
+            <td class="h5">@Html.Raw(Model.EnDescription)</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong>Card <label asp-for="ArDescription"></label></strong></td>
+            <td class="h5">@Html.Raw(Model.ArDescription)</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="Order"></label></strong></td>
+            <td class="h5">@Model.Order</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="IsActive"></label></strong></td>
+            <td class="h5">@(Model.IsActive ? "Yes" : "No") </td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong>Card <label asp-for="EnImageAlt"></label></strong></td>
+            <td class="h5">@Model.EnImageAlt</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong>Card <label asp-for="ArImageAlt"></label></strong></td>
+            <td class="h5">@Model.ArImageAlt</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="ImageUrl"></label></strong></td>
+            <td>
+                <div class="col-sm-10">
+                    <img src="@Model.ImageUrl" class="thumpnail-edit-image" asp-append-version="true" />
+                </div>
+            </td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="FileUrl"></label></strong></td>
+            <td>
+                @*<a asp-controller="DynamicSectionCard" asp-action="DownloadFile" asp-route-fileName="@Model.FileUrl">Download File</a>*@
+
+
+                <a href="@Model.FileUrl" title="View/Download File" target="_blank" data-placement="right">Download File</a>
+            </td>
+        </tr>
+
+        <tr>
+            <td class="btn-mais-info text-primary">
+                <br />
+                <p>
+                    <strong><a asp-controller="DynamicSectionCard" asp-action="Index" asp-route-id="@Model.SectionVersionId" asp-route-pageRouteVersionId="@Model.PageRouteVersionId" asp-route-approvalId="@Model.ApprovalId">Back to previous page</a></strong>
+                </p>
+            </td>
+            <td> </td>
+            <td class="h5"></td>
+        </tr>
+
+    </tbody>
+</table>

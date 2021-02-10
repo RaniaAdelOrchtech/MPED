@@ -1,0 +1,2280 @@
+﻿
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = ViewBag.RepoOpt;
+    var lang = Context.Request.Query["lang"];
+
+    ViewBag.lang = lang;
+    string langVal = ViewBag.lang == "en" ? "en" : "ar";
+    Layout = ViewBag.Layout;
+
+
+}
+<style>
+    .charts {
+        width: 100%;
+        min-height: 450px;
+    }
+
+    @@media (max-width: 767px) {
+        div#PieFigure {
+            overflow-x: auto;
+            margin-right: -50px;
+        }
+
+        table, tbody, tr, td, th {
+            display: revert;
+        }
+    }
+</style>
+<link href="~/css/Charts.css" rel="stylesheet" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+<!-- Page Heading -->
+<section class="section page-heading animate-onscroll">
+
+    <h1>
+        @ViewBag.Title
+    </h1>
+    <p class="breadcrumb"><a href="~/home?lang=@langVal">@(ViewBag.lang == "en" ? "Main" : "الرئيسية")</a> / @ViewBag.AnalyticsNav / <a href="~/analytics?lang=@langVal">@ViewBag.Analytics</a> / @ViewBag.RepoOpt</p>
+</section>
+
+@if ("" + lang == "" || lang == "ar")
+{
+    <partial name="~/Views/Shared/Analytics/_AnalyticsBarAr.cshtml" model="@langVal" />
+}
+else
+{
+    <partial name="~/Views/Shared/Analytics/_AnalyticsBarEn.cshtml" model="@langVal" />
+}
+<!-- Page Heading -->
+@*<partial name="~/Views/Shared/Analytics/_AnalyticsBar.cshtml" />*@
+<div style="margin-bottom:5px;margin-top:5px">
+    <ul class="nav nav-tabs" id="myTab">
+        <li class="active"><a data-toggle="tab" id="home-tab" onclick="MoveToReport()" href="">@ViewBag.ReportSpan</a></li>
+        <li><a data-toggle="tab" id="Charts-tab" href="" onclick="MoveToCharts()">@ViewBag.ChartsSpan</a></li>
+    </ul>
+
+    <div class="tab-content">
+        <div id="Report" class="tab-pane fade in active">
+            <div class="row row-without-margin" style="margin-bottom: 10px;">
+                <div class="col-lg-3 col-md-3 RTL_select_header">
+                    <div class="col">
+                        <h6>@ViewBag.selectFrequancy</h6>
+                    </div>
+                    <div class="col">
+                        <input type="text" id="Frequancy" placeholder="Select" autocomplete="off" style="direction:ltr" />
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3">
+                    <div class="col RTL_select_header">
+                        <h6 style="padding-left:2px;">@ViewBag.selectFiscalYear</h6>
+                    </div>
+                    <div class="col">
+                        <input type="text" id="Years" placeholder="Select" autocomplete="off" style="direction:ltr" />
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 RTL_select_header" id="quartersDiv" hidden>
+                    <div class="col">
+                        <h6>@ViewBag.selectQuarter</h6>
+                    </div>
+                    <div class="col">
+                        <input type="text" id="Quartes" placeholder="Select" autocomplete="off" style="direction:ltr" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row row-without-margin" style="margin-bottom:10px;">
+                <div class="col-lg-3 col-md-3 RTL_select_header">
+                    <div class="col">
+                        <h6>@ViewBag.selectPrice</h6>
+                    </div>
+                    <div class="col">
+                        <input type="text" id="Prices" placeholder="Select" autocomplete="off" style="direction:ltr" />
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 RTL_select_header" id="GDPConstDiv" hidden>
+                    <div class="col">
+                        <h6>@ViewBag.selectGDP</h6>
+                    </div>
+                    <div class="col">
+                        <input type="text" id="GDPConst" placeholder="Select" autocomplete="off" style="direction:ltr" />
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 RTL_select_header" id="GDPCurrentDiv" hidden>
+                    <div class="col">
+                        <h6>@ViewBag.selectGDP</h6>
+                    </div>
+                    <div class="col">
+                        <input type="text" id="GDPCurrent" placeholder="Select" autocomplete="off" style="direction:ltr" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row row-without-margin" style="margin-bottom:10px;">
+                <div id="div_Component" class="col-lg-4 col-md-4" hidden>
+                    <div class="RTL_select_header">
+                        <div class="col">
+                            <h6>@ViewBag.selectComponent</h6>
+                        </div>
+                        <div class="col">
+                            <input type="text" id="Component" placeholder="Select" autocomplete="off" style="direction:ltr" />
+                        </div>
+                    </div>
+                </div>
+                <div id="div_Activity" class="col-lg-8 col-md-8 row" hidden>
+                    <div class="col-lg-6 col-md-6 RTL_select_header" id="ActivityDiv">
+                        <div class="col">
+                            <h6>@ViewBag.selectActivity</h6>
+                        </div>
+                        <div class="col">
+                            <input type="text" id="Activity" placeholder="Select" autocomplete="off" style="direction:ltr" />
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4 RTL_select_header" id="SectorDiv">
+                        <div class="col">
+                            <h6>@ViewBag.selectSector</h6>
+                        </div>
+                        <div class="col">
+                            <input type="text" id="Sectors" placeholder="Select" autocomplete="off" style="direction:ltr" />
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="row row-without-margin-button-reverse RTL_btns" style="flex-flow:row-reverse;">
+                <div class="col-md-1">
+                    <button type="submit" id="btnGridSearchGovernorateClear" class="btn" style="background-color:#688C8B; color:white;min-width:65px">@ViewBag.clearBtn</button>
+                </div>
+                <div class="col-md-1">
+                    <button id="btnGridSearch" type="submit" class="btn" style="background-color:#28A5A3; color:white;min-width:65px">@ViewBag.submitBtn</button>
+                </div>
+
+            </div>
+            <br />
+
+            <div id="div_table" style="overflow: auto;overflow-y: hidden;">
+
+                @*@if (langVal == "en")
+                    {
+                        @:<div id="div_table" style="overflow: auto;overflow-y: hidden;margin-left:-10%;width:120%">
+                        }
+                        else
+                        {
+                            @:<div id="div_table" style="overflow: auto;overflow-y: hidden;margin-right:-10%;width:120%">
+                            }*@
+                <table id="csvData-table" style="margin-top:70px;" class="table table-striped table-bordered dt-responsive nowrap">
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+        <div id="Charts" class="tab-pane fade">
+            <div>
+                <ul class="nav nav-tabs" id="pills-tab">
+                    <li class="active"><a data-toggle="tab" id="Pie-tab" onclick="clearPie()" href="#Pie" style="color: #28A5A3">@ViewBag.Pie</a></li>
+                    <li><a data-toggle="tab" id="Bar-tab" onclick="clearBar()" href="#Bar" style="color: #28A5A3">@ViewBag.Bar</a></li>
+                    <li><a data-toggle="tab" id="Line-tab" onclick="clearLine()" href="#Line" style="color: #28A5A3">@ViewBag.Line</a></li>
+                </ul>
+                <div class="tab-content" id="pills-tabContent">
+                    <div class="tab-pane fade in active" id="Pie">
+
+                        <div class="row row-without-margin" style="margin-bottom:10px;">
+                            <div class="col-lg-3 col-md-3 RTL_select_header">
+                                <div class="col">
+                                    <h6>@ViewBag.selectFrequancy</h6>
+                                </div>
+                                <div class="col">
+                                    <input type="text" id="PieFrequancy" placeholder="Select" autocomplete="off" style="direction:ltr" />
+                                </div>
+                            </div>
+
+                            <div class="col-lg-3 col-md-3">
+                                <div class="col RTL_select_header">
+                                    <h6 style="padding-left:2px;">@ViewBag.selectFiscalYear</h6>
+                                </div>
+                                <div class="col">
+                                    <input type="text" id="PieYears" placeholder="Select" autocomplete="off" style="direction:ltr" />
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3 RTL_select_header" id="PiequartersDiv" hidden>
+                                <div class="col">
+                                    <h6>@ViewBag.selectQuarter</h6>
+                                </div>
+                                <div class="col">
+                                    <input type="text" id="PieQuartes" placeholder="Select" autocomplete="off" style="direction:ltr" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row row-without-margin" style="margin-bottom:10px;">
+                            <div class="col-lg-3 col-md-3 RTL_select_header">
+                                <div class="col">
+                                    <h6>@ViewBag.selectPrice</h6>
+                                </div>
+                                <div class="col">
+                                    <input type="text" id="PiePrices" placeholder="Select" autocomplete="off" style="direction:ltr" />
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 RTL_select_header" id="PieGDPConstDiv" hidden>
+                                <div class="col">
+                                    <h6>@ViewBag.selectGDP</h6>
+                                </div>
+                                <div class="col">
+                                    <input type="text" id="PieGDPConst" placeholder="Select" autocomplete="off" style="direction:ltr" />
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 RTL_select_header" id="PieGDPCurrentDiv" hidden>
+                                <div class="col">
+                                    <h6>@ViewBag.selectGDP</h6>
+                                </div>
+                                <div class="col">
+                                    <input type="text" id="PieGDPCurrent" placeholder="Select" autocomplete="off" style="direction:ltr" />
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row row-without-margin" style="margin-bottom:10px;">
+                            <div id="Pie_div_Component" class="col-lg-4 col-md-4" hidden>
+                                <div class="RTL_select_header">
+                                    <div class="col">
+                                        <h6>@ViewBag.selectComponent</h6>
+                                    </div>
+                                    <div class="col">
+                                        <input type="text" id="PieComponent" placeholder="Select" autocomplete="off" style="direction:ltr" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="Pie_div_Activity" class="col-lg-8 col-md-8 row" hidden>
+                                <div class="col-lg-6 col-md-6 RTL_select_header">
+                                    <div class="col">
+                                        <h6>@ViewBag.selectActivity</h6>
+                                    </div>
+                                    <div class="col">
+                                        <input type="text" id="PieActivity" placeholder="Select" autocomplete="off" style="direction:ltr" />
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-4 RTL_select_header">
+                                    <div class="col">
+                                        <h6>@ViewBag.selectSector</h6>
+                                    </div>
+                                    <div class="col">
+                                        <input type="text" id="PieSectors" placeholder="Select" autocomplete="off" style="direction:ltr" />
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="row row-without-margin-button-reverse RTL_btns" style="flex-flow:row-reverse;">
+                            <div class="col-md-1">
+                                <button type="submit" id="PiebtnGridSearchGovernorateClear" class="btn" style="background-color:#688C8B; color:white;min-width:65px">@ViewBag.clearBtn</button>
+                            </div>
+                            <div class="col-md-1">
+                                <button id="PiebtnGridSearch" type="submit" class="btn" style="background-color:#28A5A3; color:white;min-width:65px">@ViewBag.submitBtn</button>
+                            </div>
+
+                        </div>
+
+                        <div id="PieFigure" style="display:none">
+                            @*<figure class="highcharts-figure" style="margin-top:70px;">*@
+                            <div id="pie-container"></div>
+
+                            @*</figure>*@
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="Bar">
+
+                        <div class="row row-without-margin" style="margin-bottom:10px;">
+                            <div class="col-lg-3 col-md-3 RTL_select_header">
+                                <div class="col">
+                                    <h6>@ViewBag.selectFrequancy</h6>
+                                </div>
+                                <div class="col">
+                                    <input type="text" id="BarFrequancy" placeholder="Select" autocomplete="off" style="direction:ltr" />
+                                </div>
+                            </div>
+
+                            <div class="col-lg-3 col-md-3">
+                                <div class="col RTL_select_header">
+                                    <h6 style="padding-left:2px;">@ViewBag.selectFiscalYear</h6>
+                                </div>
+                                <div class="col">
+                                    <input type="text" id="BarYears" placeholder="Select" autocomplete="off" style="direction:ltr" />
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3 RTL_select_header" id="BarquartersDiv" hidden>
+                                <div class="col">
+                                    <h6>@ViewBag.selectQuarter</h6>
+                                </div>
+                                <div class="col">
+                                    <input type="text" id="BarQuartes" placeholder="Select" autocomplete="off" style="direction:ltr" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row row-without-margin" style="margin-bottom:10px;">
+                            <div class="col-lg-3 col-md-3 RTL_select_header">
+                                <div class="col">
+                                    <h6>@ViewBag.selectPrice</h6>
+                                </div>
+                                <div class="col">
+                                    <input type="text" id="BarPrices" placeholder="Select" autocomplete="off" style="direction:ltr" />
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 RTL_select_header" id="BarGDPConstDiv" hidden>
+                                <div class="col">
+                                    <h6>@ViewBag.selectGDP</h6>
+                                </div>
+                                <div class="col">
+                                    <input type="text" id="BarGDPConst" placeholder="Select" autocomplete="off" style="direction:ltr" />
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 RTL_select_header" id="BarGDPCurrentDiv" hidden>
+                                <div class="col">
+                                    <h6>@ViewBag.selectGDP</h6>
+                                </div>
+                                <div class="col">
+                                    <input type="text" id="BarGDPCurrent" placeholder="Select" autocomplete="off" style="direction:ltr" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row row-without-margin" style="margin-bottom:10px;">
+                            <div id="Bar_div_Component" class="col-lg-4 col-md-4" hidden>
+                                <div class="RTL_select_header">
+                                    <div class="col">
+                                        <h6>@ViewBag.selectComponent</h6>
+                                    </div>
+                                    <div class="col">
+                                        <input type="text" id="BarComponent" placeholder="Select" autocomplete="off" style="direction:ltr" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="Bar_div_Activity" class="col-lg-8 col-md-8 row" hidden>
+                                <div class="col-lg-6 col-md-6 RTL_select_header">
+                                    <div class="col">
+                                        <h6>@ViewBag.selectActivity</h6>
+                                    </div>
+                                    <div class="col">
+                                        <input type="text" id="BarActivity" placeholder="Select" autocomplete="off" style="direction:ltr" />
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-4 RTL_select_header">
+                                    <div class="col">
+                                        <h6>@ViewBag.selectSector</h6>
+                                    </div>
+                                    <div class="col">
+                                        <input type="text" id="BarSectors" placeholder="Select" autocomplete="off" style="direction:ltr" />
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="row row-without-margin-button-reverse RTL_btns" style="flex-flow:row-reverse;">
+                            <div class="col-md-1">
+                                <button type="submit" id="BarbtnGridSearchGovernorateClear" class="btn" style="background-color:#688C8B; color:white;min-width:65px">@ViewBag.clearBtn</button>
+                            </div>
+                            <div class="col-md-1">
+                                <button id="BarbtnGridSearch" type="submit" class="btn" style="background-color:#28A5A3; color:white;min-width:65px">@ViewBag.submitBtn</button>
+                            </div>
+
+                        </div>
+                        <br />
+                        <br />
+
+                        <div id="BarFigure" style="display:none;direction:ltr">
+
+
+
+                            <div id="bar-container" class="charts"></div>
+
+                        </div>
+                    </div>
+
+
+
+                    <div class="tab-pane fade" id="Line">
+
+
+                        <div class="row row-without-margin" style="margin-bottom:10px;">
+                            <div class="col-lg-3 col-md-3 RTL_select_header">
+                                <div class="col">
+                                    <h6>@ViewBag.selectFrequancy</h6>
+                                </div>
+                                <div class="col">
+                                    <input type="text" id="LineFrequancy" placeholder="Select" autocomplete="off" style="direction:ltr" />
+                                </div>
+                            </div>
+
+                            <div class="col-lg-3 col-md-3">
+                                <div class="col RTL_select_header">
+                                    <h6 style="padding-left:2px;">@ViewBag.selectFiscalYear</h6>
+                                </div>
+                                <div class="col">
+                                    <input type="text" id="LineYears" placeholder="Select" autocomplete="off" style="direction:ltr" />
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3 RTL_select_header" id="LinequartersDiv" hidden>
+                                <div class="col">
+                                    <h6>@ViewBag.selectQuarter</h6>
+                                </div>
+                                <div class="col">
+                                    <input type="text" id="LineQuartes" placeholder="Select" autocomplete="off" style="direction:ltr" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row row-without-margin" style="margin-bottom:10px;">
+                            <div class="col-lg-3 col-md-3 RTL_select_header">
+                                <div class="col">
+                                    <h6>@ViewBag.selectPrice</h6>
+                                </div>
+                                <div class="col">
+                                    <input type="text" id="LinePrices" placeholder="Select" autocomplete="off" style="direction:ltr" />
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 RTL_select_header" id="LineGDPConstDiv" hidden>
+                                <div class="col">
+                                    <h6>@ViewBag.selectGDP</h6>
+                                </div>
+                                <div class="col">
+                                    <input type="text" id="LineGDPConst" placeholder="Select" autocomplete="off" style="direction:ltr" />
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 RTL_select_header" id="LineGDPCurrentDiv" hidden>
+                                <div class="col">
+                                    <h6>@ViewBag.selectGDP</h6>
+                                </div>
+                                <div class="col">
+                                    <input type="text" id="LineGDPCurrent" placeholder="Select" autocomplete="off" style="direction:ltr" />
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <div class="row row-without-margin" style="margin-bottom:10px;">
+                            <div id="Line_div_Component" class="col-lg-4 col-md-4" hidden>
+                                <div class="RTL_select_header">
+                                    <div class="col">
+                                        <h6>@ViewBag.selectComponent</h6>
+                                    </div>
+                                    <div class="col">
+                                        <input type="text" id="LineComponent" placeholder="Select" autocomplete="off" style="direction:ltr" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="Line_div_Activity" class="col-lg-8 col-md-8 row" hidden>
+                                <div class="col-lg-6 col-md-6 RTL_select_header">
+                                    <div class="col">
+                                        <h6>@ViewBag.selectActivity</h6>
+                                    </div>
+                                    <div class="col">
+                                        <input type="text" id="LineActivity" placeholder="Select" autocomplete="off" style="direction:ltr" />
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-4 RTL_select_header">
+                                    <div class="col">
+                                        <h6>@ViewBag.selectSector</h6>
+                                    </div>
+                                    <div class="col">
+                                        <input type="text" id="LineSectors" placeholder="Select" autocomplete="off" style="direction:ltr" />
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="row row-without-margin-button-reverse RTL_btns" style="flex-flow: row-reverse;">
+                            <div class="col-md-1">
+                                <button type="submit" id="LinebtnGridSearchGovernorateClear" class="btn" style="background-color:#688C8B; color:white;min-width:65px">@ViewBag.clearBtn</button>
+                            </div>
+                            <div class="col-md-1">
+                                <button id="LinebtnGridSearch" type="submit" class="btn" style="background-color:#28A5A3; color:white;min-width:65px">@ViewBag.submitBtn</button>
+                            </div>
+
+                        </div>
+                        <br />
+                        <br />
+                        <div id="LineFigure" style="display:none;direction:ltr">
+
+
+                            <div id="line-container" class="charts"></div>
+
+
+                        </div>
+
+                    </div>
+
+
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@{
+    @using Newtonsoft.Json;
+    ViewBag.AvailableYears = JsonConvert.SerializeObject(ViewBag.YearView);
+    ViewBag.AvailableQuarters = JsonConvert.SerializeObject(ViewBag.QuarterView);
+    ViewBag.AvailablePrices = JsonConvert.SerializeObject(ViewBag.PriceView);
+    ViewBag.AvailableGDPConst = JsonConvert.SerializeObject(ViewBag.GDPViewConst);
+    ViewBag.AvailableGDPCurrent = JsonConvert.SerializeObject(ViewBag.GDPViewCurrent);
+    ViewBag.AvailableGDPConstChart = JsonConvert.SerializeObject(ViewBag.GDPViewConstChart);
+    ViewBag.AvailableSectors = JsonConvert.SerializeObject(ViewBag.SectorView);
+    ViewBag.AvailableComponents = JsonConvert.SerializeObject(ViewBag.ComponentView);
+    ViewBag.AvailableActivities = JsonConvert.SerializeObject(ViewBag.ActivityView);
+    ViewBag.AvailableFrequancy = JsonConvert.SerializeObject(ViewBag.FrequancyView);
+
+    ViewBag.ChooseAllFiltersMsg = JsonConvert.SerializeObject(ViewBag.ChooseAllFilters);
+    ViewBag.ConfirmBtnMsg = JsonConvert.SerializeObject(ViewBag.ConfirmBtn);
+    ViewBag.GDPRepoExcelMsg = JsonConvert.SerializeObject(ViewBag.GDPRepoExcel);
+    ViewBag.GDPRepoSectorsAndQuartersMsg = JsonConvert.SerializeObject(ViewBag.GDPRepoSectorsAndQuarters);
+    ViewBag.SwitchTabsMsg = JsonConvert.SerializeObject(ViewBag.SwitchTabs);
+    ViewBag.SwitchTabsYesMsg = JsonConvert.SerializeObject(ViewBag.SwitchTabsYes);
+    ViewBag.SwitchTabsNoMsg = JsonConvert.SerializeObject(ViewBag.SwitchTabsNo);
+
+
+
+
+
+}
+@section Scripts{
+
+
+    <script>
+        var dropdownyear = JSON.parse('@Html.Raw(ViewBag.AvailableYears)');
+        var dropdownquarter = JSON.parse('@Html.Raw(ViewBag.AvailableQuarters)');
+        var dropdownprice = JSON.parse('@Html.Raw(ViewBag.AvailablePrices)');
+        var dropdownGDPConst = JSON.parse('@Html.Raw(ViewBag.AvailableGDPConst)');
+        var dropdownGDPConstChart = JSON.parse('@Html.Raw(ViewBag.AvailableGDPConstChart)');
+        var dropdownGDPCurrent = JSON.parse('@Html.Raw(ViewBag.AvailableGDPCurrent)');
+        var dropdownSector= JSON.parse('@Html.Raw(ViewBag.AvailableSectors)');
+        var dropdownActivity= JSON.parse('@Html.Raw(ViewBag.AvailableActivities)');
+        var dropdownComponent = JSON.parse('@Html.Raw(ViewBag.AvailableComponents)');
+        var dropdownFrequancy = JSON.parse('@Html.Raw(ViewBag.AvailableFrequancy)');
+
+        var chooseAllFiltersMsg=JSON.parse('@Html.Raw(ViewBag.ChooseAllFiltersMsg)');
+        var confirmBtnMsg=JSON.parse('@Html.Raw(ViewBag.ConfirmBtnMsg)');
+        var GDPRepoExcelMsg=JSON.parse('@Html.Raw(ViewBag.GDPRepoExcelMsg)');
+        var GDPRepoSectorsAndQuartersMsg = JSON.parse('@Html.Raw(ViewBag.GDPRepoSectorsAndQuartersMsg)');
+        var SwitchTabsMsg=JSON.parse('@Html.Raw(ViewBag.SwitchTabsMsg)');
+        var SwitchTabsYesMsg=JSON.parse('@Html.Raw(ViewBag.SwitchTabsYesMsg)');
+        var SwitchTabsNoMsg=JSON.parse('@Html.Raw(ViewBag.SwitchTabsNoMsg)');
+
+        var url_string = window.location.href;
+        var url = new URL(url_string);
+        var langParam = url.searchParams.get("lang");
+
+        dropdownComponent.map(function (item) {
+            if (item.subs.length == 0)
+                delete item.subs;
+        })
+        dropdownActivity.map(function (item) {
+            if (item.subs.length == 0)
+                delete item.subs;
+        })
+
+        function allActivitiesIds () {
+            allIds = []
+           Array.prototype.forEach.call(dropdownActivity,e => {
+                allIds.push(e.id)
+               if (e.subs != undefined) {
+                   Array.prototype.forEach.call(e.subs, e2 => {
+                    allIds.push(e2.id)
+                   })
+                }
+            })
+            return allIds;
+        }
+
+
+   $(document).ready(function () {
+
+       var dataTableFilLang = ""
+       console.log('@ViewBag.lang')
+       if ('@ViewBag.lang' == '' || '@ViewBag.lang' == "ar") {
+
+           $("#div_table").css("direction", "rtl")
+           $("#myTab").css("direction", "rtl").css("padding","0")
+           $("#pills-tab").css("direction", "rtl").css("padding","0")
+           $("#Report").css("direction", "rtl")
+           $("#Pie").css("direction", "rtl")
+           $("#Bar").css("direction", "rtl")
+           $("#Line").css("direction", "rtl")
+           $(".RTL_btns").children().css("float", "left")
+           $("#btnExcel").css("float", "left")
+           dataTableFilLang = "/dataTableArabicLang.json"
+           $(".RTL_select_header").addClass("text-right")
+       }
+       else {
+           dataTableFilLang = "/dataTableEnglishLang.json"
+           $(".RTL_btns").children().css("float", "right")
+
+       }
+
+         YearsTree = $('#Years').comboTree({
+                source: dropdownyear,
+                isMultiple: true,
+         });
+         QuartesTree = $('#Quartes').comboTree({
+                source: dropdownquarter,
+                isMultiple: true,
+         });
+         window.PricesTree = $('#Prices').comboTree({
+             source: dropdownprice,
+             isMultiple: false,
+         });
+         GDPConstTree = $('#GDPConst').comboTree({
+             source: dropdownGDPConst,
+             isMultiple: false,
+         });
+       GDPCurrentTree = $('#GDPCurrent').comboTree({
+           source: dropdownGDPCurrent,
+           isMultiple: false,
+       });
+         SectorTree = $('#Sectors').comboTree({
+           source: dropdownSector,
+           isMultiple: true,
+       });
+        ActivityTree = $('#Activity').comboTree({
+           source: dropdownActivity,
+             isMultiple: true,
+           cascadeSelect:true
+
+       });
+        ComponentTree = $('#Component').comboTree({
+           source: dropdownComponent,
+           isMultiple: true,
+           cascadeSelect:true
+        });
+       FrequancyTree = $('#Frequancy').comboTree({
+           source: dropdownFrequancy,
+           isMultiple: false,
+           cascadeSelect: true
+       });
+
+         var piedropdownyear = dropdownyear.slice();
+       piedropdownyear.shift()
+
+       var piedropdownComponent = dropdownComponent.slice();
+        piedropdownComponent.pop()
+
+        var piedropdownActivity = dropdownActivity.slice();
+        piedropdownActivity.pop()
+
+         var piedropdownquarter = dropdownquarter.slice();
+       piedropdownquarter.shift()
+
+       var piedropdownSector = dropdownSector.slice();
+        piedropdownSector.shift()
+
+         PieYearsTree = $('#PieYears').comboTree({
+             source: piedropdownyear,
+             isMultiple: false,
+         });
+         PieQuartesTree = $('#PieQuartes').comboTree({
+             source: piedropdownquarter,
+             isMultiple: false,
+         });
+
+         window.PiePricesTree = $('#PiePrices').comboTree({
+             source: dropdownprice,
+             isMultiple: false,
+         });
+
+       PieGDPConstTree = $('#PieGDPConst').comboTree({
+           source: dropdownGDPConstChart,
+           isMultiple: false,
+       });
+
+       PieGDPCurrentTree = $('#PieGDPCurrent').comboTree({
+           source: dropdownGDPCurrent,
+           isMultiple: false,
+       });
+         PieSectorTree = $('#PieSectors').comboTree({
+             source: piedropdownSector,
+             isMultiple: false,
+       });
+        PieActivityTree = $('#PieActivity').comboTree({
+           source: piedropdownActivity,
+             isMultiple: true,
+           cascadeSelect:true
+
+        });
+
+        PieComponentTree = $('#PieComponent').comboTree({
+           source: piedropdownComponent,
+           isMultiple: true,
+           cascadeSelect:true
+        });
+
+       PieFrequancyTree = $('#PieFrequancy').comboTree({
+           source: dropdownFrequancy,
+           isMultiple: false,
+           cascadeSelect: true
+       });
+
+
+         BarYearsTree = $('#BarYears').comboTree({
+             source: dropdownyear,
+             isMultiple: true,
+         });
+         BarQuartesTree = $('#BarQuartes').comboTree({
+             source: dropdownquarter,
+             isMultiple: true,
+         });
+         window.BarPricesTree = $('#BarPrices').comboTree({
+             source: dropdownprice,
+             isMultiple: false,
+         });
+
+         BarSectorTree = $('#BarSectors').comboTree({
+             source: dropdownSector,
+             isMultiple: true,
+       });
+        BarActivityTree = $('#BarActivity').comboTree({
+           source: dropdownActivity,
+             isMultiple: true,
+           cascadeSelect:true
+
+       });
+        BarComponentTree = $('#BarComponent').comboTree({
+           source: dropdownComponent,
+           isMultiple: true,
+           cascadeSelect:true
+        });
+       BarFrequancyTree = $('#BarFrequancy').comboTree({
+           source: dropdownFrequancy,
+           isMultiple: false,
+           cascadeSelect: true
+       });
+       BarGDPConstTree = $('#BarGDPConst').comboTree({
+           source: dropdownGDPConstChart,
+           isMultiple: false,
+       });
+      BarGDPCurrentTree = $('#BarGDPCurrent').comboTree({
+           source: dropdownGDPCurrent,
+           isMultiple: false,
+       });
+
+           LineYearsTree = $('#LineYears').comboTree({
+             source: dropdownyear,
+             isMultiple: true,
+         });
+         LineQuartesTree = $('#LineQuartes').comboTree({
+             source: dropdownquarter,
+             isMultiple: true,
+         });
+         window.LinePricesTree = $('#LinePrices').comboTree({
+             source: dropdownprice,
+             isMultiple: false,
+         });
+         LineSectorTree = $('#LineSectors').comboTree({
+             source: piedropdownSector,
+             isMultiple: false,
+       });
+        LineActivityTree = $('#LineActivity').comboTree({
+           source: dropdownActivity,
+             isMultiple: true,
+           cascadeSelect:true
+
+       });
+        LineComponentTree = $('#LineComponent').comboTree({
+           source: dropdownComponent,
+           isMultiple: true,
+           cascadeSelect:true
+        });
+       LineFrequancyTree = $('#LineFrequancy').comboTree({
+           source: dropdownFrequancy,
+           isMultiple: false,
+           cascadeSelect: true
+       });
+       LineGDPConstTree = $('#LineGDPConst').comboTree({
+           source: dropdownGDPConstChart,
+           isMultiple: false,
+       });
+       LineGDPCurrentTree = $('#LineGDPCurrent').comboTree({
+           source: dropdownGDPCurrent,
+           isMultiple: false,
+       });
+
+                   var csvTable,
+                 domTable,
+                htmlTable = ' <table id="csvData-table" style="margin-top:70px;" class="table table-striped table-bordered dt-responsive nowrap"><tbody></tbody></table>'
+
+        $("#btnGridSearch").click(function () {
+
+           var selectedYearsIds = YearsTree.getSelectedIds();
+           var selectedQuartersIds = QuartesTree.getSelectedIds();
+           var selectedPricesIds = PricesTree.getSelectedIds();
+            var selectedGDPConstId = GDPConstTree.getSelectedIds();
+            var selectedGDPCurrentId = GDPCurrentTree.getSelectedIds();
+            var selectedSectorsIds = SectorTree.getSelectedIds();
+            var selectedComponentNames = ComponentTree.getSelectedNames();
+           var selectedActivituesNames = ActivityTree.getSelectedNames();
+           var headers = null
+
+            selectedGDP = null
+            if (selectedGDPConstId != null) {
+                selectedGDP = selectedGDPConstId
+            }
+              if (selectedGDPCurrentId != null) {
+                selectedGDP = selectedGDPCurrentId
+            }
+
+            if ($("#div_Activity").css("display") == "block") {
+               headers=selectedActivituesNames
+           }
+           if ($("#div_Component").css("display") == "block") {
+               headers=selectedComponentNames
+            }
+
+            if (selectedGDP != null && selectedYearsIds != null && selectedPricesIds != null && (headers != null || selectedGDP==3) ) {
+                   $.ajax({
+               data: { sheetNum: selectedGDP, lang: langParam, years: selectedYearsIds, quarters: selectedQuartersIds, prices: selectedPricesIds,sectors:selectedSectorsIds,headers },
+                        url: '@Url.Action("GetReport")',
+                        dataType: 'json',
+                       type: 'POST',
+                       success: function (data) {
+
+                           $('#div_table').show()
+                           if ('@ViewBag.isBlank' == "") {
+                                      $('html, body').animate({
+                               scrollTop: $("#div_table").offset().top - $("#header").offset().top
+                            }, 2000);
+                           }
+
+
+                        if ($.fn.DataTable.fnIsDataTable(domTable)) {
+                                 csvTable.destroy(true);
+                                     $('#div_table').append(htmlTable);
+                                }
+
+                           $("#csvData-table").empty();
+
+                            var formattedHeaders = [];
+                            $.each(data.headerColumns, function (e, f) {
+                                formattedHeaders.push({ "title": data.headerColumns[e] });
+                            });
+                            csvTable = $("#csvData-table").DataTable({
+                                "aaSorting": [],
+                                 "language": { "url": dataTableFilLang },
+                                dom: 'Bfrtip',
+                                buttons: [
+        {
+           extend: 'csv',
+           charset: 'UTF-8',
+           fieldSeparator: ',',
+           bom: true,
+                                        text: '<img src="/img/excel.png" style="width: 40px;" />',
+                                        titleAttr: 'Excel'
+
+        }
+    ],
+                                "destroy": true,
+                                "columns": formattedHeaders
+                            });
+                           var csvData = data;
+
+                            domTable = document.getElementById('csvData-table');
+
+
+                           for (var i = 0; i < csvData.result.length; i++) {
+                                csvTable.row.add(
+                                    csvData.result[i]
+                                );
+                            }
+                            csvTable.draw();
+                           result = data;
+
+                                setTimeout(function () {
+
+                           $(".buttons-csv").css("margin-bottom", "10px")
+                           }, 200)
+
+                        },
+                        error: function (err) {
+                            alert("Error has occured");
+                        }
+                    });
+           }
+
+           else {
+                    Swal.fire({
+                        icon: 'error',
+                        text: chooseAllFiltersMsg,
+                        confirmButtonText: confirmBtnMsg,
+                        confirmButtonColor: '#28A5A3',
+                     })
+                }
+       });
+        $("#PiebtnGridSearch").click(function () {
+
+                var selectedYearsIds = PieYearsTree.getSelectedIds();
+                var selectedQuartersIds = PieQuartesTree.getSelectedIds();
+           var selectedPricesIds = PiePricesTree.getSelectedIds();
+            var selectedGDPConstId = PieGDPConstTree.getSelectedIds();
+            var selectedGDPCurrentId = PieGDPCurrentTree.getSelectedIds();
+                var selectedSectorsIds = PieSectorTree.getSelectedIds();
+                var selectedComponentNames = PieComponentTree.getSelectedNames();
+           var selectedActivituesNames = PieActivityTree.getSelectedNames();
+           var headers = null
+
+
+
+            selectedGDP = null
+            if (selectedGDPConstId != null) {
+                selectedGDP = selectedGDPConstId
+            }
+            if (selectedGDPCurrentId != null) {
+                selectedGDP = selectedGDPCurrentId
+            }
+
+            if ($("#Pie_div_Activity").css("display") == "block") {
+                headers = selectedActivituesNames
+            }
+            if ($("#Pie_div_Component").css("display") == "block") {
+                headers = selectedComponentNames
+            }
+            if (selectedGDP != null && selectedYearsIds != null && selectedPricesIds != null && (headers != null || selectedGDP == 3)) {
+                   $.ajax({
+                       data: { sheetNum: selectedGDP, lang: langParam, years: selectedYearsIds, quarters: selectedQuartersIds, prices: selectedPricesIds, sectors: selectedSectorsIds, headers  },
+                        url: '@Url.Action("GetPieReport")',
+                        dataType: 'json',
+                        type: 'POST',
+                       success: function (data) {
+                           PieChart(data.data, data.unit)
+                           $("#PieFigure").show()
+                           if ('@ViewBag.isBlank' == "") {
+                               $('html, body').animate({
+                                   scrollTop: $("#PieFigure").offset().top - $("#header").offset().top
+                               }, 2000);
+                           }
+                        },
+                        error: function (err) {
+                            alert("Error has occured");
+                        }
+                    });
+           }
+
+                 else {
+
+                           Swal.fire({
+                        icon: 'error',
+                        text: chooseAllFiltersMsg,
+                        confirmButtonText: confirmBtnMsg,
+                         confirmButtonColor: '#28A5A3',
+                     })
+
+                }
+       });
+         $("#BarbtnGridSearch").click(function () {
+
+                var selectedYearsIds = BarYearsTree.getSelectedIds();
+                var selectedQuartersIds = BarQuartesTree.getSelectedIds();
+                var selectedPricesIds = BarPricesTree.getSelectedIds();
+             var selectedGDPConstId = BarGDPConstTree.getSelectedIds();
+            var selectedGDPCurrentId = BarGDPCurrentTree.getSelectedIds();
+                var selectedSectorsIds = BarSectorTree.getSelectedIds();
+                var selectedComponentNames = BarComponentTree.getSelectedNames();
+           var selectedActivituesNames = BarActivityTree.getSelectedNames();
+           var headers = null
+
+
+  selectedGDP = null
+            if (selectedGDPConstId != null) {
+                selectedGDP = selectedGDPConstId
+            }
+            if (selectedGDPCurrentId != null) {
+                selectedGDP = selectedGDPCurrentId
+            }
+
+            if ($("#Bar_div_Activity").css("display") == "block") {
+                headers = selectedActivituesNames
+            }
+            if ($("#Bar_div_Component").css("display") == "block") {
+                headers = selectedComponentNames
+            }
+
+           if (selectedGDP != null && selectedYearsIds != null && selectedPricesIds != null && (headers != null || selectedGDP==3)) {
+                   $.ajax({
+               data: { sheetNum: selectedGDP, lang: langParam, years: selectedYearsIds, quarters: selectedQuartersIds, prices: selectedPricesIds,sectors:selectedSectorsIds,headers },
+                        url: '@Url.Action("GetChartReport")',
+                        dataType: 'json',
+                        type: 'POST',
+                       success: function (data) {
+                           BarChart(data.data, data.unit)
+                           $("#BarFigure").show()
+                           if ('@ViewBag.isBlank' == "") {
+                               $('html, body').animate({
+                                   scrollTop: $("#BarFigure").offset().top - $("#header").offset().top
+                               }, 2000);
+                           }
+                        },
+                        error: function (err) {
+                            alert("Error has occured");
+                        }
+                    });
+           }
+
+                 else {
+
+                          Swal.fire({
+                        icon: 'error',
+                        text: chooseAllFiltersMsg,
+                        confirmButtonText: confirmBtnMsg,
+                         confirmButtonColor: '#28A5A3',
+                     })
+                }
+         });
+         $("#LinebtnGridSearch").click(function () {
+
+                var selectedYearsIds = LineYearsTree.getSelectedIds();
+                var selectedQuartersIds = LineQuartesTree.getSelectedIds();
+                var selectedPricesIds = LinePricesTree.getSelectedIds();
+             var selectedGDPConstId = LineGDPConstTree.getSelectedIds();
+             var selectedGDPCurrentId = LineGDPCurrentTree.getSelectedIds();
+                var selectedSectorsIds = LineSectorTree.getSelectedIds();
+                var selectedComponentNames = LineComponentTree.getSelectedNames();
+           var selectedActivituesNames = LineActivityTree.getSelectedNames();
+           var headers = null
+
+
+             selectedGDP = null
+             if (selectedGDPConstId != null) {
+                 selectedGDP = selectedGDPConstId
+             }
+             if (selectedGDPCurrentId != null) {
+                 selectedGDP = selectedGDPCurrentId
+             }
+
+             if ($("#Line_div_Activity").css("display") == "block") {
+                 headers = selectedActivituesNames
+             }
+             if ($("#Line_div_Component").css("display") == "block") {
+                 headers = selectedComponentNames
+             }
+
+             if (selectedGDP != null && selectedYearsIds != null && selectedPricesIds != null && (headers != null || selectedGDP == 3)) {
+                   $.ajax({
+                       data: { sheetNum: selectedGDP, lang: langParam, years: selectedYearsIds, quarters: selectedQuartersIds, prices: selectedPricesIds,sectors:selectedSectorsIds,headers,chartType:"line" },
+                        url: '@Url.Action("GetChartReport")',
+                        dataType: 'json',
+                        type: 'POST',
+                       success: function (data) {
+                           LineChart(data.data, data.unit)
+                           $("#LineFigure").show()
+                           if ('@ViewBag.isBlank' == "") {
+                               $('html, body').animate({
+                                   scrollTop: $("#LineFigure").offset().top - $("#header").offset().top
+                               }, 2000);
+                           }
+                        },
+                        error: function (err) {
+                            alert("Error has occured");
+                        }
+                    });
+           }
+
+                 else {
+                          Swal.fire({
+                        icon: 'error',
+                        text: chooseAllFiltersMsg,
+                        confirmButtonText: confirmBtnMsg,
+                         confirmButtonColor: '#28A5A3',
+                     })
+                }
+       });
+       $("#btnGridSearchGovernorateClear").click(function () {
+               clearReport()
+       })
+       $("#PiebtnGridSearchGovernorateClear").click(function () {
+          clearPie()
+       })
+       $("#BarbtnGridSearchGovernorateClear").click(function () {
+              clearBar()
+       })
+        $("#LinebtnGridSearchGovernorateClear").click(function () {
+            clearLine()
+        })
+
+       setTimeout(function () {
+
+            $("#Frequancy").parent().next().children("ul").children("li").children("span").on("click", function () {
+             var valData=$(this)[0].attributes[0].value
+                if (valData == 1) {
+
+                                 $("#quartersDiv").hide()
+                                 QuartesTree.clearSelection()
+
+                             }
+                             else if (valData == 2) {
+                                 $("#quartersDiv").show()
+                                 YearsTree.clearSelection()
+                                    if ('@ViewBag.lang' == '' || '@ViewBag.lang' == "ar") {
+                         runTimeRTLWithoutClearNames()
+                            }
+                             }
+
+
+            })
+            $("#PieFrequancy").parent().next().children("ul").children("li").children("span").on("click", function () {
+             var valData=$(this)[0].attributes[0].value
+                             if (valData == 1) {
+                                 $("#PiequartersDiv").hide()
+                                 PieQuartesTree.clearSelection()
+
+                             }
+                             else if (valData == 2) {
+                                 $("#PiequartersDiv").show()
+                                 PieYearsTree.clearSelection()
+                                    if ('@ViewBag.lang' == '' || '@ViewBag.lang' == "ar") {
+                                        runTimeRTLWithoutClearNames()
+                                        renameComboboxToArabic("PieYears", 0)
+                                        renameComboboxToArabic("PieQuartes", 0)
+                            }
+                             }
+
+
+            })
+            $("#BarFrequancy").parent().next().children("ul").children("li").children("span").on("click", function () {
+             var valData=$(this)[0].attributes[0].value
+                             if (valData == 1) {
+                                 $("#BarquartersDiv").hide()
+                                 BarQuartesTree.clearSelection()
+
+                             }
+                             else if (valData == 2) {
+                                 $("#BarquartersDiv").show()
+                                 BarYearsTree.clearSelection()
+                                    if ('@ViewBag.lang' == '' || '@ViewBag.lang' == "ar") {
+                         runTimeRTLWithoutClearNames()
+                            }
+                             }
+
+
+                         })
+         $("#LineFrequancy").parent().next().children("ul").children("li").children("span").on("click", function () {
+             var valData=$(this)[0].attributes[0].value
+                             if (valData == 1) {
+                                 $("#LinequartersDiv").hide()
+                                 LineQuartesTree.clearSelection()
+
+                             }
+                             else if (valData == 2) {
+                                 $("#LinequartersDiv").show()
+                                 LineYearsTree.clearSelection()
+                                    if ('@ViewBag.lang' == '' || '@ViewBag.lang' == "ar") {
+                         runTimeRTLWithoutClearNames()
+                            }
+                             }
+
+
+                         })
+
+            $("#Years").parent().next().children("ul").children("li").children("span").on("click", function () {
+                if ($(this)[0].attributes[0].value == -1) {
+                     if (YearsTree.getSelectedIds().includes("-1")) {
+                    YearsTree.setSelection(YearsTree.options.source.map(x => x.id))
+                }
+                     else {
+                         YearsTree.clearSelection()
+                }
+                }
+
+            })
+            $("#BarYears").parent().next().children("ul").children("li").children("span").on("click", function () {
+                if ($(this)[0].attributes[0].value == -1) {
+                     if (BarYearsTree.getSelectedIds().includes("-1")) {
+                    BarYearsTree.setSelection(BarYearsTree.options.source.map(x => x.id))
+                }
+                     else {
+                         BarYearsTree.clearSelection()
+                }
+                }
+
+            })
+             $("#LineYears").parent().next().children("ul").children("li").children("span").on("click", function () {
+                if ($(this)[0].attributes[0].value == -1) {
+                     if (LineYearsTree.getSelectedIds().includes("-1")) {
+                    LineYearsTree.setSelection(LineYearsTree.options.source.map(x => x.id))
+                }
+                     else {
+                         LineYearsTree.clearSelection()
+                }
+                }
+
+             })
+
+             $("#Quartes").parent().next().children("ul").children("li").children("span").on("click", function () {
+                if ($(this)[0].attributes[0].value == -1) {
+                     if (QuartesTree.getSelectedIds().includes("-1")) {
+                    QuartesTree.setSelection(QuartesTree.options.source.map(x => x.id))
+                }
+                     else {
+                         QuartesTree.clearSelection()
+                }
+                }
+
+            })
+           $("#BarQuartes").parent().next().children("ul").children("li").children("span").on("click", function () {
+
+                  if ($(this)[0].attributes[0].value == -1) {
+                     if (BarQuartesTree.getSelectedIds().includes("-1")) {
+                    BarQuartesTree.setSelection(BarQuartesTree.options.source.map(x => x.id))
+                }
+                     else {
+                         BarQuartesTree.clearSelection()
+                }
+                }
+                var sectors = BarSectorTree.getSelectedIds()
+                var quarters = BarQuartesTree.getSelectedIds()
+                if ((sectors != null && sectors.length>1) && (quarters != null && quarters.length>1)) {
+                            Swal.fire({
+                                    icon: 'error',
+                                    text: GDPRepoSectorsAndQuartersMsg,
+                                    confirmButtonText: confirmBtnMsg,
+                                    confirmButtonColor: '#28A5A3',
+                     })
+                    BarQuartesTree.clearSelection()
+                }
+
+
+            })
+           $("#LineQuartes").parent().next().children("ul").children("li").children("span").on("click", function () {
+
+                  if ($(this)[0].attributes[0].value == -1) {
+                     if (LineQuartesTree.getSelectedIds().includes("-1")) {
+                    LineQuartesTree.setSelection(LineQuartesTree.options.source.map(x => x.id))
+                }
+                     else {
+                         LineQuartesTree.clearSelection()
+                }
+                }
+                var sectors = LineSectorTree.getSelectedIds()
+                var quarters = LineQuartesTree.getSelectedIds()
+                if ((sectors != null && sectors.length>1) && (quarters != null && quarters.length>1)) {
+                        Swal.fire({
+                                    icon: 'error',
+                                    text: GDPRepoSectorsAndQuartersMsg,
+                                    confirmButtonText: confirmBtnMsg,
+                                    confirmButtonColor: '#28A5A3',
+                     })
+                    LineQuartesTree.clearSelection()
+                }
+
+
+            })
+
+
+           $("#Sectors").parent().next().children("ul").children("li").children("span").on("click", function () {
+               if ($(this)[0].attributes[0].value == -1) {
+                   if (SectorTree.getSelectedIds().includes("-1")) {
+                       SectorTree.setSelection(SectorTree.options.source.map(x => x.id))
+                   }
+                   else {
+                       SectorTree.clearSelection()
+                   }
+               }
+
+           })
+            $("#BarSectors").parent().next().children("ul").children("li").children("span").on("click", function () {
+
+
+                 if ($(this)[0].attributes[0].value == -1) {
+                   if (BarSectorTree.getSelectedIds().includes("-1")) {
+                       BarSectorTree.setSelection(BarSectorTree.options.source.map(x => x.id))
+                   }
+                   else {
+                       BarSectorTree.clearSelection()
+                   }
+               }
+
+                  var sectors = BarSectorTree.getSelectedIds()
+                var quarters = BarQuartesTree.getSelectedIds()
+
+                if ((sectors != null && sectors.length > 1) && (quarters != null && quarters.length > 1)) {
+                      Swal.fire({
+                                    icon: 'error',
+                                    text: GDPRepoSectorsAndQuartersMsg,
+                                    confirmButtonText: confirmBtnMsg,
+                                    confirmButtonColor: '#28A5A3',
+                     })
+                  BarSectorTree.clearSelection()
+                }
+
+
+            })
+             $("#LineSectors").parent().next().children("ul").children("li").children("span").on("click", function () {
+                var sectors = LineSectorTree.getSelectedIds()
+                var quarters = LineQuartesTree.getSelectedIds()
+                if ((sectors != null && sectors.length > 1) && (quarters != null && quarters.length > 1)) {
+                         Swal.fire({
+                                    icon: 'error',
+                                    text: GDPRepoSectorsAndQuartersMsg,
+                                    confirmButtonText: confirmBtnMsg,
+                                    confirmButtonColor: '#28A5A3',
+                     })
+                  LineSectorTree.clearSelection()
+                }
+
+
+            })
+
+             $("#Component").parent().next().children("ul").children("li").children("span").on("click", function () {
+                if ($(this)[0].attributes[0].value == -1) {
+                     if (ComponentTree.getSelectedIds().includes("-1")) {
+                    ComponentTree.setSelection(ComponentTree.options.source.map(x => x.id))
+                }
+                     else {
+                         ComponentTree.clearSelection()
+                }
+                }
+
+             })
+               $("#PieComponent").parent().next().children("ul").children("li").children("span").on("click", function () {
+                if ($(this)[0].attributes[0].value == -1) {
+                     if (PieComponentTree.getSelectedIds().includes("-1")) {
+                    PieComponentTree.setSelection(PieComponentTree.options.source.map(x => x.id))
+                }
+                     else {
+                         PieComponentTree.clearSelection()
+                }
+                }
+
+               })
+              $("#BarComponent").parent().next().children("ul").children("li").children("span").on("click", function () {
+                if ($(this)[0].attributes[0].value == -1) {
+                     if (BarComponentTree.getSelectedIds().includes("-1")) {
+                    BarComponentTree.setSelection(BarComponentTree.options.source.map(x => x.id))
+                }
+                     else {
+                         BarComponentTree.clearSelection()
+                }
+                }
+
+              })
+             $("#LineComponent").parent().next().children("ul").children("li").children("span").on("click", function () {
+                if ($(this)[0].attributes[0].value == -1) {
+                     if (LineComponentTree.getSelectedIds().includes("-1")) {
+                    LineComponentTree.setSelection(LineComponentTree.options.source.map(x => x.id))
+                }
+                     else {
+                         LineComponentTree.clearSelection()
+                }
+                }
+
+                 })
+
+             $("#Activity").parent().next().children("ul").children("li").children("span").on("click", function () {
+                if ($(this)[0].attributes[0].value == -1) {
+                     if (ActivityTree.getSelectedIds().includes("-1")) {
+                    ActivityTree.setSelection(allActivitiesIds ())
+                }
+                     else {
+                         ActivityTree.clearSelection()
+                }
+                }
+
+             })
+            $("#PieActivity").parent().next().children("ul").children("li").children("span").on("click", function () {
+                if ($(this)[0].attributes[0].value == -1) {
+                     if (PieActivityTree.getSelectedIds().includes("-1")) {
+                    PieActivityTree.setSelection(allActivitiesIds ())
+                }
+                     else {
+                         PieActivityTree.clearSelection()
+                }
+                }
+
+            })
+               $("#BarActivity").parent().next().children("ul").children("li").children("span").on("click", function () {
+                if ($(this)[0].attributes[0].value == -1) {
+                     if (BarActivityTree.getSelectedIds().includes("-1")) {
+                    BarActivityTree.setSelection(allActivitiesIds ())
+                }
+                     else {
+                         BarActivityTree.clearSelection()
+                }
+                }
+
+               })
+             $("#LineActivity").parent().next().children("ul").children("li").children("span").on("click", function () {
+                if ($(this)[0].attributes[0].value == -1) {
+                     if (LineActivityTree.getSelectedIds().includes("-1")) {
+                    LineActivityTree.setSelection(allActivitiesIds ())
+                }
+                     else {
+                         LineActivityTree.clearSelection()
+                }
+                }
+
+            })
+
+           $("#Prices").parent().next().children("ul").children("li").children("span").on("click", function () {
+               var prices = PricesTree.getSelectedIds()
+               $("#div_Component").hide()
+                   $("#div_Activity").hide()
+                   ComponentTree.clearSelection()
+                   ActivityTree.clearSelection()
+                   SectorTree.clearSelection()
+               //constant
+               if (prices != null && prices.includes("1")) {
+                   $("#GDPConstDiv").show()
+                   $("#GDPCurrentDiv").hide()
+                   GDPCurrentTree.clearSelection()
+                   GDPConstTree.clearSelection()
+                     if ('@ViewBag.lang' == '' || '@ViewBag.lang' == "ar") {
+                         runTimeRTLWithoutClearNames()
+                           renameComboboxToArabic("GDPConst", 0)
+                            }
+               }
+               else if(prices != null && prices.includes("2")) {
+                   $("#GDPCurrentDiv").show()
+                   $("#GDPConstDiv").hide()
+                         GDPCurrentTree.clearSelection()
+                   GDPConstTree.clearSelection()
+                     if ('@ViewBag.lang' == '' || '@ViewBag.lang' == "ar") {
+                         runTimeRTLWithoutClearNames()
+                          renameComboboxToArabic("GDPCurrent", 0)
+                            }
+               }
+           })
+             $("#PiePrices").parent().next().children("ul").children("li").children("span").on("click", function () {
+               var prices = PiePricesTree.getSelectedIds()
+                 $("#Pie_div_Component").hide()
+                 $("#Pie_div_Activity").hide()
+                   PieComponentTree.clearSelection()
+                   PieActivityTree.clearSelection()
+                   PieSectorTree.clearSelection()
+               //constant
+               if (prices != null && prices.includes("1")) {
+                   $("#PieGDPConstDiv").show()
+                   $("#PieGDPCurrentDiv").hide()
+                   PieGDPCurrentTree.clearSelection()
+                   PieGDPConstTree.clearSelection()
+                     if ('@ViewBag.lang' == '' || '@ViewBag.lang' == "ar") {
+                         runTimeRTLWithoutClearNames()
+                           renameComboboxToArabic("PieGDPConst", 0)
+                   }
+                   PieGDPConstTree.setSelection([1])
+                    $("#PieGDPConst").parent().next().children("ul").children("li").children("span").click()
+               }
+               else if(prices != null && prices.includes("2")) {
+                   $("#PieGDPCurrentDiv").show()
+                   $("#PieGDPConstDiv").hide()
+                    PieGDPCurrentTree.clearSelection()
+                   PieGDPConstTree.clearSelection()
+                     if ('@ViewBag.lang' == '' || '@ViewBag.lang' == "ar") {
+                         runTimeRTLWithoutClearNames()
+                           renameComboboxToArabic("PieGDPCurrent", 0)
+                            }
+               }
+             })
+            $("#BarPrices").parent().next().children("ul").children("li").children("span").on("click", function () {
+                  var prices = BarPricesTree.getSelectedIds()
+                 $("#Bar_div_Component").hide()
+                 $("#Bar_div_Activity").hide()
+                   BarComponentTree.clearSelection()
+                   BarActivityTree.clearSelection()
+                   BarSectorTree.clearSelection()
+               //constant
+               if (prices != null && prices.includes("1")) {
+                   $("#BarGDPConstDiv").show()
+                   $("#BarGDPCurrentDiv").hide()
+                   BarGDPCurrentTree.clearSelection()
+                   BarGDPConstTree.clearSelection()
+
+                     if ('@ViewBag.lang' == '' || '@ViewBag.lang' == "ar") {
+                         runTimeRTLWithoutClearNames()
+                           renameComboboxToArabic("BarGDPConst", 0)
+                   }
+                   BarGDPConstTree.setSelection([1])
+                    $("#BarGDPConst").parent().next().children("ul").children("li").children("span").click()
+
+               }
+               else if(prices != null && prices.includes("2")) {
+                   $("#BarGDPCurrentDiv").show()
+                   $("#BarGDPConstDiv").hide()
+                    BarGDPCurrentTree.clearSelection()
+                   BarGDPConstTree.clearSelection()
+                     if ('@ViewBag.lang' == '' || '@ViewBag.lang' == "ar") {
+                         runTimeRTLWithoutClearNames()
+                           renameComboboxToArabic("BarGDPCurrent", 0)
+                            }
+               }
+            })
+           $("#LinePrices").parent().next().children("ul").children("li").children("span").on("click", function () {
+               console.log("ok")
+               var prices = LinePricesTree.getSelectedIds()
+                 $("#Line_div_Component").hide()
+                 $("#Line_div_Activity").hide()
+                   LineComponentTree.clearSelection()
+                   LineActivityTree.clearSelection()
+                   LineSectorTree.clearSelection()
+               //constant
+               if (prices != null && prices.includes("1")) {
+                   $("#LineGDPConstDiv").show()
+                   $("#LineGDPCurrentDiv").hide()
+                   LineGDPConstTree.clearSelection()
+                   LineGDPCurrentTree.clearSelection()
+                     if ('@ViewBag.lang' == '' || '@ViewBag.lang' == "ar") {
+                         runTimeRTLWithoutClearNames()
+                           renameComboboxToArabic("LineGDPConst", 0)
+                   }
+                   LineGDPConstTree.setSelection([1])
+                    $("#LineGDPConst").parent().next().children("ul").children("li").children("span").click()
+               }
+               else if(prices != null && prices.includes("2")) {
+                   $("#LineGDPCurrentDiv").show()
+                   $("#LineGDPConstDiv").hide()
+                    LineGDPCurrentTree.clearSelection()
+                   LineGDPConstTree.clearSelection()
+                     if ('@ViewBag.lang' == '' || '@ViewBag.lang' == "ar") {
+                         runTimeRTLWithoutClearNames()
+                           renameComboboxToArabic("LineGDPCurrent", 0)
+                            }
+               }
+            })
+
+             $("#PieGDP").parent().next().children("ul").children("li").children("span").on("click", function () {
+                   var Gdp = PieGDPTree.getSelectedIds()
+                   var prices = PiePricesTree.getSelectedIds()
+                   PieComponentTree.clearSelection();
+                   PieActivityTree.clearSelection();
+                //component
+                if (Gdp != null && Gdp.includes("1")) {
+                    $("#PieComponent").prop("disabled", false)
+                    $("#Pie_div_Component").css("pointer-events","")
+                       $("#PieActivity").prop("disabled",true)
+                    $("#PieSectors").prop("disabled", true)
+                    $("#Pie_div_Activity").css("pointer-events","none")
+                    $("#Pie_check_SectorGrowthRate").prop("disabled",true)
+                    $("#Pie_check_SectorGrowthRate").prop("checked", false)
+                }
+                else {
+                    if (prices != null && prices.includes("1")) {
+                       $("#Pie_check_SectorGrowthRate").prop("disabled",false)
+                    }
+                    else {
+                       $("#Pie_check_SectorGrowthRate").prop("disabled",true)
+                       $("#Pie_check_SectorGrowthRate").prop("checked", false)
+                    }
+                    $("#PieComponent").prop("disabled", true)
+                      $("#Pie_div_Component").css("pointer-events","none")
+                    $("#PieActivity").prop("disabled", false)
+                    $("#PieSectors").prop("disabled", false)
+                     $("#Pie_div_Activity").css("pointer-events","")
+                }
+             })
+              $("#BarGDP").parent().next().children("ul").children("li").children("span").on("click", function () {
+                   var Gdp = BarGDPTree.getSelectedIds()
+                   var prices = BarPricesTree.getSelectedIds()
+                   BarComponentTree.clearSelection();
+                   BarActivityTree.clearSelection();
+                //component
+                if (Gdp != null && Gdp.includes("1")) {
+                    $("#BarComponent").prop("disabled", false)
+                      $("#Bar_div_Component").css("pointer-events","")
+                       $("#BarActivity").prop("disabled",true)
+                    $("#BarSectors").prop("disabled", true)
+                     $("#Bar_div_Activity").css("pointer-events","none")
+                    $("#Bar_check_SectorGrowthRate").prop("disabled",true)
+                    $("#Bar_check_SectorGrowthRate").prop("checked", false)
+                }
+                else {
+                    if (prices != null && prices.includes("1")) {
+                       $("#Bar_check_SectorGrowthRate").prop("disabled",false)
+                    }
+                    else {
+                       $("#Bar_check_SectorGrowthRate").prop("disabled",true)
+                       $("#Bar_check_SectorGrowthRate").prop("checked", false)
+                    }
+                    $("#BarComponent").prop("disabled", true)
+                     $("#Bar_div_Component").css("pointer-events","none")
+                    $("#BarActivity").prop("disabled", false)
+                    $("#BarSectors").prop("disabled", false)
+                     $("#Bar_div_Activity").css("pointer-events","")
+                }
+              })
+             $("#LineGDP").parent().next().children("ul").children("li").children("span").on("click", function () {
+                   var Gdp = LineGDPTree.getSelectedIds()
+                   var prices = LinePricesTree.getSelectedIds()
+                   LineComponentTree.clearSelection();
+                   LineActivityTree.clearSelection();
+                //component
+                if (Gdp != null && Gdp.includes("1")) {
+                    $("#LineComponent").prop("disabled", false)
+                      $("#Line_div_Component").css("pointer-events","")
+                    $("#LineActivity").prop("disabled",true)
+                    $("#LineSectors").prop("disabled", true)
+                    $("#Line_div_Activity").css("pointer-events","none")
+                    $("#Line_check_SectorGrowthRate").prop("disabled",true)
+                    $("#Line_check_SectorGrowthRate").prop("checked", false)
+                }
+                else {
+                    if (prices != null && prices.includes("1")) {
+                       $("#Line_check_SectorGrowthRate").prop("disabled",false)
+                    }
+                    else {
+                       $("#Line_check_SectorGrowthRate").prop("disabled",true)
+                       $("#Line_check_SectorGrowthRate").prop("checked", false)
+                    }
+                    $("#LineComponent").prop("disabled", true)
+                    $("#Line_div_Component").css("pointer-events","none")
+                    $("#LineActivity").prop("disabled", false)
+                    $("#LineSectors").prop("disabled", false)
+                     $("#Line_div_Activity").css("pointer-events","")
+                }
+             })
+
+
+           $("#GDPConst").parent().next().children("ul").children("li").children("span").on("click", function () {
+               var gdpConst = GDPConstTree.getSelectedIds()
+
+               if (gdpConst != null && gdpConst.includes("1")) {
+                   $("#div_Component").show()
+                   $("#div_Activity").hide()
+                   ComponentTree.clearSelection()
+                   ActivityTree.clearSelection()
+                   SectorTree.clearSelection()
+                   if ('@ViewBag.lang' == '' || '@ViewBag.lang' == "ar") {
+                       runTimeRTLWithoutClearNames()
+
+                   }
+               }
+               else if (gdpConst != null && gdpConst.includes("4")) {
+                   $("#div_Activity").show()
+                   $("#div_Component").hide()
+                   ComponentTree.clearSelection()
+                   ActivityTree.clearSelection()
+                   SectorTree.clearSelection()
+                   if ('@ViewBag.lang' == '' || '@ViewBag.lang' == "ar") {
+                       runTimeRTLWithoutClearNames()
+                   }
+               }
+               else {
+                   $("#div_Component").hide()
+                   $("#div_Activity").hide()
+                   ComponentTree.clearSelection()
+                   ActivityTree.clearSelection()
+                   SectorTree.clearSelection()
+               }
+           })
+           $("#GDPCurrent").parent().next().children("ul").children("li").children("span").on("click", function () {
+               var gdpCurrent = GDPCurrentTree.getSelectedIds()
+
+               if (gdpCurrent != null && gdpCurrent.includes("1")) {
+                   $("#div_Component").show()
+                   $("#div_Activity").hide()
+                   ComponentTree.clearSelection()
+                   ActivityTree.clearSelection()
+                   SectorTree.clearSelection()
+                   if ('@ViewBag.lang' == '' || '@ViewBag.lang' == "ar") {
+                       runTimeRTLWithoutClearNames()
+                   }
+               }
+               else if (gdpCurrent != null && gdpCurrent.includes("2")) {
+                   $("#div_Activity").show()
+                   $("#div_Component").hide()
+                   ComponentTree.clearSelection()
+                   ActivityTree.clearSelection()
+                   SectorTree.clearSelection()
+                   if ('@ViewBag.lang' == '' || '@ViewBag.lang' == "ar") {
+                       runTimeRTLWithoutClearNames()
+                   }
+               }
+               else {
+                   $("#div_Component").hide()
+                   $("#div_Activity").hide()
+                   ComponentTree.clearSelection()
+                   ActivityTree.clearSelection()
+                   SectorTree.clearSelection()
+               }
+           })
+
+            $("#PieGDPConst").parent().next().children("ul").children("li").children("span").on("click", function () {
+                var gdpConst = PieGDPConstTree.getSelectedIds()
+
+               if (gdpConst != null && gdpConst.includes("1")) {
+                   $("#Pie_div_Component").show()
+                   $("#Pie_div_Activity").hide()
+                   PieComponentTree.clearSelection()
+                   PieActivityTree.clearSelection()
+                   PieSectorTree.clearSelection()
+                   if ('@ViewBag.lang' == '' || '@ViewBag.lang' == "ar") {
+                       runTimeRTLWithoutClearNames()
+                   }
+               }
+               else if (gdpConst != null && gdpConst.includes("4")) {
+                   $("#Pie_div_Activity").show()
+                   $("#Pie_div_Component").hide()
+                   PieComponentTree.clearSelection()
+                   PieActivityTree.clearSelection()
+                   PieSectorTree.clearSelection()
+                   if ('@ViewBag.lang' == '' || '@ViewBag.lang' == "ar") {
+                       runTimeRTLWithoutClearNames()
+                   }
+               }
+               else {
+                   $("#Pie_div_Component").hide()
+                   $("#Pie_div_Activity").hide()
+                   PieComponentTree.clearSelection()
+                   PieActivityTree.clearSelection()
+                   PieSectorTree.clearSelection()
+               }
+           })
+           $("#PieGDPCurrent").parent().next().children("ul").children("li").children("span").on("click", function () {
+               var gdpCurrent = PieGDPCurrentTree.getSelectedIds()
+
+               if (gdpCurrent != null && gdpCurrent.includes("1")) {
+                   $("#Pie_div_Component").show()
+                   $("#Pie_div_Activity").hide()
+                   PieComponentTree.clearSelection()
+                   PieActivityTree.clearSelection()
+                   PieSectorTree.clearSelection()
+                   if ('@ViewBag.lang' == '' || '@ViewBag.lang' == "ar") {
+                       runTimeRTLWithoutClearNames()
+                   }
+               }
+               else if (gdpCurrent != null && gdpCurrent.includes("2")) {
+                   $("#Pie_div_Activity").show()
+                   $("#Pie_div_Component").hide()
+                   PieComponentTree.clearSelection()
+                   PieActivityTree.clearSelection()
+                   PieSectorTree.clearSelection()
+                   if ('@ViewBag.lang' == '' || '@ViewBag.lang' == "ar") {
+                       runTimeRTLWithoutClearNames()
+                   }
+               }
+               else {
+                   $("#Pie_div_Component").hide()
+                   $("#Pie_div_Activity").hide()
+                   PieComponentTree.clearSelection()
+                   PieActivityTree.clearSelection()
+                   PieSectorTree.clearSelection()
+               }
+           })
+
+
+           $("#BarGDPConst").parent().next().children("ul").children("li").children("span").on("click", function () {
+                var gdpConst = BarGDPConstTree.getSelectedIds()
+
+               if (gdpConst != null && gdpConst.includes("1")) {
+                   $("#Bar_div_Component").show()
+                   $("#Bar_div_Activity").hide()
+                   BarComponentTree.clearSelection()
+                   BarActivityTree.clearSelection()
+                   BarSectorTree.clearSelection()
+                   if ('@ViewBag.lang' == '' || '@ViewBag.lang' == "ar") {
+                       runTimeRTLWithoutClearNames()
+                   }
+               }
+               else if (gdpConst != null && gdpConst.includes("4")) {
+                   $("#Bar_div_Activity").show()
+                   $("#Bar_div_Component").hide()
+                   BarComponentTree.clearSelection()
+                   BarActivityTree.clearSelection()
+                   BarSectorTree.clearSelection()
+                   if ('@ViewBag.lang' == '' || '@ViewBag.lang' == "ar") {
+                       runTimeRTLWithoutClearNames()
+                   }
+               }
+               else {
+                   $("#Bar_div_Component").hide()
+                   $("#Bar_div_Activity").hide()
+                   BarComponentTree.clearSelection()
+                   BarActivityTree.clearSelection()
+                   BarSectorTree.clearSelection()
+               }
+           })
+           $("#BarGDPCurrent").parent().next().children("ul").children("li").children("span").on("click", function () {
+               var gdpCurrent = BarGDPCurrentTree.getSelectedIds()
+
+               if (gdpCurrent != null && gdpCurrent.includes("1")) {
+                   $("#Bar_div_Component").show()
+                   $("#Bar_div_Activity").hide()
+                   BarComponentTree.clearSelection()
+                   BarActivityTree.clearSelection()
+                   BarSectorTree.clearSelection()
+                   if ('@ViewBag.lang' == '' || '@ViewBag.lang' == "ar") {
+                       runTimeRTLWithoutClearNames()
+                   }
+               }
+               else if (gdpCurrent != null && gdpCurrent.includes("2")) {
+                   $("#Bar_div_Activity").show()
+                   $("#Bar_div_Component").hide()
+                   BarComponentTree.clearSelection()
+                   BarActivityTree.clearSelection()
+                   BarSectorTree.clearSelection()
+                   if ('@ViewBag.lang' == '' || '@ViewBag.lang' == "ar") {
+                       runTimeRTLWithoutClearNames()
+                   }
+               }
+               else {
+                   $("#Bar_div_Component").hide()
+                   $("#Bar_div_Activity").hide()
+                   BarComponentTree.clearSelection()
+                   BarActivityTree.clearSelection()
+                   BarSectorTree.clearSelection()
+               }
+           })
+
+
+           $("#LineGDPConst").parent().next().children("ul").children("li").children("span").on("click", function () {
+                var gdpConst = LineGDPConstTree.getSelectedIds()
+
+               if (gdpConst != null && gdpConst.includes("1")) {
+                   $("#Line_div_Component").show()
+                   $("#Line_div_Activity").hide()
+                   LineComponentTree.clearSelection()
+                   LineActivityTree.clearSelection()
+                   LineSectorTree.clearSelection()
+                   if ('@ViewBag.lang' == '' || '@ViewBag.lang' == "ar") {
+                       runTimeRTLWithoutClearNames()
+                   }
+               }
+               else if (gdpConst != null && gdpConst.includes("4")) {
+                   $("#Line_div_Activity").show()
+                   $("#Line_div_Component").hide()
+                   LineComponentTree.clearSelection()
+                   LineActivityTree.clearSelection()
+                   LineSectorTree.clearSelection()
+                   if ('@ViewBag.lang' == '' || '@ViewBag.lang' == "ar") {
+                       runTimeRTLWithoutClearNames()
+                   }
+               }
+               else {
+                   $("#Line_div_Component").hide()
+                   $("#Line_div_Activity").hide()
+                   LineComponentTree.clearSelection()
+                   LineActivityTree.clearSelection()
+                   LineSectorTree.clearSelection()
+               }
+           })
+           $("#LineGDPCurrent").parent().next().children("ul").children("li").children("span").on("click", function () {
+               var gdpCurrent = LineGDPCurrentTree.getSelectedIds()
+
+               if (gdpCurrent != null && gdpCurrent.includes("1")) {
+                   $("#Line_div_Component").show()
+                   $("#Line_div_Activity").hide()
+                   LineComponentTree.clearSelection()
+                   LineActivityTree.clearSelection()
+                   LineSectorTree.clearSelection()
+                   if ('@ViewBag.lang' == '' || '@ViewBag.lang' == "ar") {
+                       runTimeRTLWithoutClearNames()
+                   }
+               }
+               else if (gdpCurrent != null && gdpCurrent.includes("2")) {
+                   $("#Line_div_Activity").show()
+                   $("#Line_div_Component").hide()
+                   LineComponentTree.clearSelection()
+                   LineActivityTree.clearSelection()
+                   LineSectorTree.clearSelection()
+                   if ('@ViewBag.lang' == '' || '@ViewBag.lang' == "ar") {
+                       runTimeRTLWithoutClearNames()
+                   }
+               }
+               else {
+                   $("#Line_div_Component").hide()
+                   $("#Line_div_Activity").hide()
+                   LineComponentTree.clearSelection()
+                   LineActivityTree.clearSelection()
+                   LineSectorTree.clearSelection()
+               }
+           })
+
+
+
+
+            if ('@ViewBag.lang' == '' || '@ViewBag.lang' == "ar") {
+
+                runTimeRTL()
+            }
+
+
+
+        }, 200)
+
+       if ('@ViewBag.lang' == '' || '@ViewBag.lang' == "ar") {
+
+
+       ComponentTree.onChange(function () {
+           var length = ComponentTree.getSelectedIds() != null?ComponentTree.getSelectedIds().length:0
+           renameComboboxToArabic("Component", length)
+       })
+       ActivityTree.onChange(function () {
+           var length = ActivityTree.getSelectedIds() != null?ActivityTree.getSelectedIds().length:0
+           renameComboboxToArabic("Activity", length)
+       })
+       SectorTree.onChange(function () {
+           var length = SectorTree.getSelectedIds() != null?SectorTree.getSelectedIds().length:0
+           renameComboboxToArabic("Sectors", length)
+       })
+       YearsTree.onChange(function () {
+           var length = YearsTree.getSelectedIds() != null?YearsTree.getSelectedIds().length:0
+           renameComboboxToArabic("Years", length)
+       })
+       QuartesTree.onChange(function () {
+           var length = QuartesTree.getSelectedIds() != null?QuartesTree.getSelectedIds().length:0
+           renameComboboxToArabic("Quartes", length)
+       })
+
+
+
+         PieComponentTree.onChange(function () {
+           var length = PieComponentTree.getSelectedIds() != null?PieComponentTree.getSelectedIds().length:0
+           renameComboboxToArabic("PieComponent", length)
+         })
+          PieActivityTree.onChange(function () {
+           var length = PieActivityTree.getSelectedIds() != null?PieActivityTree.getSelectedIds().length:0
+           renameComboboxToArabic("PieActivity", length)
+          })
+           PieSectorTree.onChange(function () {
+               var length = PieSectorTree.getSelectedIds() != null ? PieSectorTree.getSelectedIds().length : 0
+               if (length == 0) {
+
+               renameComboboxToArabic("PieSectors", length)
+               }
+           })
+
+
+
+       BarComponentTree.onChange(function () {
+           var length = BarComponentTree.getSelectedIds() != null?BarComponentTree.getSelectedIds().length:0
+           renameComboboxToArabic("BarComponent", length)
+       })
+       BarActivityTree.onChange(function () {
+           var length = BarActivityTree.getSelectedIds() != null?BarActivityTree.getSelectedIds().length:0
+           renameComboboxToArabic("BarActivity", length)
+       })
+       BarSectorTree.onChange(function () {
+           var length = BarSectorTree.getSelectedIds() != null?BarSectorTree.getSelectedIds().length:0
+           renameComboboxToArabic("BarSectors", length)
+       })
+       BarYearsTree.onChange(function () {
+           var length = BarYearsTree.getSelectedIds() != null?BarYearsTree.getSelectedIds().length:0
+           renameComboboxToArabic("BarYears", length)
+       })
+       BarQuartesTree.onChange(function () {
+           var length = BarQuartesTree.getSelectedIds() != null?BarQuartesTree.getSelectedIds().length:0
+           renameComboboxToArabic("BarQuartes", length)
+       })
+
+
+           LineComponentTree.onChange(function () {
+           var length = LineComponentTree.getSelectedIds() != null?LineComponentTree.getSelectedIds().length:0
+           renameComboboxToArabic("LineComponent", length)
+       })
+       LineActivityTree.onChange(function () {
+           var length = LineActivityTree.getSelectedIds() != null?LineActivityTree.getSelectedIds().length:0
+           renameComboboxToArabic("LineActivity", length)
+       })
+       LineSectorTree.onChange(function () {
+
+           var length = LineSectorTree.getSelectedIds() != null ? LineSectorTree.getSelectedIds().length : 0
+               if (length == 0) {
+
+               renameComboboxToArabic("LineSectors", length)
+               }
+       })
+       LineYearsTree.onChange(function () {
+           var length = LineYearsTree.getSelectedIds() != null?LineYearsTree.getSelectedIds().length:0
+           renameComboboxToArabic("LineYears", length)
+       })
+       LineQuartesTree.onChange(function () {
+           var length = LineQuartesTree.getSelectedIds() != null?LineQuartesTree.getSelectedIds().length:0
+           renameComboboxToArabic("LineQuartes", length)
+       })
+
+
+
+   }
+
+   })
+
+
+        $(window).resize(function () {
+               $(".comboTreeInputBox").each(function () {
+                var offWidth = $(this)[0].offsetWidth - 37.5
+                $(this).next().css("margin-right", +offWidth + "px")
+               })
+
+
+            drawBarChart();
+            drawLineChart();
+});
+
+        function clearReport() {
+
+             YearsTree.clearSelection();
+                QuartesTree.clearSelection();
+                PricesTree.clearSelection();
+                SectorTree.clearSelection();
+                ComponentTree.clearSelection();
+            ActivityTree.clearSelection();
+            $("#quartersDiv").hide()
+            $("#GDPCurrentDiv").hide()
+            $("#GDPConstDiv").hide()
+               $('#div_table').hide()
+            $("#div_Component").hide()
+            $("#div_Activity").hide()
+            ComponentTree.clearSelection()
+            ActivityTree.clearSelection()
+            SectorTree.clearSelection()
+
+                  if ('@ViewBag.lang' == '' || '@ViewBag.lang' == "ar") {
+                moveBtnToRight()
+            }
+
+        }
+        function clearPie() {
+                PieYearsTree.clearSelection();
+                PieQuartesTree.clearSelection();
+                PiePricesTree.clearSelection();
+                //PieGDPTree.clearSelection();
+                PieSectorTree.clearSelection();
+                PieComponentTree.clearSelection();
+            PieActivityTree.clearSelection();
+            $("#PiequartersDiv").hide()
+            $("#PieGDPCurrentDiv").hide()
+            $("#PieGDPConstDiv").hide()
+            $("#PieFigure").hide()
+            $("#Pie_div_Component").hide()
+            $("#Pie_div_Activity").hide()
+            PieComponentTree.clearSelection()
+            PieActivityTree.clearSelection()
+            PieSectorTree.clearSelection()
+
+               if ('@ViewBag.lang' == '' || '@ViewBag.lang' == "ar") {
+                moveBtnToRight()
+            }
+
+
+        }
+        function clearBar() {
+                BarYearsTree.clearSelection();
+                BarQuartesTree.clearSelection();
+                BarPricesTree.clearSelection();
+                BarSectorTree.clearSelection();
+                BarComponentTree.clearSelection();
+            BarActivityTree.clearSelection();
+            $("#BarquartersDiv").hide()
+            $("#BarGDPCurrentDiv").hide()
+            $("#BarGDPConstDiv").hide()
+            $("#BarFigure").hide()
+            $("#Bar_div_Component").hide()
+            $("#Bar_div_Activity").hide()
+            BarComponentTree.clearSelection()
+            BarActivityTree.clearSelection()
+            BarSectorTree.clearSelection()
+
+              if ('@ViewBag.lang' == '' || '@ViewBag.lang' == "ar") {
+                moveBtnToRight()
+            }
+        }
+
+        function clearLine() {
+                LineYearsTree.clearSelection();
+                LineQuartesTree.clearSelection();
+                LinePricesTree.clearSelection();
+                LineSectorTree.clearSelection();
+                LineComponentTree.clearSelection();
+            LineActivityTree.clearSelection();
+            $("#LinequartersDiv").hide()
+            $("#LineGDPCurrentDiv").hide()
+            $("#LineGDPConstDiv").hide()
+            $("#LineFigure").hide()
+            $("#Line_div_Component").hide()
+            $("#Line_div_Activity").hide()
+            LineComponentTree.clearSelection()
+            LineActivityTree.clearSelection()
+            LineSectorTree.clearSelection()
+
+             if ('@ViewBag.lang' == '' || '@ViewBag.lang' == "ar") {
+                moveBtnToRight()
+            }
+        }
+        function MoveToCharts() {
+            if (!$("#Charts-tab").parent()[0].classList.contains("active")) {
+
+           var selectedYearsIds = YearsTree.getSelectedIds();
+           var selectedQuartersIds = QuartesTree.getSelectedIds();
+           var selectedPricesIds = PricesTree.getSelectedIds();
+           var selectedSectorsIds = SectorTree.getSelectedIds();
+           var selectedComponentNames = ComponentTree.getSelectedNames();
+           var selectedActivituesNames = ActivityTree.getSelectedNames();
+                var  flag=(selectedYearsIds != null ||
+                    selectedQuartersIds != null || selectedPricesIds != null
+                     || selectedSectorsIds != null || selectedComponentNames != null
+                    || selectedActivituesNames != null)
+
+                if (($("#Charts-tab").attr("href") == "" || $("#Charts-tab").attr("href").includes("lang")) && flag) {
+                    Swal.fire({
+                        // title: 'Are you sure?',
+                        text: SwitchTabsMsg,
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#28A5A3',
+                        cancelButtonColor: '#688C8B',
+                        confirmButtonText: SwitchTabsYesMsg,
+                        cancelButtonText: SwitchTabsNoMsg
+                    }).then((result) => {
+                        if (result.value) {
+                            clearPie()
+                            clearBar()
+                            clearLine()
+                            $("#Charts-tab").attr("href", "#Charts")
+                            $("#home-tab").attr("href", "x")
+                            $("#home-tab").click()
+                            $("#home-tab").attr("href", "")
+                            $("#Charts-tab").click()
+                            $("#Charts-tab").attr("href", "")
+                                  if ('@ViewBag.lang' == '' || '@ViewBag.lang' == "ar") {
+                moveBtnToRight()
+            }
+                        } else {
+                            $("#home-tab").parent().addClass("active")
+                            $("#Charts-tab").parent().removeClass("active")
+                        }
+                    })
+                }
+                else if (($("#Charts-tab").attr("href") == "" || $("#Charts-tab").attr("href").includes("lang")) &&!flag) {
+                            clearPie()
+                            clearBar()
+                            clearLine()
+                            $("#Charts-tab").attr("href", "#Charts")
+                            $("#home-tab").attr("href", "x")
+                            $("#home-tab").click()
+                            $("#home-tab").attr("href", "")
+                            $("#Charts-tab").click()
+                    $("#Charts-tab").attr("href", "")
+
+                                              if ('@ViewBag.lang' == '' || '@ViewBag.lang' == "ar") {
+                moveBtnToRight()
+            }
+                }
+
+            }
+
+        }
+        function MoveToReport() {
+            if (!$("#home-tab").parent()[0].classList.contains("active")) {
+                var flag = false
+                if ($("#Pie-tab").parent()[0].classList.contains("active")) {
+                    var selectedYearsIds = PieYearsTree.getSelectedIds();
+                    var selectedQuartersIds = PieQuartesTree.getSelectedIds();
+                    var selectedPricesIds = PiePricesTree.getSelectedIds();
+                    //var selectedGDPId = PieGDPTree.getSelectedIds();
+                    var selectedSectorsIds = PieSectorTree.getSelectedIds();
+                    var selectedComponentNames = PieComponentTree.getSelectedNames();
+                    var selectedActivituesNames = PieActivityTree.getSelectedNames();
+
+                    flag = (selectedYearsIds != null || selectedQuartersIds != null
+                        || selectedPricesIds != null ||  selectedSectorsIds != null
+                        || selectedComponentNames != null || selectedActivituesNames != null)
+
+                }
+
+
+                else if ($("#Bar-tab").parent()[0].classList.contains("active")) {
+                    var selectedYearsIds = BarYearsTree.getSelectedIds();
+                    var selectedQuartersIds = BarQuartesTree.getSelectedIds();
+                    var selectedPricesIds = BarPricesTree.getSelectedIds();
+                    //var selectedGDPId = BarGDPTree.getSelectedIds();
+                    var selectedSectorsIds = BarSectorTree.getSelectedIds();
+                    var selectedComponentNames = BarComponentTree.getSelectedNames();
+                    var selectedActivituesNames = BarActivityTree.getSelectedNames();
+
+                    flag = (selectedYearsIds != null || selectedQuartersIds != null
+                        || selectedPricesIds != null ||  selectedSectorsIds != null
+                        || selectedComponentNames != null || selectedActivituesNames != null)
+                }
+                else if ($("#Line-tab").parent()[0].classList.contains("active")) {
+
+                var selectedYearsIds = LineYearsTree.getSelectedIds();
+                var selectedQuartersIds = LineQuartesTree.getSelectedIds();
+                var selectedPricesIds = LinePricesTree.getSelectedIds();
+                //var selectedGDPId = LineGDPTree.getSelectedIds();
+                var selectedSectorsIds = LineSectorTree.getSelectedIds();
+                var selectedComponentNames = LineComponentTree.getSelectedNames();
+                    var selectedActivituesNames = LineActivityTree.getSelectedNames();
+
+                            flag = (selectedYearsIds != null || selectedQuartersIds != null
+                        || selectedPricesIds != null || selectedSectorsIds != null
+                        || selectedComponentNames != null || selectedActivituesNames != null)
+
+                }
+
+
+
+                if (($("#home-tab").attr("href") == "" || $("#home-tab").attr("href").includes("lang"))&& flag) {
+                    Swal.fire({
+                        // title: 'Are you sure?',
+                        text: SwitchTabsMsg,
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#28A5A3',
+                        cancelButtonColor: '#688C8B',
+                        confirmButtonText: SwitchTabsYesMsg,
+                        cancelButtonText: SwitchTabsNoMsg
+                    }).then((result) => {
+                        if (result.value) {
+                            clearReport()
+                            $("#home-tab").attr("href", "#Report")
+                             $("#Charts-tab").attr("href", "x")
+                            $("#Charts-tab").click()
+                             $("#Charts-tab").attr("href", "")
+                            $("#home-tab").click()
+                            $("#home-tab").attr("href", "")
+
+                                if ('@ViewBag.lang' == '' || '@ViewBag.lang' == "ar") {
+                moveBtnToRight()
+            }
+                        } else {
+                             $("#Charts-tab").parent().addClass("active")
+                             $("#home-tab").parent().removeClass("active")
+                        }
+                    })
+                }
+
+
+                else if (($("#home-tab").attr("href") == "" || $("#home-tab").attr("href").includes("lang"))&& !flag) {
+                    clearReport()
+                    $("#home-tab").attr("href", "#Report")
+                     $("#Charts-tab").attr("href", "x")
+                    $("#Charts-tab").click()
+                     $("#Charts-tab").attr("href", "")
+                    $("#home-tab").click()
+                    $("#home-tab").attr("href", "")
+
+                                              if ('@ViewBag.lang' == '' || '@ViewBag.lang' == "ar") {
+                moveBtnToRight()
+            }
+                }
+
+            }
+
+        }
+
+
+
+    </script>
+
+    @*<script src="https://cdn.jsdelivr.net/alasql/0.3/alasql.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.7.12/xlsx.core.min.js"></script>
+        <script src="~/js/Charts.js"></script>*@
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="~/js/NewCharts.js"></script>
+
+}

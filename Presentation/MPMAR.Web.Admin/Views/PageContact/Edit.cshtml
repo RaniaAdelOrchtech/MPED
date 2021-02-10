@@ -1,0 +1,264 @@
+﻿@model PageContactEditViewModel
+@using MPMAR.Common
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+
+        string approvalId = Context.Request.Query["approvalId"];
+    int approvalIdInt = 0;
+    int.TryParse(approvalId, out approvalIdInt);
+
+    var bEUsersPrivilegesViewModel = bEUsersPrivilegesService.ValidateIBEUsersPrivilegesViewService(PrivilegesPageType.ContactUs, this.User.FindFirstValue(ClaimTypes.NameIdentifier), this.User.IsInRole(UserRolesConst.SuperAdmin), approvalId: approvalIdInt);
+}
+
+@*<h1>Create Page Contact</h1>*@
+
+
+
+<div>
+    <h4>Contact Us > <a asp-controller="PageContact" asp-action="Details">Page Contact</a> > Edit</h4>
+</div>
+
+@if (ViewBag.DisableEditFlage == true && bEUsersPrivilegesViewModel.CanEdit && !bEUsersPrivilegesViewModel.IsFromApprovalPage)
+{
+<div class="alert alert-warning">
+    <strong>NOTE!</strong> Your old changes haven't been approved yet, and your new changes will be auto-submitted.
+</div>
+}
+
+<form enctype="multipart/form-data" asp-controller="PageContact" asp-action="Edit" method="post" class="mt-3">
+
+    <input asp-for="PageRouteVersionId" type="hidden" />
+    <input asp-for="Id" type="hidden" />
+    <input asp-for="IsActive" type="hidden" />
+    <input asp-for="IsDeleted" type="hidden" />
+    <input asp-for="ChangeActionEnum" type="hidden" />
+    <input asp-for="PageContactId" type="hidden" />
+    <input asp-for="VersionStatusEnum" type="hidden" />
+    <input asp-for="CreationDate" type="hidden" />
+    <input asp-for="CreatedById" type="hidden" />
+    <input asp-for="ApprovedById" type="hidden" />
+    <input asp-for="ApprovalDate" type="hidden" />
+    <input asp-for="ModifiedById" type="hidden" />
+    <input asp-for="ModificationDate" type="hidden" />
+
+    <div class="form-group row">
+        <label asp-for="EnPageName" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="EnPageName" class="form-control" />
+            <span asp-validation-for="EnPageName" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="ArPageName" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="ArPageName" class="form-control" />
+            <span asp-validation-for="ArPageName" class="text-danger"></span>
+        </div>
+    </div>
+
+
+    <div class="form-group row">
+        <label asp-for="EnMapTitle" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="EnMapTitle" class="form-control" placeholder="English Map Title" />
+            <span asp-validation-for="EnMapTitle" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="ArMapTitle" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="ArMapTitle" class="form-control" placeholder="Arbic Map Title" />
+            <span asp-validation-for="ArMapTitle" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="MapUrl" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            @*<input asp-for="MapUrl" class="form-control" placeholder="Map Url" />*@
+            <textarea asp-for="MapUrl" class="form-control" rows="5" cols="40" placeholder="Map Url"></textarea>
+            <span asp-validation-for="MapUrl" class="text-danger"></span>
+        </div>
+    </div>
+
+
+
+
+
+    <div class="form-group row">
+        <label asp-for="EnAddress" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="EnAddress" class="form-control" placeholder="English Address" />
+            <span asp-validation-for="EnAddress" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="ArAddress" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="ArAddress" class="form-control" placeholder="Arbic Address" />
+            <span asp-validation-for="ArAddress" class="text-danger"></span>
+        </div>
+    </div>
+
+
+    <div class="form-group row">
+        <label asp-for="FaxNumber" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="FaxNumber" class="form-control" placeholder="Fax Number" />
+            <span asp-validation-for="FaxNumber" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="PhoneNumber" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="PhoneNumber" class="form-control" placeholder="Phone Number" />
+            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="Order" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="Order" class="form-control" placeholder="Order from left to right" />
+            <span asp-validation-for="Order" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="IsActive" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="IsActive" class="flat" />
+            <span asp-validation-for="IsActive" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="FormParticipateActive" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="FormParticipateActive" class="flat" />
+            <span asp-validation-for="FormParticipateActive" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="EnParticipateTitle" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="EnParticipateTitle" class="form-control" placeholder="English Participate Title" />
+            <span asp-validation-for="EnParticipateTitle" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="ArParticipateTitle" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="ArParticipateTitle" class="form-control" placeholder="Arbic Participate Title" />
+            <span asp-validation-for="ArParticipateTitle" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="EmailParticipateEmail" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="EmailParticipateEmail" class="form-control" placeholder="Arbic Participate Title" />
+            <span asp-validation-for="EmailParticipateEmail" class="text-danger"></span>
+        </div>
+    </div>
+
+
+
+    <div class="ln_solid"></div>
+    <h3>Search Engine Optimization Data</h3>
+
+    <div class="form-group row">
+        <label asp-for="SeoTitleEN" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="SeoTitleEN" class="form-control" placeholder="English Page Title" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="SeoTitleAR" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="SeoTitleAR" class="form-control" placeholder="Arabic Page Title" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="SeoDescriptionEN" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="SeoDescriptionEN" class="form-control" placeholder="English Page Description" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="SeoDescriptionAR" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="SeoDescriptionAR" class="form-control" placeholder="Arabic Page Description" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="SeoOgTitleEN" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="SeoOgTitleEN" class="form-control" placeholder="English Facebook Og Title" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="SeoOgTitleAR" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="SeoOgTitleAR" class="form-control" placeholder="Arabic Facebook Og Title" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="SeoTwitterCardEN" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="SeoTwitterCardEN" class="form-control" placeholder="English Twitter Card" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="SeoTwitterCardAR" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="SeoTwitterCardAR" class="form-control" placeholder="Arabic Twitter Card" />
+        </div>
+    </div>
+
+    <div class="item form-group">
+        <div class="col-md-6 col-sm-6 offset-md-2">
+            <button type="submit" class="btn btn-success">Edit</button>
+            <a asp-action="Details" type="button" class="btn btn-primary">Cancel</a>
+        </div>
+    </div>
+</form>
+
+@section Scripts{
+    <script>
+        /* Enable html editor */
+        $(document).ready(function () {
+            $('.summernote').summernote({
+                height: 200,
+                toolbar: [['style', ['style']], ['font', ['bold', 'underline', 'clear']], ['fontname', ['fontname']], ['color', ['color']], ['para', ['ul', 'ol', 'paragraph']], ['table', ['table']], ['insert', ['link']], ['view', ['fullscreen', 'codeview', 'help']]]
+            });
+        });
+
+        $(document).ready(function () {
+            //$('.custom-file-input').on('change', function () {
+            //    var fileName = $(this).val().split('\\').pop();
+            //    $(this).next('.custom-file-label').html(fileName);
+            //});
+            $('.custom-file-input').on('change', function () {
+                var fileName = $(this).val().split('\\').pop();
+                // $(this).next('.custom-file-label').html(fileName);
+                var ext = $(this).val().split('.').pop().toLowerCase();
+                if (ext == 'png' || ext == 'jpg' || ext == 'jpeg' || ext == 'gif' || ext == 'icon' || ext == 'bmp') {
+                    $(this).next('.custom-file-label').html(fileName);
+                }
+                else {
+                    alert('Please upload image file only.');
+                    return false;
+                }
+            });
+        });</script>
+}

@@ -1,0 +1,131 @@
+﻿@model MPMAR.Web.Site.ViewModels.ViewPageEventVersions
+@{
+    string lang = Context.Request.Query["lang"];
+    var controllerName = this.ViewContext.RouteData.Values["controller"].ToString();
+}
+<div>
+
+    <section id="content">
+        <!-- Page Heading -->
+        <section class="section page-heading animate-onscroll">
+            <h1> @(lang == "en" ? Model.EnTitle : Model.ArTitle) </h1>
+            <p class="breadcrumb"><a href="@Url.Content("~/")">@(lang == "en" ? "Home" : "الرئيسية") </a> / @(lang == "en" ? Model.MainEnTitle : Model.MainArTitle) / <a href="@(Url.Content("~/")+""+Model.ContollerName)">@(lang == "en" ? Model.PageEnTitle : Model.PageArTitle)</a> / @(lang == "en" ? Model.EnTitle : Model.ArTitle) </p>
+            
+
+        </section>
+        <!-- Page Heading -->
+        <!-- Event Map -->
+        <section class="animate-onscroll">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    <iframe width="1000" height="480" src="@(Model.EventLocationUrl)" frameborder="0" style="border:0;" allowfullscreen=""></iframe>
+                </div>
+            </div>
+        </section>
+        <!-- /Event Map -->
+        <!-- Section -->
+        <section class="section full-width-bg gray-bg">
+
+            <div class="row">
+
+                <div class="col-lg-12 col-md-12 col-sm-12">
+
+                    <!-- Event Single -->
+                    <div class="event-single">
+
+                        <div class="row">
+
+                            <div class="col-lg-9 col-md-9 col-sm-8 animate-onscroll">
+                                @if (Model.ArUrl != null)
+                                {
+                                <div class="event-image">
+                                    <img src="@Model.ArUrl" alt="">
+                                </div>
+                                }
+
+                                @(lang == "en" ? Html.Raw(Model.EnDescription) : Html.Raw(Model.ArDescription))
+                            </div>
+
+                            <div class="col-lg-3 col-md-3 col-sm-4">
+
+                                <!-- Event Meta -->
+                                <div class="event-meta">
+
+                                    <div class="event-meta-block animate-onscroll">
+                                        <i class="icons icon-calendar icons-fadeout"></i>
+                                        <i class="icons icon-calendar"></i>
+                                        <p class="title">
+                                            @(lang == "en" ? "Date" : "التاريخ")
+                                        </p>
+                                        <p>
+                                            @(lang == "en" ?  Model.EventStartDate.ToString("dd MMMM") + " - "+Model.EventEndDate.ToString("dd MMMM") : Model.EventStartDate.ToString("dd MMMM", System.Globalization.CultureInfo.GetCultureInfo("ar-EG")) +" - "+Model.EventEndDate.ToString("dd MMMM", System.Globalization.CultureInfo.GetCultureInfo("ar-EG")))
+                                        </p>
+                                    </div>
+
+
+                                    <div class="event-meta-block animate-onscroll">
+                                        <i class="icons icon-clock icons-fadeout"></i>
+                                        <i class="icons icon-clock"></i>
+                                        <p class="title">
+                                            @(lang == "en" ? "Time" : "الوقت")
+
+                                        </p>
+                                        <p style="direction:ltr !important;text-align:@(lang == "en" ? "left":"right");">
+
+                                            @(Model.EventStartDate.ToString("hh:mm tt")+"-"+Model.EventEndDate.ToString("hh:mm tt"))
+                                        
+                                        </p>
+
+                                    </div>
+
+                                    <div class="event-meta-block animate-onscroll">
+                                        <i class="icons icon-location icons-fadeout"></i>
+                                        <i class="icons icon-location"></i>
+                                        <p class="title">
+                                            @(lang == "en" ? "Place" : "المكان")
+
+                                        </p>
+                                        <p>
+                                            @if(Model.EnAddress!=null && Model.EnAddress!="")
+                                            {
+                                            @(lang == "en" ? (Model.EnAddress.Length > 26 ? Model.EnAddress.Substring(0, 24) : Model.EnAddress) : (Model.ArAddress.Length > 26 ? Model.ArAddress.Substring(0, 24) : Model.ArAddress))
+                                            }
+                                        </p>
+
+                                    </div>
+                                    <div class="event-meta-block animate-onscroll">
+                                        <i class="icons icon-share icons-fadeout"></i>
+                                        <i class="icons icon-share"></i>
+                                        <p class="title">
+                                            @(lang == "en" ? "Share" : "شارك")
+
+                                        </p>
+                                        @*<ul class="social-share">
+                                                @if (Model.EventSocialLinks != null)
+                                                @foreach (var item in Model.EventSocialLinks.Split(','))
+                                                    {
+                                                <li class="@item.Split(':')[0]"><a href="@item.Split(':')[1]"><i class="icons icon-@item.Split(':')[0]"></i></a></li>
+                                                    }
+                                            </ul>*@
+                                        <ul class="social-share">
+                                            <li class="facebook"><a href="https://www.facebook.com/sharer/sharer.php?u=http://212.129.13.21:1987/EventCalendar/EventDetial?id=@Model.Id" class="tooltip-ontop" title="" data-original-title="Facebook"><i class="icons icon-facebook"></i></a></li>
+                                            <li class="twitter"><a href="https://twitter.com/share" class="tooltip-ontop" title="" data-original-title="Twitter"><i class="icons icon-twitter"></i></a></li>
+                                            <li class="email"><a href="mailto:?subject=@(lang == "en" ? Model.EnTitle : Model.EnTitle)" class="tooltip-ontop" title="" data-original-title="Email"><i class="icons icon-mail"></i></a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- /Event Meta -->
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /Event Single -->
+                </div>
+            </div>
+        </section>
+        <!-- /Section -->
+
+
+    </section>
+    <!-- Back To Top -->
+    <a href="#" id="button-to-top"><i class="icons icon-up-dir"></i></a>
+</div>

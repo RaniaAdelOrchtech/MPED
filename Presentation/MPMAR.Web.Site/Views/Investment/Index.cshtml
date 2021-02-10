@@ -1,0 +1,1101 @@
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+
+@{
+    ViewData["Title"] = ViewBag.RepoOpt;
+
+
+    var lang = Context.Request.Query["lang"];
+    ViewBag.lang = lang;
+    string langVal = ViewBag.lang == "en" ? "en" : "ar";
+    Layout = ViewBag.Layout;
+
+}
+<style>
+    .charts {
+        width: 100%;
+        min-height: 450px;
+    }
+
+    @@media (max-width: 767px) {
+        div#PieFigure {
+            overflow-x: auto;
+            margin-right: -50px;
+        }
+
+      table, tbody, tr, td, th {
+            display: revert;
+        }
+    }
+</style>
+<link href="~/css/Charts.css" rel="stylesheet" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+
+<section class="section page-heading animate-onscroll">
+
+    <h1>
+        @ViewBag.Title
+    </h1>
+    <p class="breadcrumb"><a href="~/home?lang=@langVal">@(ViewBag.lang == "en" ? "Main" : "الرئيسية")</a> / @ViewBag.AnalyticsNav / <a href="~/analytics?lang=@langVal">@ViewBag.Analytics</a> / @ViewBag.RepoOpt</p>
+</section>
+@if ("" + lang == "" || lang == "ar")
+{
+    <partial name="~/Views/Shared/Analytics/_AnalyticsBarAr.cshtml" model="@langVal" />
+}
+else
+{
+    <partial name="~/Views/Shared/Analytics/_AnalyticsBarEn.cshtml" model="@langVal" />
+}
+<div style="margin-bottom:5px;margin-top:5px">
+    <ul class="nav nav-tabs" id="myTab">
+        <li class="active"><a data-toggle="tab" id="home-tab" onclick="MoveToReport()" href="">@ViewBag.ReportSpan</a></li>
+        <li><a data-toggle="tab" id="Charts-tab" href="" onclick="MoveToCharts()">@ViewBag.ChartsSpan</a></li>
+    </ul>
+
+    <div class="tab-content">
+        <div id="Report" class="tab-pane fade in active">
+            <div class="row row-without-margin" style="        margin-bottom: 10px;
+">
+
+                <div class="col-lg-3 col-md-3 RTL_select_header">
+                    <div class="col">
+                        <h6>@ViewBag.selectFrequancy</h6>
+                    </div>
+                    <div class="col">
+                        <input type="text" id="Frequancy" placeholder="Select" autocomplete="off" style="direction:ltr" />
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 RTL_select_header" id="yearsDiv">
+                    <div class="col">
+                        <h6 style="padding-left:2px;">@ViewBag.selectFiscalYear</h6>
+                    </div>
+                    <div class="col">
+                        <input type="text" id="Years" placeholder="Select" autocomplete="off" style="direction:ltr" />
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 RTL_select_header" id="quartersDiv" hidden>
+                    <div class="col">
+                        <h6>@ViewBag.selectQuarter</h6>
+                    </div>
+                    <div class="col">
+                        <input type="text" id="Quartes" placeholder="Select" autocomplete="off" style="direction:ltr" />
+                    </div>
+                </div>
+
+
+
+            </div>
+
+            <div class="row row-without-margin" style="margin-bottom:10px;">
+                <div class="col-lg-6 col-md-6 RTL_select_header">
+                    <div class="col">
+                        <h6>@ViewBag.selectSector</h6>
+                    </div>
+                    <div class="col">
+                        <input type="text" id="Investment" placeholder="Select" autocomplete="off" style="direction:ltr" />
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row row-without-margin-button-reverse RTL_btns" style="flex-flow:row-reverse;">
+                <div class="col-md-1">
+                    <button type="submit" id="btnGridSearchGovernorateClear" class="btn" style="background-color:#688C8B; color:white;min-width:65px">@ViewBag.clearBtn</button>
+                </div>
+                <div class="col-md-1">
+                    <button id="btnGridSearch" type="submit" class="btn" style="background-color:#28A5A3; color:white;min-width:65px">@ViewBag.submitBtn</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3 karimdiv" id="selectedlistYears">
+                </div>
+                <div class="col-md-3 karimdiv" id="selectedlistQuarters">
+                </div>
+                <div class="col-md-6 karimdiv" id="selectedlistHeaders">
+                </div>
+            </div>
+            <div id="div_table" style="overflow: auto;overflow-y: hidden;">
+
+                <table id="csvData-table" style="margin-top:70px;" class="table table-striped table-bordered dt-responsive nowrap">
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+        <div id="Charts" class="tab-pane fade">
+            <div>
+                <ul class="nav nav-tabs" id="pills-tab">
+                    <li class="active"><a data-toggle="tab" id="Pie-tab" onclick="clearPie()" href="#Pie" style="color: #28A5A3">@ViewBag.Pie</a></li>
+                    <li><a data-toggle="tab" id="Bar-tab" onclick="clearBar()" href="#Bar" style="color: #28A5A3">@ViewBag.Bar</a></li>
+                    <li><a data-toggle="tab" id="Line-tab" onclick="clearLine()" href="#Line" style="color: #28A5A3">@ViewBag.Line</a></li>
+                </ul>
+                <div class="tab-content" id="pills-tabContent">
+                    <div class="tab-pane fade in active" id="Pie">
+                        <div class="row row-without-margin" style="margin-bottom:10px;">
+                            <div class="col-lg-3 col-md-3 RTL_select_header">
+                                <div class="col">
+                                    <h6>@ViewBag.selectFrequancy</h6>
+                                </div>
+                                <div class="col">
+                                    <input type="text" id="PieFrequancy" placeholder="Select" autocomplete="off" style="direction:ltr" />
+                                </div>
+                            </div>
+
+
+                            <div class="col-lg-3 col-md-3 RTL_select_header">
+                                <div class="col">
+                                    <h6 style="padding-left:2px;">@ViewBag.selectFiscalYear</h6>
+                                </div>
+                                <div class="col">
+                                    <input type="text" id="PieYears" placeholder="Select" autocomplete="off" style="direction:ltr" />
+                                </div>
+                            </div>
+
+                            <div class="col-lg-3 col-md-3 RTL_select_header" id="PiequartersDiv" hidden>
+                                <div class="col">
+                                    <h6>@ViewBag.selectQuarter</h6>
+                                </div>
+                                <div class="col">
+                                    <input type="text" id="PieQuartes" placeholder="Select" autocomplete="off" style="direction:ltr" />
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                        <div class="row row-without-margin" style="margin-bottom:10px;">
+                            <div class="col-lg-6 col-md-6 RTL_select_header">
+                                <div class="col">
+                                    <h6>@ViewBag.selectSector</h6>
+                                </div>
+                                <div class="col">
+                                    <input type="text" id="PieInvestment" placeholder="Select" autocomplete="off" style="direction:ltr" />
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row row-without-margin-button-reverse RTL_btns" style="flex-flow:row-reverse;">
+                            <div class="col-md-1">
+                                <button type="submit" id="pieBtnGridSearchClear" class="btn" style="background-color:#688C8B; color:white;min-width:65px">@ViewBag.clearBtn</button>
+                            </div>
+                            <div class="col-md-1">
+                                <button id="pieBtnGridSearch" type="submit" class="btn" style="background-color:#28A5A3; color:white;min-width:65px">@ViewBag.submitBtn</button>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 karimdiv" id="PieselectedlistHeaders">
+                            </div>
+                            <div class="col-md-3 karimdiv" id="PieselectedlistYears">
+                            </div>
+                            <div class="col-md-3 karimdiv" id="PieselectedlistQuarters">
+                            </div>
+
+                        </div>
+                        <div id="PieFigure" style="display:none">
+                            <figure class="highcharts-figure" style="margin-top:70px;">
+                                <div id="pie-container" class="charts"></div>
+                            </figure>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="Bar">
+                        <div class="row row-without-margin" style="margin-bottom:10px;">
+                            <div class="col-lg-3 col-md-3 RTL_select_header">
+                                <div class="col">
+                                    <h6>@ViewBag.selectSector</h6>
+                                </div>
+                                <div class="col">
+                                    <input type="text" id="BarInvestment" placeholder="Select" autocomplete="off" style="direction:ltr" />
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3 RTL_select_header">
+                                <div class="col">
+                                    <h6 style="padding-left:2px;">@ViewBag.selectFiscalYear</h6>
+                                </div>
+                                <div class="col">
+                                    <input type="text" id="BarYears" placeholder="Select" autocomplete="off" style="direction:ltr" />
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row row-without-margin-button-reverse RTL_btns" style="flex-flow:row-reverse;">
+                            <div class="col-md-1">
+                                <button type="submit" id="barBtnGridSearchClear" class="btn" style="background-color:#688C8B; color:white;min-width:65px">@ViewBag.clearBtn</button>
+                            </div>
+                            <div class="col-md-1">
+                                <button id="barBtnGridSearch" type="submit" class="btn" style="background-color:#28A5A3; color:white;min-width:65px">@ViewBag.submitBtn</button>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 karimdiv" id="BarselectedlistHeaders">
+                            </div>
+                            <div class="col-md-3 karimdiv" id="BarselectedlistYears">
+                            </div>
+                            <div class="col-md-3 karimdiv" id="BarselectedlistQuarters">
+                            </div>
+                        </div>
+
+                        <div id="BarFigure" style="display:none;direction:ltr">
+
+                            <div id="bar-container"></div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="tab-pane fade" id="Line">
+                        <div class="row row-without-margin" style="margin-bottom:10px;">
+                            <div class="col-lg-3 col-md-3 RTL_select_header">
+                                <div class="col">
+                                    <h6>@ViewBag.selectSector</h6>
+                                </div>
+                                <div class="col">
+                                    <input type="text" id="LineInvestment" placeholder="Select" autocomplete="off" style="direction:ltr" />
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3 RTL_select_header">
+                                <div class="col">
+                                    <h6 style="padding-left:2px;">@ViewBag.selectFiscalYear</h6>
+                                </div>
+                                <div class="col">
+                                    <input type="text" id="LineYears" placeholder="Select" autocomplete="off" style="direction:ltr" />
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row row-without-margin-button-reverse RTL_btns" style="flex-flow:row-reverse;">
+                            <div class="col-md-1">
+                                <button type="submit" id="lineBtnGridSearchClear" class="btn" style="background-color:#688C8B; color:white;min-width:65px">@ViewBag.clearBtn</button>
+                            </div>
+                            <div class="col-md-1 ">
+                                <button id="lineBtnGridSearch" type="submit" class="btn" style="background-color:#28A5A3; color:white;min-width:65px">@ViewBag.submitBtn</button>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 karimdiv" id="LineselectedlistHeaders">
+                            </div>
+                            <div class="col-md-3 karimdiv" id="LineselectedlistYears">
+                            </div>
+                            <div class="col-md-3 karimdiv" id="LineselectedlistQuarters">
+                            </div>
+                        </div>
+                        <div id="LineFigure" style="display:none;direction:ltr">
+
+                            <div id="line-container" class="charts"></div>
+
+                        </div>
+
+
+                    </div>
+
+
+
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+@{
+    @using Newtonsoft.Json;
+    ViewBag.AvailableYears = JsonConvert.SerializeObject(ViewBag.YearView);
+    ViewBag.AvailableQuarters = JsonConvert.SerializeObject(ViewBag.QuarterView);
+    ViewBag.AvailableInvestments = JsonConvert.SerializeObject(ViewBag.InvestmentView);
+    ViewBag.AvailableFrequancy = JsonConvert.SerializeObject(ViewBag.FrequancyView);
+
+    ViewBag.ChooseAllFiltersMsg = JsonConvert.SerializeObject(ViewBag.ChooseAllFilters);
+    ViewBag.ConfirmBtnMsg = JsonConvert.SerializeObject(ViewBag.ConfirmBtn);
+    ViewBag.SwitchTabsMsg = JsonConvert.SerializeObject(ViewBag.SwitchTabs);
+    ViewBag.SwitchTabsYesMsg = JsonConvert.SerializeObject(ViewBag.SwitchTabsYes);
+    ViewBag.SwitchTabsNoMsg = JsonConvert.SerializeObject(ViewBag.SwitchTabsNo);
+
+}
+@section Scripts{
+
+    <script>
+        var dropdownyear = JSON.parse('@Html.Raw(ViewBag.AvailableYears)');
+        var dropdownquarter = JSON.parse('@Html.Raw(ViewBag.AvailableQuarters)');
+        var dropdownInvestment = JSON.parse('@Html.Raw(ViewBag.AvailableInvestments)');
+        var dropdownFrequancy = JSON.parse('@Html.Raw(ViewBag.AvailableFrequancy)');
+
+        var chooseAllFiltersMsg = JSON.parse('@Html.Raw(ViewBag.ChooseAllFiltersMsg)');
+        var confirmBtnMsg=JSON.parse('@Html.Raw(ViewBag.ConfirmBtnMsg)');
+        var SwitchTabsMsg=JSON.parse('@Html.Raw(ViewBag.SwitchTabsMsg)');
+        var SwitchTabsYesMsg=JSON.parse('@Html.Raw(ViewBag.SwitchTabsYesMsg)');
+        var SwitchTabsNoMsg=JSON.parse('@Html.Raw(ViewBag.SwitchTabsNoMsg)');
+
+        var url_string = window.location.href;
+        var url = new URL(url_string);
+        var langParam = url.searchParams.get("lang");
+
+        dropdownInvestment.map(function (item) {
+            if (item.subs.length == 0)
+                delete item.subs;
+        })
+
+
+                $(document).ready(function () {
+
+
+
+                    var dataTableFilLang=""
+
+       if ('@ViewBag.lang' == '' || '@ViewBag.lang' == "ar") {
+
+           $("#div_table").css("direction", "rtl")
+           $("#myTab").css("direction", "rtl").css("padding","0")
+          $("#pills-tab").css("direction", "rtl").css("padding","0")
+           $("#Report").css("direction", "rtl")
+           $("#Pie").css("direction", "rtl")
+           $("#Bar").css("direction", "rtl")
+           $("#Line").css("direction", "rtl")
+         $(".RTL_btns").children().css("float", "left")
+           dataTableFilLang = "/dataTableArabicLang.json"
+           $(".RTL_select_header").addClass("text-right")
+       }
+       else {
+           dataTableFilLang = "/dataTableEnglishLang.json"
+            $(".RTL_btns").children().css("float", "right")
+       }
+         YearsTree = $('#Years').comboTree({
+                source: dropdownyear,
+                isMultiple: true,
+         });
+         QuartesTree = $('#Quartes').comboTree({
+                source: dropdownquarter,
+                isMultiple: true,
+         });
+         InvestmentTree = $('#Investment').comboTree({
+           source: dropdownInvestment,
+           isMultiple: true,
+           cascadeSelect:true
+         });
+
+      FrequancyTree = $('#Frequancy').comboTree({
+          source: dropdownFrequancy,
+          isMultiple: false,
+           cascadeSelect:true
+         });
+
+         var piedropdownyear = dropdownyear.slice();
+         piedropdownyear.shift()
+
+        var piedropdownquarter = dropdownquarter.slice();
+                    piedropdownquarter.shift()
+
+                    var piedropdownInvestments = dropdownInvestment.slice();
+        piedropdownInvestments.pop()
+
+         PieYearsTree = $('#PieYears').comboTree({
+             source: piedropdownyear,
+             isMultiple: false,
+         });
+         PieQuartesTree = $('#PieQuartes').comboTree({
+             source: piedropdownquarter,
+             isMultiple: false,
+         });
+        PieInvestmentTree = $('#PieInvestment').comboTree({
+           source: piedropdownInvestments,
+           isMultiple: true,
+           cascadeSelect:true
+        });
+
+                      PieFrequancyTree = $('#PieFrequancy').comboTree({
+          source: dropdownFrequancy,
+          isMultiple: false,
+           cascadeSelect:true
+         });
+
+         BarYearsTree = $('#BarYears').comboTree({
+             source: dropdownyear,
+             isMultiple: true,
+         });
+       BarInvestmentTree = $('#BarInvestment').comboTree({
+           source: dropdownInvestment,
+           isMultiple: true,
+           cascadeSelect:true
+       });
+
+          LineYearsTree = $('#LineYears').comboTree({
+             source: dropdownyear,
+             isMultiple: true,
+         });
+        LineInvestmentTree = $('#LineInvestment').comboTree({
+           source: dropdownInvestment,
+           isMultiple: true,
+           cascadeSelect:true
+       });
+
+             var csvTable,
+                 domTable,
+                htmlTable = ' <table id="csvData-table" style="margin-top:70px;" class="table table-striped table-bordered dt-responsive nowrap"><tbody></tbody></table>'
+
+       $("#btnGridSearch").click(function () {
+
+           var selectedYearsIds = YearsTree.getSelectedIds();
+           var selectedQuartersIds = QuartesTree.getSelectedIds();
+           var selectedYearsNames = YearsTree.getSelectedNames();
+           var selectedFrequancyIds = FrequancyTree.getSelectedIds();
+           var selectedQuartersNames = QuartesTree.getSelectedNames();
+           var headers = InvestmentTree.getSelectedNames();
+
+                $("#selectedlistYears").html("");
+                $("#selectedlistQuarters").html("");
+                $("#selectedlistHeaders").html("");
+
+           if (selectedFrequancyIds != null && selectedYearsIds != null && headers != null && selectedFrequancyIds == 1 || (selectedFrequancyIds == 2 && selectedQuartersIds != null)) {
+
+
+                   $.ajax({
+               data: {  lang: langParam, years: selectedYearsIds, quarters: selectedQuartersIds, headers },
+                        url: '@Url.Action("GetReport")',
+                        dataType: 'json',
+                        type: 'POST',
+                       success: function (data) {
+                           $('#div_table').show()
+                           if ('@ViewBag.isBlank' == "") {
+                               $('html, body').animate({
+                                   scrollTop: $("#div_table").offset().top - $("#header").offset().top
+                               }, 2000);
+                           }
+                              if ($.fn.DataTable.fnIsDataTable(domTable)) {
+                                 csvTable.destroy(true);
+                                     $('#div_table').append(htmlTable);
+                                }
+
+                           $("#csvData-table").empty();
+
+                            var formattedHeaders = [];
+                            $.each(data.headerColumns, function (e, f) {
+                                formattedHeaders.push({ "title": data.headerColumns[e] });
+                            });
+                           csvTable = $("#csvData-table").DataTable({
+                               "responsive": false,
+                                "aaSorting": [],
+                                 "language": { "url": dataTableFilLang },
+                                dom: 'Bfrtip',
+                               buttons: [
+        {
+           extend: 'csv',
+           charset: 'UTF-8',
+           fieldSeparator: ',',
+                                       bom: true,
+                                       text: '<img src="/img/excel.png" style="width: 40px;" />',
+              titleAttr: 'Excel'
+        }
+    ],
+
+                                "destroy": true,
+                                "columns": formattedHeaders
+                            });
+                           var csvData = data;
+
+                            domTable = document.getElementById('csvData-table');
+
+
+                           for (var i = 0; i < csvData.result.length; i++) {
+                                csvTable.row.add(
+                                    csvData.result[i]
+                                );
+                            }
+                            csvTable.draw();
+                           result = data;
+                           setTimeout(function () {
+
+                           $(".buttons-csv").css("margin-bottom", "10px")
+                           }, 200)
+
+
+
+                        },
+                        error: function (err) {
+                            alert("Error has occured");
+                        }
+                    });
+           }
+
+                 else {
+
+                        Swal.fire({
+                        icon: 'error',
+                        text: chooseAllFiltersMsg,
+                        confirmButtonText: confirmBtnMsg,
+                        confirmButtonColor: '#28A5A3',
+                     })
+                }
+       });
+
+       $("#pieBtnGridSearch").click(function () {
+
+           var selectedYearsIds = PieYearsTree.getSelectedIds();
+           var selectedQuartersIds = PieQuartesTree.getSelectedIds();
+           var selectedYearsName= PieYearsTree.getSelectedNames()
+           var selectedQuartersName= PieQuartesTree.getSelectedNames()
+           var selectedFrequancyIds = PieFrequancyTree.getSelectedIds();
+
+           var headers = PieInvestmentTree.getSelectedNames();
+
+           $("#PieselectedlistYears").html("")
+               $("#PieselectedlistQuarters").html("");
+                $("#PieselectedlistHeaders").html("");
+                          debugger;
+           if (selectedFrequancyIds != null && selectedYearsIds != null && headers != null && selectedFrequancyIds == 1 || (selectedFrequancyIds == 2 && headers != null && selectedYearsIds != null && selectedQuartersIds != null)) {
+                headers.forEach(function (entry) {
+                            if (entry != null) {
+                            //    $("#PieselectedlistHeaders").append('<span class="karimtest">' + entry + '</span');
+                            }
+                });
+
+              // $("#PieselectedlistYears").append('<span class="karimtest">' + selectedYearsName + '</span');
+
+
+               //$("#PieselectedlistQuarters").append('<span class="karimtest">' + selectedQuartersName + '</span');
+
+                   $.ajax({
+               data: {  lang: langParam, years: selectedYearsIds, quarters: selectedQuartersIds, headers },
+                        url: '@Url.Action("GetPieReport")',
+                        dataType: 'json',
+                        type: 'POST',
+                       success: function (data) {
+                        PieChart(data.data,data.unit)
+                           $('#PieFigure').show()
+                           if ('@ViewBag.isBlank' == "") {
+                               $('html, body').animate({
+                                   scrollTop: $("#PieFigure").offset().top - $("#header").offset().top
+                               }, 2000);
+                           }
+
+
+                        },
+                        error: function (err) {
+                            alert("Error has occured");
+                        }
+                    });
+           }
+
+                 else {
+
+                        Swal.fire({
+                        icon: 'error',
+                        text: chooseAllFiltersMsg,
+                        confirmButtonText: confirmBtnMsg,
+                        confirmButtonColor: '#28A5A3',
+                     })
+                }
+       });
+
+       $("#barBtnGridSearch").click(function () {
+
+           var selectedYearsIds = BarYearsTree.getSelectedIds();
+           var selectedYearsNames = BarYearsTree.getSelectedNames();
+           var headers = BarInvestmentTree.getSelectedNames();
+
+            $("#BarselectedlistYears").html("");
+            $("#BarselectedlistHeaders").html("");
+           if (selectedYearsIds != null && headers != null) {
+                selectedYearsNames.forEach(function (entry) {
+                            if (entry != null) {
+                              //  $("#BarselectedlistYears").append('<span class="karimtest">' + entry + '</span');
+                            }
+                });
+                headers.forEach(function (entry) {
+                            if (entry != null) {
+                           //     $("#BarselectedlistHeaders").append('<span class="karimtest">' + entry + '</span');
+                            }
+                        });
+
+                   $.ajax({
+               data: {  lang: langParam, years: selectedYearsIds, headers },
+                        url: '@Url.Action("GetChartReport")',
+                        dataType: 'json',
+                        type: 'POST',
+                       success: function (data) {
+                           BarChart(data.data, data.unit)
+                           $('#BarFigure').show()
+                           if ('@ViewBag.isBlank' == "") {
+                               $('html, body').animate({
+                                   scrollTop: $("#BarFigure").offset().top - $("#header").offset().top
+                               }, 2000);
+                           }
+                        },
+                        error: function (err) {
+                            alert("Error has occured");
+                        }
+                    });
+           }
+
+                 else {
+
+                        Swal.fire({
+                        icon: 'error',
+                        text: chooseAllFiltersMsg,
+                        confirmButtonText: confirmBtnMsg,
+                        confirmButtonColor: '#28A5A3',
+                     })
+                }
+       });
+
+       $("#lineBtnGridSearch").click(function () {
+
+           var selectedYearsIds = LineYearsTree.getSelectedIds();
+           var selectedYearsNames = LineYearsTree.getSelectedNames();
+           var headers = LineInvestmentTree.getSelectedNames();
+                 $("#LineselectedlistYears").html("");
+            $("#LineselectedlistHeaders").html("");
+           if (selectedYearsIds != null && headers != null) {
+               selectedYearsNames.forEach(function (entry) {
+                            if (entry != null) {
+                             //   $("#LineselectedlistYears").append('<span class="karimtest">' + entry + '</span');
+                            }
+                });
+                headers.forEach(function (entry) {
+                            if (entry != null) {
+                            //    $("#LineselectedlistHeaders").append('<span class="karimtest">' + entry + '</span');
+                            }
+                        });
+                   $.ajax({
+               data: {  lang: langParam, years: selectedYearsIds, headers ,chartType:"line"},
+                        url: '@Url.Action("GetChartReport")',
+                        dataType: 'json',
+                        type: 'POST',
+                       success: function (data) {
+                           LineChart(data.data, data.unit)
+                           $('#LineFigure').show()
+                           if ('@ViewBag.isBlank' == "") {
+                               $('html, body').animate({
+                                   scrollTop: $("#LineFigure").offset().top - $("#header").offset().top
+                               }, 2000);
+                           }
+                        },
+                        error: function (err) {
+                            alert("Error has occured");
+                        }
+                    });
+           }
+
+                 else {
+
+                        Swal.fire({
+                        icon: 'error',
+                        text: chooseAllFiltersMsg,
+                        confirmButtonText: confirmBtnMsg,
+                        confirmButtonColor: '#28A5A3',
+                     })
+                }
+       });
+
+       $("#btnGridSearchGovernorateClear").click(function () {
+           clearReport()
+       })
+
+       $("#pieBtnGridSearchClear").click(function () {
+              clearPie()
+
+       })
+
+       $("#lineBtnGridSearchClear").click(function () {
+
+           clearLine()
+
+       })
+
+         $("#barBtnGridSearchClear").click(function () {
+
+       clearBar()
+
+         })
+
+                     setTimeout(function () {
+                         $("#Frequancy").parent().next().children("ul").children("li").children("span").on("click", function () {
+             var valData=$(this)[0].attributes[0].value
+                             if (valData == 1) {
+                                 $("#quartersDiv").hide()
+                                 QuartesTree.clearSelection()
+
+                             }
+                             else if (valData == 2) {
+                                 $("#quartersDiv").show()
+                                 YearsTree.clearSelection()
+                                    if ('@ViewBag.lang' == '' || '@ViewBag.lang' == "ar") {
+                         runTimeRTLWithoutClearNames()
+                            }
+                             }
+
+
+                         })
+
+                            $("#PieFrequancy").parent().next().children("ul").children("li").children("span").on("click", function () {
+             var valData=$(this)[0].attributes[0].value
+                             if (valData == 1) {
+                                 $("#PiequartersDiv").hide()
+                                 PieQuartesTree.clearSelection()
+
+                             }
+                             else if (valData == 2) {
+                                 $("#PiequartersDiv").show()
+                                 PieYearsTree.clearSelection()
+                                    if ('@ViewBag.lang' == '' || '@ViewBag.lang' == "ar") {
+                                        runTimeRTLWithoutClearNames()
+                                            renameComboboxToArabic("PieYears", 0)
+                                        renameComboboxToArabic("PieQuartes", 0)
+                            }
+                             }
+
+
+            })
+
+            $("#Years").parent().next().children("ul").children("li").children("span").on("click", function () {
+                if ($(this)[0].attributes[0].value == -1) {
+                     if (YearsTree.getSelectedIds().includes("-1")) {
+                    YearsTree.setSelection(YearsTree.options.source.map(x => x.id))
+                }
+                     else {
+                         YearsTree.clearSelection()
+                }
+                }
+
+            })
+    $("#Quartes").parent().next().children("ul").children("li").children("span").on("click", function () {
+                if ($(this)[0].attributes[0].value == -1) {
+                     if (QuartesTree.getSelectedIds().includes("-1")) {
+                    QuartesTree.setSelection(QuartesTree.options.source.map(x => x.id))
+                }
+                     else {
+                         QuartesTree.clearSelection()
+                }
+                }
+
+            })
+            $("#BarYears").parent().next().children("ul").children("li").children("span").on("click", function () {
+                if ($(this)[0].attributes[0].value == -1) {
+                    if (BarYearsTree.getSelectedIds().includes("-1")) {
+                    BarYearsTree.setSelection(BarYearsTree.options.source.map(x => x.id))
+                }
+                     else {
+                         BarYearsTree.clearSelection()
+                }
+                }
+
+            })
+
+              $("#LineYears").parent().next().children("ul").children("li").children("span").on("click", function () {
+                  if ($(this)[0].attributes[0].value == -1) {
+                      if (LineYearsTree.getSelectedIds().includes("-1")) {
+                    LineYearsTree.setSelection(LineYearsTree.options.source.map(x => x.id))
+                }
+                     else {
+                         LineYearsTree.clearSelection()
+                }
+                }
+
+            })
+
+            $("#Investment").parent().next().children("ul").children("li").children("span").on("click", function () {
+                if ($(this)[0].attributes[0].value == -1) {
+                    if (InvestmentTree.getSelectedIds().includes("-1")) {
+                        InvestmentTree.setSelection(InvestmentTree.options.source.map(x => x.id))
+                }
+                     else {
+                         InvestmentTree.clearSelection()
+                }
+                }
+
+            })
+
+            $("#PieInvestment").parent().next().children("ul").children("li").children("span").on("click", function () {
+                if ($(this)[0].attributes[0].value == -1) {
+                    if (PieInvestmentTree.getSelectedIds().includes("-1")) {
+                        PieInvestmentTree.setSelection(PieInvestmentTree.options.source.map(x => x.id))
+                }
+                     else {
+                         PieInvestmentTree.clearSelection()
+                }
+                }
+
+            })
+
+               $("#BarInvestment").parent().next().children("ul").children("li").children("span").on("click", function () {
+                   if ($(this)[0].attributes[0].value == -1) {
+                       if (BarInvestmentTree.getSelectedIds().includes("-1")) {
+                        BarInvestmentTree.setSelection(BarInvestmentTree.options.source.map(x => x.id))
+                }
+                     else {
+                         BarInvestmentTree.clearSelection()
+                }
+                }
+
+               })
+
+               $("#LineInvestment").parent().next().children("ul").children("li").children("span").on("click", function () {
+                   if ($(this)[0].attributes[0].value == -1) {
+                       if (LineInvestmentTree.getSelectedIds().includes("-1")) {
+                        LineInvestmentTree.setSelection(LineInvestmentTree.options.source.map(x => x.id))
+                }
+                     else {
+                         LineInvestmentTree.clearSelection()
+                }
+                }
+
+               })
+
+            if ('@ViewBag.lang' == '' || '@ViewBag.lang' == "ar") {
+                         runTimeRTL()
+            }
+
+                     }, 200)
+
+                    if ('@ViewBag.lang' == '' || '@ViewBag.lang' == "ar") {
+                        YearsTree.onChange(function () {
+                            var length = YearsTree.getSelectedIds() != null ? YearsTree.getSelectedIds().length : 0
+                            renameComboboxToArabic("Years", length)
+                        })
+
+                        QuartesTree.onChange(function () {
+                            var length = QuartesTree.getSelectedIds() != null ? QuartesTree.getSelectedIds().length : 0
+                            renameComboboxToArabic("Quartes", length)
+                        })
+
+                        InvestmentTree.onChange(function () {
+                            var length = InvestmentTree.getSelectedIds() != null ? InvestmentTree.getSelectedIds().length : 0
+                            renameComboboxToArabic("Investment", length)
+                        })
+
+
+                        PieInvestmentTree.onChange(function () {
+                            var length = PieInvestmentTree.getSelectedIds() != null ? PieInvestmentTree.getSelectedIds().length : 0
+                            renameComboboxToArabic("PieInvestment", length)
+                        })
+
+
+                         BarYearsTree.onChange(function () {
+                            var length = BarYearsTree.getSelectedIds() != null ? BarYearsTree.getSelectedIds().length : 0
+                            renameComboboxToArabic("BarYears", length)
+                        })
+
+                        BarInvestmentTree.onChange(function () {
+                            var length = BarInvestmentTree.getSelectedIds() != null ? BarInvestmentTree.getSelectedIds().length : 0
+                            renameComboboxToArabic("BarInvestment", length)
+                        })
+
+
+
+                        LineYearsTree.onChange(function () {
+                            var length = LineYearsTree.getSelectedIds() != null ? LineYearsTree.getSelectedIds().length : 0
+                            renameComboboxToArabic("LineYears", length)
+                        })
+
+                        LineInvestmentTree.onChange(function () {
+                            var length = LineInvestmentTree.getSelectedIds() != null ? LineInvestmentTree.getSelectedIds().length : 0
+                            renameComboboxToArabic("LineInvestment", length)
+                        })
+                    }
+
+   })
+
+
+
+               $(window).resize(function () {
+               $(".comboTreeInputBox").each(function () {
+                var offWidth = $(this)[0].offsetWidth - 37.5
+                $(this).next().css("margin-right", +offWidth + "px")
+               })
+                              drawBarChart();
+                   drawLineChart();
+
+});
+
+        function clearReport() {
+           YearsTree.clearSelection();
+           QuartesTree.clearSelection();
+            InvestmentTree.clearSelection();
+            FrequancyTree.clearSelection();
+            $("#quartersDiv").hide()
+            $('#div_table').hide()
+            $("#selectedlistYears").html("");
+            $("#selectedlistQuarters").html("");
+            $("#selectedlistHeaders").html("");
+               if ('@ViewBag.lang' == '' || '@ViewBag.lang' == "ar") {
+                moveBtnToRight()
+            }
+        }
+        function clearPie() {
+               PieYearsTree.clearSelection();
+           PieQuartesTree.clearSelection();
+            PieInvestmentTree.clearSelection();
+            PieFrequancyTree.clearSelection();
+            $("#PiequartersDiv").hide()
+           $("#PieselectedlistYears").html("")
+               $("#PieselectedlistQuarters").html("");
+                $("#PieselectedlistHeaders").html("");
+            $('#PieFigure').hide()
+              if ('@ViewBag.lang' == '' || '@ViewBag.lang' == "ar") {
+                moveBtnToRight()
+            }
+        }
+        function clearBar() {
+            BarInvestmentTree.clearSelection()
+            BarYearsTree.clearSelection()
+            $("#BarquartersDiv").hide()
+            $("#BarselectedlistYears").html("");
+            $("#BarselectedlistHeaders").html("");
+            $('#BarFigure').hide()
+               if ('@ViewBag.lang' == '' || '@ViewBag.lang' == "ar") {
+                moveBtnToRight()
+            }
+        }
+
+        function clearLine() {
+            LineInvestmentTree.clearSelection()
+            LineYearsTree.clearSelection()
+            $("#LinequartersDiv").hide()
+               $("#LineselectedlistYears").html("");
+              $("#LineselectedlistHeaders").html("");
+            $('#LineFigure').hide()
+              if ('@ViewBag.lang' == '' || '@ViewBag.lang' == "ar") {
+                moveBtnToRight()
+            }
+        }
+
+        function MoveToCharts() {
+            debugger
+
+            if (!$("#Charts-tab").parent()[0].classList.contains("active")) {
+
+                  var selectedYearsIds = YearsTree.getSelectedIds();
+           var selectedQuartersIds = QuartesTree.getSelectedIds();
+            var headers = InvestmentTree.getSelectedNames();
+            var flag = (selectedYearsIds != null || selectedQuartersIds != null || headers != null)
+
+                if (($("#Charts-tab").attr("href") == "" || $("#Charts-tab").attr("href").includes("lang")) && flag) {
+                    Swal.fire({
+                        // title: 'Are you sure?',
+                        text: SwitchTabsMsg,
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#28A5A3',
+                        cancelButtonColor: '#688C8B',
+                        confirmButtonText: SwitchTabsYesMsg,
+                        cancelButtonText: SwitchTabsNoMsg
+                    }).then((result) => {
+                        if (result.value) {
+                            clearPie()
+                            clearBar()
+                            clearLine()
+                            $("#Charts-tab").attr("href", "#Charts")
+                            $("#home-tab").attr("href", "x")
+                            $("#home-tab").click()
+                            $("#home-tab").attr("href", "")
+                            $("#Charts-tab").click()
+                            $("#Charts-tab").attr("href", "")
+                               if ('@ViewBag.lang' == '' || '@ViewBag.lang' == "ar") {
+                moveBtnToRight()
+            }
+                        } else {
+                            $("#home-tab").parent().addClass("active")
+                            $("#Charts-tab").parent().removeClass("active")
+                        }
+                    })
+                }
+                else if (($("#Charts-tab").attr("href") == "" || $("#Charts-tab").attr("href").includes("lang")) && !flag) {
+                      clearPie()
+                            clearBar()
+                            clearLine()
+                            $("#Charts-tab").attr("href", "#Charts")
+                            $("#home-tab").attr("href", "x")
+                            $("#home-tab").click()
+                            $("#home-tab").attr("href", "")
+                            $("#Charts-tab").click()
+                    $("#Charts-tab").attr("href", "")
+              if ('@ViewBag.lang' == '' || '@ViewBag.lang' == "ar") {
+                moveBtnToRight()
+            }
+                }
+
+            }
+
+        }
+        function MoveToReport() {
+            if (!$("#home-tab").parent()[0].classList.contains("active")) {
+                var flag = false;
+                if ($("#Pie-tab").parent()[0].classList.contains("active")) {
+
+                    var selectedYearsIds = PieYearsTree.getSelectedIds();
+                    var selectedQuartersIds = PieQuartesTree.getSelectedIds();
+                    var headers = PieInvestmentTree.getSelectedNames();
+
+                    flag = (selectedYearsIds != null || selectedQuartersIds != null || headers != null)
+                }
+                else if ($("#Bar-tab").parent()[0].classList.contains("active")) {
+                    var selectedYearsIds = BarYearsTree.getSelectedIds();
+                    var headers = BarInvestmentTree.getSelectedNames();
+
+                    flag = (selectedYearsIds != null || headers != null)
+
+                }
+                else if ($("#Line-tab").parent()[0].classList.contains("active")) {
+
+                 var selectedYearsIds = LineYearsTree.getSelectedIds();
+                    var headers = LineInvestmentTree.getSelectedNames();
+
+                            flag = (selectedYearsIds != null || headers != null)
+                }
+
+                console.log(flag)
+                if (($("#home-tab").attr("href") == "" || $("#home-tab").attr("href").includes("lang")) && flag) {
+                    Swal.fire({
+                        // title: 'Are you sure?',
+                        text: SwitchTabsMsg,
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#28A5A3',
+                        cancelButtonColor: '#688C8B',
+                        confirmButtonText: SwitchTabsYesMsg,
+                        cancelButtonText: SwitchTabsNoMsg
+                    }).then((result) => {
+                        if (result.value) {
+                            clearReport()
+                            $("#home-tab").attr("href", "#Report")
+                             $("#Charts-tab").attr("href", "x")
+                            $("#Charts-tab").click()
+                             $("#Charts-tab").attr("href", "")
+                            $("#home-tab").click()
+                            $("#home-tab").attr("href", "")
+
+                                if ('@ViewBag.lang' == '' || '@ViewBag.lang' == "ar") {
+                moveBtnToRight()
+            }
+                        } else {
+                             $("#Charts-tab").parent().addClass("active")
+                             $("#home-tab").parent().removeClass("active")
+                        }
+                    })
+                }
+                else if (($("#home-tab").attr("href") == "" || $("#home-tab").attr("href").includes("lang")) && !flag) {
+                      clearReport()
+                     $("#home-tab").attr("href", "#Report")
+                     $("#Charts-tab").attr("href", "x")
+                    $("#Charts-tab").click()
+                     $("#Charts-tab").attr("href", "")
+                    $("#home-tab").click()
+                    $("#home-tab").attr("href", "")
+                                              if ('@ViewBag.lang' == '' || '@ViewBag.lang' == "ar") {
+                moveBtnToRight()
+            }
+                }
+
+            }
+
+        }
+
+
+    </script>
+    @*<script src="~/js/Charts.js"></script>*@
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="~/js/NewCharts.js"></script>
+
+}

@@ -1,0 +1,27 @@
+﻿
+@{
+    ViewData["Title"] = "NavigationMenu";
+}
+@{
+    string lang = Context.Request.Query["lang"];
+}
+<!-- Sidebar -->
+    <div class="col-lg-3 col-md-3 col-sm-4 sidebar">
+
+
+        <!-- Featured Video -->
+
+        @await Component.InvokeAsync("LogoLink")
+
+        <!-- /Featured Video -->
+        @await Component.InvokeAsync("PageEventVersions")
+        <!-- /Upcoming Events --> <!-- Image Banner -->
+        <!-- Image Banner -->
+        <!-- /Image Banner -->
+    </div>
+<!-- /Sidebar -->
+<style>
+    .en {
+        direction: ltr;
+    }
+</style>

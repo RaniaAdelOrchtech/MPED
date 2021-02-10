@@ -1,0 +1,162 @@
+﻿@model MPMAR.Business.ViewModels.PageNewsEditViewModel
+@{
+    ViewData["Title"] = "News";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    string photoPath = null;
+
+    photoPath = Model.News.url;
+
+}
+
+<div>
+    <h4><a asp-controller="StaticPageRoute" asp-action="Index">Static Page</a> > <a asp-controller="StaticPageNews" asp-action="Index" asp-route-pageRouteId="@Model.PageRouteId">News</a> > Edit </h4>
+</div>
+
+<form enctype="multipart/form-data" asp-controller="StaticPageNews" asp-action="Edit" method="post" class="mt-3">
+    <input asp-for="PageRouteId" type="hidden" />
+    <input asp-for="News.Id" type="hidden" />
+    <input asp-for="News.url" type="hidden" />
+    <input asp-for="News.CreationDate" type="hidden" />
+    <input asp-for="News.CreatedById" type="hidden" />
+    <input asp-for="News.PageNewsId" type="hidden" />
+    <input asp-for="News.ChangeActionEnum" type="hidden" />
+    <input asp-for="News.VersionStatusEnum" type="hidden" />
+    <input asp-for="NewsTypesIds" id="NewsTypeIds" type="hidden" />
+
+    <div class="form-group row">
+        <label asp-for="News.EnTitle" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="News.EnTitle" class="form-control" placeholder="English Title" />
+            <span asp-validation-for="News.EnTitle" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="News.ArTitle" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="News.ArTitle" class="form-control" placeholder="Arabic Title" />
+            <span asp-validation-for="News.ArTitle" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="News.EnShortDescription" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            @Html.TextAreaFor(model => model.News.EnShortDescription, new { @class = "form-control summernote" })
+            <span asp-validation-for="News.EnShortDescription" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="News.ArShortDescription" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            @Html.TextAreaFor(model => model.News.ArShortDescription, new { @class = "form-control summernote" })
+            <span asp-validation-for="News.ArShortDescription" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="News.EnDescription" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            @Html.TextAreaFor(model => model.News.EnDescription, new { @class = "form-control summernote" })
+            <span asp-validation-for="News.EnDescription" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="News.ArDescription" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            @Html.TextAreaFor(model => model.News.ArDescription, new { @class = "form-control summernote" })
+            <span asp-validation-for="News.ArDescription" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="News.Photo" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <div class="custom-file">
+                <input asp-for="News.Photo" class="form-control custom-file-input" accept=".gif,.jpg,.jpeg,.png,.BMP" />
+                <label class="custom-file-label">Click here to change photo</label>
+                <span asp-validation-for="News.Photo" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="News.Date" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="News.Date" type="date" class="form-control" placeholder="English Title" />
+            <span asp-validation-for="News.Date" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="NewsTypeId" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <select asp-for="NewsTypeId" asp-items="Model.AllNewsTypes" id="NewsTypes" class="form-control select2 rst" multiple>
+            </select>
+            <span asp-validation-for="NewsTypeId" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="News.IsActive" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="News.IsActive" class="flat" />
+            <span asp-validation-for="News.IsActive" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Image</label>
+        <div class="col-sm-10">
+            <img src="@photoPath" class="thumpnail-edit-image" asp-append-version="true" />
+        </div>
+    </div>
+
+
+    <div class="item form-group">
+        <div class="col-md-6 col-sm-6 offset-md-2">
+            <button type="submit" class="btn btn-success">Submit</button>
+            <a asp-controller="StaticPageNews" asp-action="Index" asp-route-pageRouteId="@Model.PageRouteId" type="button" class="btn btn-primary">Cancel</a>
+        </div>
+    </div>
+</form>
+
+@section Scripts{
+    <script src="~/select2/js/select2.full.js"></script>
+    <link href="~/select2/css/select2.min.css" rel="stylesheet" />
+    <link href="~/select2/css/select2-bootstrap.min.css" rel="stylesheet" />
+    <script src="~/select2/js/components-select2.js"></script>
+
+    <script>
+        /* Enable html editor */
+        $(document).ready(function () {
+
+             $('.select2').select2({
+                placeholder: "",
+                allowClear: true,
+            }).on('change', function () {
+                $("#NewsTypeIds").val($("#NewsTypes").select2("val"));
+            });
+
+            if ( $("#NewsTypeIds").val() != "") {
+                var NewsTypeIdssh = $("#NewsTypeIds").val();
+                var Array_NewsTypeIdssh = NewsTypeIdssh.split(',');
+                if (Array_NewsTypeIdssh.length > 0) {
+                    $("#NewsTypes").select2().val(Array_NewsTypeIdssh).trigger("change");
+                }
+            }
+
+            $('.summernote').summernote({
+                height: 200,
+                toolbar: [['style', ['style']], ['font', ['bold', 'underline', 'clear']], ['fontname', ['fontname']], ['color', ['color']], ['para', ['ul', 'ol', 'paragraph']], ['table', ['table']], ['insert', ['link']], ['view', ['fullscreen', 'codeview', 'help']]]
+            });
+        });
+
+        $(document).ready(function () {
+            $('.custom-file-input').on('change', function () {
+                var fileName = $(this).val().split('\\').pop();
+                $(this).next('.custom-file-label').html(fileName);
+            });
+        });
+
+    </script>
+}

@@ -1,0 +1,104 @@
+﻿@model MinistriesViewModel
+@{
+    ViewData["Title"] = "Ministr Details";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+<style>
+    td.h5 {
+        white-space: -moz-pre-wrap !important;
+        white-space: -webkit-pre-wrap;
+        white-space: -pre-wrap;
+        white-space: -o-pre-wrap;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        word-break: break-all;
+        white-space: normal;
+        PADDING: 8px;
+    }
+
+    td.h6 {
+        line-height: 1.4 !important;
+        PADDING: 8px;
+    }
+
+    table, th, td {
+        border: 1px solid black;
+    }
+</style>
+@if (Model != null)
+{
+    <table class="pull-left col-md-12 ">
+        <tbody>
+
+            <tr>
+                <td class="h6" style="width: 30% "><strong><label asp-for="ArName"></label></strong></td>
+                <td class="h5">@Model.ArName</td>
+            </tr>
+
+            <tr>
+                <td class="h6"><strong><label asp-for="EnName"></label></strong></td>
+                <td class="h5">@Model.EnName</td>
+            </tr>
+            <tr>
+                <td class="h6" style="width: 30% "><strong><label asp-for="PeriodAr"></label></strong></td>
+                <td class="h5">@Model.PeriodAr</td>
+            </tr>
+
+            <tr>
+                <td class="h6"><strong><label asp-for="PeriodEn"></label></strong></td>
+                <td class="h5">@Model.PeriodEn</td>
+            </tr>
+
+            <tr>
+                <td class="h6"><strong><label asp-for="ArDescription"></label></strong></td>
+                <td class="h5">@Model.ArDescription</td>
+            </tr>
+
+            <tr>
+                <td class="h6"><strong><label asp-for="EnDescription"></label></strong></td>
+                <td class="h5">@Model.EnDescription</td>
+            </tr>
+            <tr>
+                <td class="h6"><strong><label asp-for="Order"></label></strong></td>
+                <td class="h5">@Model.Order</td>
+            </tr>
+            <tr>
+                <td class="h6"><strong><label asp-for="Facebook"></label></strong></td>
+                <td class="h5">@Model.Facebook</td>
+            </tr>
+            <tr>
+                <td class="h6"><strong><label asp-for="Twitter"></label></strong></td>
+                <td class="h5">@Model.Twitter</td>
+            </tr>
+            <tr>
+                <td class="h6"><strong><label asp-for="Email"></label></strong></td>
+                <td class="h5">@Model.Email</td>
+            </tr>
+            <tr>
+                <td class="h6"><strong><label asp-for="ImageURL"></label></strong></td>
+                <td class="h5"><img asp-for="ImageUrl" src="@Model.ImageURL" style="height:200px;" /></td>
+            </tr>
+            <tr>
+                <td class="h6"><strong><label asp-for="IsActive"></label></strong></td>
+                <td class="h5">@Model.IsActive</td>
+            </tr>
+            <tr>
+                <td class="h6"><strong><label asp-for="IsDeleted"></label></strong></td>
+                <td class="h5">@Model.IsDeleted</td>
+            </tr>
+        </tbody>
+    </table>
+    <div>
+        <div class="col-md-4 col-sm-4" style="padding-top: 10px;">
+
+            <a asp-controller="FormerMinistries" asp-action="Ministries" asp-route-pageRouteVersionId="@ViewBag.pageRouteVersionId" asp-route-approvalId="@ViewBag.approvalId" type="button" class="btn btn-success">Back</a>
+        </div>
+    </div>
+}
+else
+{
+    <h5>No Data to show</h5>
+}
+

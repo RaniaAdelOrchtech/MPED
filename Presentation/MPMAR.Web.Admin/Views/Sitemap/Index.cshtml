@@ -1,0 +1,94 @@
+﻿@model SiteMap
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<style>
+    td.h5 {
+        white-space: -moz-pre-wrap !important;
+        white-space: -webkit-pre-wrap;
+        white-space: -pre-wrap;
+        white-space: -o-pre-wrap;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        word-break: break-all;
+        white-space: normal;
+        PADDING: 8px;
+    }
+
+    td.h6 {
+        line-height: 1.4 !important;
+        PADDING: 8px;
+    }
+
+    table, th, td {
+        border: 1px solid black;
+    }
+</style>
+<div>
+    <h4>Definitions > Page SiteMap Details</h4>
+</div>
+<table class="pull-left col-md-12 ">
+    <tbody>
+
+        <tr>
+            <td class="h6" style="width: 30% "><strong>En Content</strong></td>
+            <td class="h5">@Html.Raw(Model.EnContent)</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong>Ar Content</strong></td>
+            <td class="h5">@Html.Raw(Model.ArContent)</td>
+        </tr>
+        <tr>
+            <td class="h6"><strong>Active</strong></td>
+            <td class="h5">@(Model.IsActive ? "Yes" : "No") </td>
+        </tr>
+        <tr>
+            <td class="h6"><strong>En Seo Title</strong></td>
+            <td class="h5">@Model.SeoTitleEN</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong>Ar Seo Title</strong></td>
+            <td class="h5">@Model.SeoTitleAR</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong>En Seo Description</strong></td>
+            <td class="h5">@Model.SeoDescriptionEN</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong>Ar Seo Description</strong></td>
+            <td class="h5">@Model.SeoDescriptionAR</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="SeoOgTitleEN"></label></strong></td>
+            <td class="h5">@Model.SeoOgTitleEN</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="SeoOgTitleAR"></label></strong></td>
+            <td class="h5">@Model.SeoOgTitleAR</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="SeoTwitterCardEN"></label></strong></td>
+            <td class="h5">@Model.SeoTwitterCardEN</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="SeoTwitterCardAR"></label></strong></td>
+            <td class="h5">@Model.SeoTwitterCardAR</td>
+        </tr>
+    </tbody>
+</table>
+<div>
+    <div class="col-md-4 col-sm-4" style="padding-top: 10px;">
+        <a asp-controller="SiteMap" asp-action="Edit" asp-route-id="@Model.Id" type="button" class="btn btn-success">Edit</a>
+        <a asp-controller="SiteMap" asp-action="Edit" asp-route-id="@Model.Id" type="button" class="btn btn-success">Apply</a>
+    </div>
+</div>

@@ -1,0 +1,241 @@
+﻿@model MPMAR.Data.HomePageModels.Publication
+
+@{
+    string lang = Context.Request.Query["lang"];
+    string langVal = lang == "en" ? "en" : "ar";
+    string mainTitle = Model.EnMainTitle;
+    string title1 = Model.EnTitle1;
+    string title2 = Model.EnTitle2;
+    string title3 = Model.EnTitle3;
+    string description1 = Model.EnDescription1.Replace("<p>", "").Replace("</p>", "");
+    string description2 = Model.EnDescription2.Replace("<p>", "").Replace("</p>", "");
+    string description3 = Model.EnDescription3.Replace("<p>", "").Replace("</p>", "");
+    string readMore = "Read More";
+    if (lang == null || lang == "" || lang == "ar")
+    {
+        mainTitle = Model.ArMainTitle;
+        title1 = Model.ArTitle1;
+        title2 = Model.ArTitle2;
+        title3 = Model.ArTitle3;
+
+        description1 = Model.ArDescription1.Replace("<p>", "").Replace("</p>", "");
+        description2 = Model.ArDescription2.Replace("<p>", "").Replace("</p>", "");
+        description3 = Model.ArDescription3.Replace("<p>", "").Replace("</p>", "");
+        readMore = "اقرأ المزيد";
+    }
+
+}
+
+    <div class="owl-carousel-container">
+
+        <div class="owl-header">
+
+            <h3 class="animate-onscroll" style="color: #28A5A3;">@mainTitle</h3>
+
+            <div class="carousel-arrows reportsarrows animate-onscroll"
+                 style="margin-top: -10px; display: none;">
+                <span class="left-arrow"><i class="icons icon-left-dir"></i></span>
+                <span class="right-arrow"><i class="icons icon-right-dir"></i></span>
+            </div>
+
+        </div>
+        @{
+            var langChar3 = @Model.Link3.Contains("?") ? "&" : "?";
+              var langChar2 = @Model.Link2.Contains("?") ? "&" : "?";
+             var langChar1 = @Model.Link1.Contains("?") ? "&" : "?";
+        }
+        <div class="owl-carousel" data-max-items="3">
+            @if (lang == null || lang == "" || lang == "ar")
+            {
+
+                <!-- Owl Item -->
+                <div>
+
+                    <!-- Blog Post -->
+                    <div class="blog-post animate-onscroll">
+
+                        <div class="post-image">
+                            <img src=@Model.Image3 alt="" style="height:148px">
+                        </div>
+
+                        <h4 class="post-title">
+
+                            <a href=@Model.Link3@(langChar3)lang=@langVal>
+                                @title3
+                            </a>
+                        </h4>
+
+                        <p class="reports" style="height:100px !important">
+                            @description3
+                        </p>
+
+                        <a href=@Model.Link3@(langChar3)lang=@langVal
+                           class="button read-more-button big button-arrow" target="_blank">@readMore</a>
+
+                    </div>
+                    <!-- /Blog Post -->
+
+                </div>
+                <!-- /Owl Item -->
+                <!-- Owl Item -->
+                <div>
+
+                    <!-- Blog Post -->
+                    <div class="blog-post animate-onscroll">
+
+                        <div class="post-image">
+                            <img src=@Model.Image2 alt="" style="height:148px">
+                        </div>
+
+                        <h4 class="post-title">
+                          
+                            <a href=@Model.Link2@(langChar2)lang=@langVal
+                               target="_blank">
+                                @title2
+                            </a>
+                        </h4>
+
+                        <p class="reports" style="height:100px !important">
+                            @Html.Raw(@description2)
+                        </p>
+
+                        <a href=@Model.Link2@(langChar2)lang=@langVal
+                           class="button read-more-button big button-arrow" target="_blank">
+                            @readMore
+                        </a>
+
+                    </div>
+                    <!-- /Blog Post -->
+
+                </div>
+                <!-- /Owl Item -->
+                <!-- Owl Item -->
+                <div>
+
+                    <!-- Blog Post -->
+
+
+                    <div class="blog-post animate-onscroll">
+
+                        <div class="post-image">
+                            <img src=@Model.Image1 alt="" style="height:148px">
+                        </div>
+
+                        <h4 class="post-title">
+                       
+                            <a href=@Model.Link1@(langChar1)lang=@langVal>
+                                @title1
+                            </a>
+                        </h4>
+
+                        <p class="reports" style="height:100px !important">
+                            @Html.Raw(@description1)
+                        </p>
+
+                        <a href=@Model.Link1@(langChar1)lang=@langVal class="button read-more-button big button-arrow">
+                            @readMore
+                        </a>
+
+                    </div>
+                    <!-- /Blog Post -->
+
+                </div>
+                <!-- /Owl Item -->
+            }
+            else
+            {
+                <!-- Owl Item -->
+                <div>
+
+                    <!-- Blog Post -->
+
+
+                    <div class="blog-post animate-onscroll">
+
+                        <div class="post-image">
+                            <img src=@Model.Image1 alt="" style="height:148px">
+                        </div>
+
+                        <h4 class="post-title">
+                            <a href=@Model.Link1@(langChar1)lang=@langVal>
+                                @title1
+                            </a>
+                        </h4>
+
+                        <p class="reports" style="height:100px !important">
+                            @Html.Raw(@description1)
+                        </p>
+
+                        <a href=@Model.Link1@(langChar1)lang=@langVal class="button read-more-button big button-arrow" target="_blank">
+                            @readMore
+                        </a>
+
+                    </div>
+                    <!-- /Blog Post -->
+
+                </div>
+                <!-- /Owl Item -->
+                <!-- Owl Item -->
+                <div>
+
+                    <!-- Blog Post -->
+                    <div class="blog-post animate-onscroll">
+
+                        <div class="post-image">
+                            <img src=@Model.Image2 alt="" style="height:148px">
+                        </div>
+
+                        <h4 class="post-title">
+                            <a href=@Model.Link2@(langChar2)lang=@langVal
+                               target="_blank">
+                                @title2
+                            </a>
+                        </h4>
+
+                        <p class="reports" style="height:100px !important">
+                            @Html.Raw(@description2)
+                        </p>
+
+                        <a href=@Model.Link2@(langChar2)lang=@langVal
+                           class="button read-more-button big button-arrow" target="_blank">
+                            @readMore
+                        </a>
+
+                    </div>
+                    <!-- /Blog Post -->
+
+                </div>
+                <!-- /Owl Item -->
+                <!-- Owl Item -->
+                <div>
+
+                    <!-- Blog Post -->
+                    <div class="blog-post animate-onscroll">
+
+                        <div class="post-image">
+                            <img src=@Model.Image3 alt="" style="height:148px">
+                        </div>
+
+                        <h4 class="post-title">
+                            <a href=@Model.Link3@(langChar3)lang=@langVal>
+                                @title3
+                            </a>
+                        </h4>
+
+                        <p class="reports" style="height:100px !important">
+                            @Html.Raw(description3)
+                        </p>
+
+                        <a href=@Model.Link3@(langChar3)lang=@langVal
+                           class="button read-more-button big button-arrow" target="_blank">@readMore</a>
+
+                    </div>
+                    <!-- /Blog Post -->
+
+                </div>
+                <!-- /Owl Item -->
+            }
+
+        </div>
+
+    </div>

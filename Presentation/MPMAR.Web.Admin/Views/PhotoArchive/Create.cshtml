@@ -1,0 +1,205 @@
+﻿@model MPMAR.Business.ViewModels.PhotoArchiveEditViewModel
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+<div>
+    <h4><a asp-controller="StaticPageRoute" asp-action="Index">Static Page</a> >  <a asp-controller="PhotoArchive" asp-action="Index" asp-route-pageRouteId="PageRouteId">Photo Archive </a> > Add</h4>
+</div>
+
+<form enctype="multipart/form-data" asp-controller="PhotoArchive" asp-action="Create" method="post" class="mt-3" onsubmit="DisableAfterClick(event,this)">
+    <input asp-for="PageRouteId" type="hidden" />
+    <div class="form-group row">
+        <label asp-for="EnPhotoArchiveName" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="EnPhotoArchiveName" class="form-control" placeholder="English Photo Archive Name" />
+            <span asp-validation-for="EnPhotoArchiveName" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="ArPhotoArchiveName" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="ArPhotoArchiveName" class="form-control" placeholder="Arabic Photo Archive Name" />
+            <span asp-validation-for="ArPhotoArchiveName" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="EnPhotoArchiveDesc" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            @Html.TextAreaFor(model => model.EnPhotoArchiveDesc, new { @class = "form-control summernote" })
+            <span asp-validation-for="EnPhotoArchiveDesc" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="ArPhotoArchiveDesc" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            @Html.TextAreaFor(model => model.ArPhotoArchiveDesc, new { @class = "form-control summernote" })
+            <span asp-validation-for="ArPhotoArchiveDesc" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="PhotoArchiveType" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <select asp-for="PhotoArchiveType" asp-items="@Model.PhotoArchiveType" id="PhotoArchiveType" class="form-control select2 rst">
+            </select>
+            <span asp-validation-for="PhotoArchiveType" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="EnPhotoArchiveType" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="EnPhotoArchiveType" class="form-control" placeholder="English Photo Archive Type" readonly />
+            <span asp-validation-for="EnPhotoArchiveType" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="ArPhotoArchiveType" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="ArPhotoArchiveType" class="form-control" placeholder="Arabic Photo Archive Type" readonly />
+            <span asp-validation-for="ArPhotoArchiveType" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="ImageFile" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <div class="custom-file">
+                <input asp-for="ImageFile" class="form-control custom-file-input" accept="image/png, image/jpeg, image/jpg, image/gif, image/bmp, image/icon" />
+                <label class="custom-file-label">Choose File...</label>
+                <span asp-validation-for="ImageFile" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="Order" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="Order" class="form-control" placeholder="Order from left to right" />
+            <span asp-validation-for="Order" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="IsActive" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="IsActive" class="flat" />
+            <span asp-validation-for="IsActive" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="ln_solid"></div>
+    <h3>Search Engine Optimization Data</h3>
+
+    <div class="form-group row">
+        <label asp-for="SeoTitleEN" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="SeoTitleEN" class="form-control" placeholder="English Seo Page Title" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="SeoTitleAR" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="SeoTitleAR" class="form-control" placeholder="Arabic Seo Page Title" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="SeoDescriptionEN" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="SeoDescriptionEN" class="form-control" placeholder="English Seo Page Description" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="SeoDescriptionAR" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="SeoDescriptionAR" class="form-control" placeholder="Arabic Seo Page Description" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="SeoOgTitleEN" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="SeoOgTitleEN" class="form-control" placeholder="English Facebook Og Title" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="SeoOgTitleAR" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="SeoOgTitleAR" class="form-control" placeholder="Arabic Facebook Og Title" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="SeoTwitterCardEN" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="SeoTwitterCardEN" class="form-control" placeholder="English Twitter Card" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="SeoTwitterCardAR" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="SeoTwitterCardAR" class="form-control" placeholder="Arabic Twitter Card" />
+        </div>
+    </div>
+
+
+
+    <div class="item form-group">
+        <div class="col-md-6 col-sm-6 offset-md-2">
+            <button type="submit" class="btn btn-success">Submit</button>
+            <a asp-controller="PhotoArchive" asp-action="Index" type="button" class="btn btn-primary" asp-route-pageRouteId="@Model.PageRouteId">Cancel</a>
+        </div>
+    </div>
+</form>
+
+@section Scripts{
+    <script>
+        /* Enable html editor */
+        $(document).ready(function () {
+            $('.summernote').summernote({
+                height: 200,
+                toolbar: [['style', ['style']], ['font', ['bold', 'underline', 'clear']], ['fontname', ['fontname']], ['color', ['color']], ['para', ['ul', 'ol', 'paragraph']], ['table', ['table']], ['insert', ['link']], ['view', ['fullscreen', 'codeview', 'help']]]
+            });
+        });
+
+        $(document).ready(function () {
+            $('.custom-file-input').on('change', function () {
+                var fileName = $(this).val().split('\\').pop();
+                //$(this).next('.custom-file-label').html(fileName);
+                var ext = $(this).val().split('.').pop().toLowerCase();
+                if (ext == 'png' || ext == 'jpg' || ext == 'jpeg' || ext == 'gif') {
+                    $(this).next('.custom-file-label').html(fileName);
+                }
+                else {
+                    alert('Please upload image file only.');
+                    return false;
+                }
+            });
+            $('#PhotoArchiveType').removeAttr("multiple");
+            $('#PhotoArchiveType').on('change', function () {
+                if ($(this).val() == "Other") {
+                    $('#EnPhotoArchiveType,#ArPhotoArchiveType').attr("readonly", false);
+                    $('#EnPhotoArchiveType').val("");
+                    $('#ArPhotoArchiveType').val("");
+                }
+                else {
+                    $('#EnPhotoArchiveType').val($(this).val().split('$')[0]);
+                    $('#ArPhotoArchiveType').val($(this).val().split('$')[1]);
+                    $('#EnPhotoArchiveType').attr("readonly", "readonly");
+                    $('#ArPhotoArchiveType').attr("readonly", "readonly");
+                }
+            });
+        });
+    </script>
+}

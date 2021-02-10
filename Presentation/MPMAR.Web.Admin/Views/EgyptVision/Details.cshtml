@@ -1,0 +1,97 @@
+﻿@model EgyptVisionVersion
+@{
+    ViewBag.Title = "Egypt Vision Details";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+
+    var photoPath = Url.Content("~/Uploads/Images/") + Model.EnImagePath ?? "noImage.png";
+    // var photoPath = "~/Uploads/Images/" + Model.ImageUrl ?? "noImage.png";
+}
+
+<style>
+    td.h5 {
+        white-space: -moz-pre-wrap !important;
+        white-space: -webkit-pre-wrap;
+        white-space: -pre-wrap;
+        white-space: -o-pre-wrap;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        word-break: break-all;
+        white-space: normal;
+        PADDING: 8px;
+    }
+
+    td.h6 {
+        line-height: 1.4 !important;
+        PADDING: 8px;
+    }
+
+    table, th, td {
+        border: 1px solid black;
+    }
+</style>
+<div>
+    <h4><a asp-controller="StaticPageRoute" asp-action="Index">Static Page</a> > <a asp-controller="EgyptVision" asp-action="Index"  asp-route-approvalId="@ViewBag.approvalId">Page Egypt Vision</a> > Detail</h4>
+</div>
+
+<table class="pull-left col-md-12 ">
+    <tbody>
+
+
+        @if (ViewBag.Id == 11)
+        {
+            <tr>
+                <td class="h6" style="width: 30%"><strong><label asp-for="EnEgyptVisionName">En Main Title</label></strong></td>
+                <td class="h5">@Html.Raw(Model.EnEgyptVisionName)</td>
+            </tr>
+            <tr>
+                <td class="h6"><strong><label asp-for="ArEgyptVisionName">Ar Main Title</label></strong></td>
+                <td class="h5">
+                    @Html.Raw(Model.ArEgyptVisionName)
+                </td>
+            </tr>
+        }
+        else
+        {
+            <tr>
+                <td class="h6" style="width: 30%"><strong><label asp-for="EnEgyptVisionName">En Egypt Vision Name</label></strong></td>
+                <td class="h5">@Model.EnEgyptVisionName</td>
+            </tr>
+            <tr>
+                <td class="h6"><strong><label asp-for="ArEgyptVisionName">Ar Egypt Vision Name</label></strong></td>
+                <td class="h5">@Model.ArEgyptVisionName</td>
+            </tr>
+        }
+        <tr>
+            <td class="h6" style="width: 30%"><strong><label asp-for="EnEgyptVisionSmallDesc">En Egypt Vision Small Description</label></strong></td>
+            <td class="h5">@Model.EnEgyptVisionSmallDesc</td>
+        </tr>
+        <tr>
+            <td class="h6"><strong><label asp-for="ArEgyptVisionSmallDesc">Ar Egypt Vision Small Description</label></strong></td>
+            <td class="h5">@Model.ArEgyptVisionSmallDesc</td>
+        </tr>
+        <tr>
+            <td class="h6"><strong><label asp-for="IsActive"></label></strong></td>
+            <td class="h5">@(Model.IsActive ? "Yes" : "No") </td>
+        </tr>
+        <tr>
+            <td class="h6"><strong><label asp-for="EnImagePath">En Image Path</label></strong></td>
+            <td class="h5">
+                <img src="@Model.EnImagePath" class="thumpnail-edit-image" asp-append-version="true" />
+            </td>
+        </tr>
+        <tr>
+            <td class="h6"><strong><label asp-for="ArImagePath">Ar Image Path</label></strong></td>
+            <td class="h5">
+                <img src="@Model.ArImagePath" class="thumpnail-edit-image" asp-append-version="true" />
+            </td>
+        </tr>
+
+    </tbody>
+</table>
+
+<div>
+    <div class="col-md-4 col-sm-4" style="padding-top: 10px;">
+
+        <a asp-controller="EgyptVision" asp-route-approvalId="@ViewBag.approvalId" asp-action="Index" type="button" class="btn btn-success">Back to previous page</a>
+    </div>
+</div>

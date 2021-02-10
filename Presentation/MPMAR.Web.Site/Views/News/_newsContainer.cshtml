@@ -1,0 +1,99 @@
+﻿@model List<MPMAR.Web.Site.ViewModels.PageNewsListViewModel.News>
+@{
+    string lang = Context.Request.Query["lang"];
+    string langVal = lang == "en" ? "en" : "ar";
+}
+<div class="media-items row">
+    <virtual id="example">
+        @foreach (var PageNews in @Model)
+        {
+            <div id="div_@PageNews.Id" class="newsDiv paginationContent col-lg-12 col-md-12 col-sm-12  @PageNews.NewsTypesClasses">
+
+                <!-- Media Item -->
+                <div class="media-item animate-onscroll ">
+
+                    <div class="media-image">
+
+                        <img src="@PageNews.Url" alt="">
+
+                        <div class="media-hover">
+                            <div class="media-icons">
+
+
+                                @*<a href="#" class="media-icon" onclick="OpenImageModal(this)"><i class="icons icon-zoom-in" ><img src="@PageNews.Url" style="width: 400px; height: 264px;" hidden><p style="font-size: 12px;text-align: center;">@(lang=="en"?"Show": "اعرض")</p></i></a>*@
+
+
+                                <a href="@PageNews.Url" class="media-icon"><i class="icons icon-zoom-in"></i><p style="font-size: 12px;text-align: center;">@(lang == "en" ? "Show" : "اعرض")</p></a>
+
+
+                                <a onclick="newsDetails('@PageNews.Id','@string.IsNullOrWhiteSpace(PageNews.EnDescription)')" style="cursor:pointer" class="media-icon"><i class="icons icon-link"></i><p style="font-size: 12px;text-align: center;">@(lang == "en" ? "Read" : "اقرأ")</p></a>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="media-info">
+
+                        <div class="media-header">
+
+                            <div class="media-format">
+                                <div>
+                                    <i class="icons icon-picture"></i>
+                                </div>
+                            </div>
+
+                            <div class="media-caption">
+                                <h2><a style="cursor:pointer" onclick="newsDetails('@PageNews.Id','@string.IsNullOrWhiteSpace(PageNews.EnDescription)')"> @(lang == "en" ? PageNews.EnTitle : PageNews.ArTitle)</a></h2>
+                                <span class="newsdate">
+                                    <i class="icons icon-clock"></i>@PageNews.Date
+                                </span><span class="tags"><i class="icons icon-folder"></i><span class="tags"><a href="#">@PageNews.NewsTypes</a></span>
+                            </div>
+
+                        </div>
+
+                        <div class="media-description">
+                            <p>@(lang == "en" ? Html.Raw(PageNews.EnShortDescription) : Html.Raw(PageNews.ArShortDescription))</p>
+                        </div>
+                        <div class="media-button">
+                            <a onclick="newsDetails('@PageNews.Id','@string.IsNullOrWhiteSpace(PageNews.EnDescription)')" style="cursor:pointer" class="button big button-arrow">@(lang == "en" ? "Read More" : "اقرأ المزيد")</a>
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+                <!-- /Media Item -->
+            </div>
+        }
+    </virtual>
+
+</div>
+
+@if (((ViewBag.TotalCount + 10 - 1) / 10) > 1)
+{
+    <nav aria-label="...">
+        <ul class="pagination">
+            <li class="page-item prev">
+                <a  id="prevLink" class="page-link pag" style="cursor:pointer" onclick="Previous()">@(langVal == "en" ? "Previous" : "السابق")</a>
+            </li>
+            @for (int i = 0; i < (ViewBag.TotalCount + 10 - 1) / 10; i++)
+            {
+                <li class="page-item p-@(i+1)"><a class="page-link pag" style="cursor:pointer" onclick="UpdateNewsListPaginate(@(i+1))">@(i + 1)</a></li>
+            }
+
+            <li class="page-item next">
+                <a  id="nextLink" class="page-link pag" style="cursor:pointer" onclick="Next()">@(langVal == "en" ? "Next" : "التالي")</a>
+            </li>
+        </ul>
+    </nav>
+}
+
+
+@if (ViewBag.TotalCount == null || ViewBag.TotalCount == 0)
+{
+    <p>@(langVal == "en" ? "No Search Results" : "لا يوجد نتائج للبحث")</p>
+}
+
+<input id="totalCount" value="@ViewBag.TotalCount" hidden/>

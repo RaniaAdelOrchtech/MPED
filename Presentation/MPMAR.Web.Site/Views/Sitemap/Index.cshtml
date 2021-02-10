@@ -1,0 +1,133 @@
+﻿@model MPMAR.Web.Site.ViewModels.ViewSitemap
+@{
+    string lang = Context.Request.Query["lang"];
+    ViewData["Title"] = (lang == "en" ? "ABOUT THE SITE" : "عن الموقع");
+    string langVal = lang == "en" ? "en" : "ar";
+    int countby4 = 0;
+    int startCount = 2;
+    int endCount = 1;
+}
+<div>
+    <section id="content">
+        <!-- Page Heading -->
+        <section class="section page-heading animate-onscroll">
+            <h1>
+                @(lang == "en" ? "ABOUT THE SITE" : "عن الموقع")
+            </h1>
+            <p class="breadcrumb">
+                <a href="secondoptionhomepage.html">
+                    @(lang == "en" ? "Home" : "الرئيسية")
+                </a> /  @(lang == "en" ? "ABOUT THE SITE" : "عن الموقع")
+            </p>
+        </section>
+
+        <!-- Page Heading -->
+        <!-- Section -->
+        <section class="section full-width-bg gray-bg">
+            <div class="row">
+                <div class="col-lg-9 col-md-9 col-sm-8">
+                    <div class="row section-row" style="margin-top: -43px;">
+                        <div class="col-lg-12 col-md-12 col-sm-12 topgap">
+                            <p class="animate-onscroll">
+                                @Html.Raw(lang == "en" ? Model.SiteMap.EnContent : Model.SiteMap.ArContent)
+                            </p>
+                            <br class="clearfix">
+                        </div>
+                    </div>
+
+                    @foreach (var item in Model.NavItemList)
+                    {
+
+                        @if ((countby4 == startCount || countby4 == 0) && item.ParentNavItem == null)
+                        {
+                            @:<div class="row">
+                                if (countby4 != 0)
+                                    startCount += 3;
+
+                            }
+                        if (countby4 == 0)
+                        {
+                            <div class="col-lg-4 col-md-4 col-sm-4 topgap">
+                                <ul>
+                                    <li class="sitebottomgap">
+                                        <a class="singletitle" href="@Url.Content("~/"+"?lang="+langVal)">
+                                            @(lang == "en" ? "Home" : "الرئيسية")
+                                        </a>
+                                    </li>
+                                    <li class="sitebottomgap">
+                                        <a class="singletitle" href="@Url.Content("~/ContactUs"+"?lang="+langVal)">
+                                            @(lang == "en" ? "Connect with us" : "تواصل معنا")
+                                        </a>
+                                    </li>
+                                    <li class="sitebottomgap">
+                                        <a class="singletitle" href="@Url.Content("~/SiteMap"+"?lang="+langVal)">
+
+                                            @(lang == "en" ? "About the site" : "عن الموقع")
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        }
+                        if (item.ParentNavItem == null)
+                        {
+                            <div class="col-lg-4 col-md-4 col-sm-4 topgap">
+                                <a class="singletitle">@(lang == "en" ? item.EnName : item.ArName)</a>
+                                @if ((item.PageRoutes != null || item.NavItemList != null))
+                                {
+
+                                    <ul id="root" style="margin-right: 30px;">
+                                        @if (item.NavItemList != null && item.NavItemList.Count > 0
+                              && item.NavItemList.FirstOrDefault().PageRoutes != null &&
+                              item.NavItemList.FirstOrDefault().PageRoutes.Count > 0)
+                                        {
+
+                                            <li>
+                                                <span style="color: #28a5a3;">@(lang=="en"? item.NavItemList.FirstOrDefault().EnName: item.NavItemList.FirstOrDefault().ArName)</span>
+                                                <ul class="subsub" style="margin-right: 30px;">
+                                                    @foreach (var sub_item in item.NavItemList.FirstOrDefault().PageRoutes)
+                                                    {
+                                                        <li class="sitebottomgap"><a href="@(Url.Content("~/")+sub_item.ControllerName+"?id="+sub_item.Id+"&lang="+langVal)">@(lang == "en" ? sub_item.EnName : sub_item.ArName)</a></li>
+                                                    }
+
+
+                                                </ul>
+
+                                            </li>
+                                        }
+                                        @if (item.PageRoutes != null && item.PageRoutes.Count > 0)
+                                        {
+                                            @foreach (var sub_item in item.PageRoutes)
+                                            {
+                                                <li class="sitebottomgap"><a href="@(Url.Content("~/")+sub_item.ControllerName+"?id="+sub_item.Id+"&lang="+langVal)">@(lang == "en" ? sub_item.EnName : sub_item.ArName)</a></li>
+                                            }
+                                        }
+
+
+
+                                    </ul>
+                                }
+                            </div>
+                        }
+                        @if (countby4 == endCount && item.ParentNavItem == null)
+                        {
+                        @:</div>
+                        endCount += 3;
+                    }
+                        if (item.ParentNavItem == null)
+                        {
+                            countby4 = countby4 + 1;
+                        }
+
+                    }
+                </div>
+                <!-- Sidebar -->
+                @await Component.InvokeAsync("Sidebar")
+                <!-- /Sidebar -->
+            </div>
+        </section>
+        <!-- /Section -->
+
+    </section>
+    <!-- Back To Top -->
+    <a href="#" id="button-to-top"><i class="icons icon-up-dir"></i></a>
+</div>

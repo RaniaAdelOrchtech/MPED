@@ -1,0 +1,228 @@
+﻿@model IEnumerable<MPMAR.Data.HomePageModels.HomePagePhoto>
+@{
+    string lang = Context.Request.Query["lang"];
+    string langVal = lang == "en" ? "en" : "ar";
+    var modelData = Model.ToList();
+}
+<section class="section full-width-bg hidehomecoloronmobile">
+
+    <div class="row">
+
+        <div class="col-lg-12 col-md-12 col-sm-12">
+
+            <div class="row" style="
+						margin-left: -4px;
+						margin-right: -5px;
+					">
+                <div class="col-md-7 fix-slider-disturtion">
+                    <div class="row">
+
+                        <div class="col-md-6 padding-5 ">
+
+                            <div class="animate-onscroll">
+
+                                <div class="containerexample">
+                                    <div class="post-image">
+                                        @{
+                                            var langChar0 = @modelData[0].Url.Contains("?") ? "&" : "?";
+                                        }
+                                        <a href="@modelData[0].Url@(langChar0)lang=@langVal">
+                                            <img class="img-responsive min-height-170 hidehomeimgonmobile imageover"
+                                                 src="@modelData[0].ImageUrl" alt="" style="height:170px;width:325px">
+                                            <div class="text-block hidehomeimgonmobile overlayspace"  style="width:100%">
+                                                <h4 class="overlaytextcolorbottom">
+                                                    @if (lang == null || lang == "" || lang == "ar")
+                                                    {
+                                                        @modelData[0].ArTitle
+                                                    }
+                                                    else
+                                                    {
+                                                        @modelData[0].EnTitle
+                                                    }
+                                                </h4>
+                                            </div>
+                                            <div class="overlay">
+                                                <div class="text">
+                                                    <a href="@modelData[0].Url@(langChar0)lang=@langVal">
+                                                        <p class="justfiyslidertext"
+                                                           style="font-size: 14px !important;line-height: 18px;">
+                                                            @if (lang == null || lang == "" || lang == "ar")
+                                                            {
+                                                                @Html.Raw(@modelData[0].ArDescription)
+                                                            }
+                                                            else
+                                                            {
+                                                                @Html.Raw(@modelData[0].EnDescription)
+                                                            }
+                                                        </p>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="mobile-spacer-10"></div>
+                        <div class="col-md-6 padding-5">
+
+                            <div class="animate-onscroll">
+
+                                <div class="containerexample">
+                                    <div class="post-image">
+                                        @{
+                                            var langChar1 = @modelData[1].Url.Contains("?") ? "&" : "?";
+                                        }
+                                        <a href="@modelData[1].Url@(langChar1)lang=@langVal">
+                                            <img class="img-responsive min-height-170 hidehomeimgonmobile headertopimghegiht imageover"
+                                                 src="@modelData[1].ImageUrl" alt="" style="height:170px;width:325px">
+                                            <div class="text-block hidehomeimgonmobile overlayspace" style="width:100%">
+                                                <h4 class="overlaytextcolorbottom">
+                                                    @if (lang == null || lang == "" || lang == "ar")
+                                                    {
+                                                        @modelData[1].ArTitle
+                                                    }
+                                                    else
+                                                    {
+                                                        @modelData[1].EnTitle
+                                                    }
+                                                </h4>
+                                            </div>
+                                            <div class="overlay">
+                                                <div class="text">
+                                                    <a href="@modelData[1].Url@(langChar1)lang=@langVal">
+                                                        <p class="justfiyslidertext"
+                                                           style="font-size: 14px !important;line-height: 18px;">
+                                                            @if (lang == null || lang == "" || lang == "ar")
+                                                            {
+                                                                @Html.Raw(@modelData[1].ArDescription)
+                                                            }
+                                                            else
+                                                            {
+                                                                @Html.Raw(@modelData[1].EnDescription)
+                                                            }
+                                                        </p>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="spacer-10" style="height:10px"></div>
+                    @await Component.InvokeAsync("PhotoSlider")
+                </div>
+                <div class="col-md-5">
+                    @await Component.InvokeAsync("Video")
+                    <div class="spacer-10" style="display: none;"></div>
+                    <div class="row">
+                        <div class="col-md-6 padding-5">
+
+                            <div class="animate-onscroll">
+                                <div class="containerexample">
+                                    <div class="post-image">
+                                        @{
+                                            var langChar2 = @modelData[2].Url.Contains("?") ? "&" : "?";
+                                        }
+                                        <a href="@modelData[2].Url@(langChar2)lang=@langVal">
+                                            <img class="img-responsive min-height-170 hidehomeimgonmobile headerimghegiht imageover"
+                                                 src="@modelData[2].ImageUrl" alt="" style="height:189px;width:230px">
+                                            <div class="text-block hidehomeimgonmobile overlayspace" style="width:100%">
+                                                <h4 class="overlaytextcolorbottom"  style="font-size: 14px">
+                                                    @if (lang == null || lang == "" || lang == "ar")
+                                                    {
+                                                        @modelData[2].ArTitle
+                                                    }
+                                                    else
+                                                    {
+                                                        @modelData[2].EnTitle
+                                                    }
+                                                </h4>
+                                            </div>
+                                            <div class="overlay">
+                                                <div class="text">
+                                                    <a href="@modelData[2].Url@(langChar2)lang=@langVal">
+                                                        <p class="justfiyslidertext"
+                                                           style="font-size: 12px !important;line-height: 18px;">
+                                                            @if (lang == null || lang == "" || lang == "ar")
+                                                            {
+                                                                @Html.Raw(@modelData[2].ArDescription)
+                                                            }
+                                                            else
+                                                            {
+                                                                @Html.Raw(@modelData[2].EnDescription)
+                                                            }
+                                                        </p>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <div class="mobile-spacer-10"></div>
+                        <div class="col-md-6 padding-5">
+
+                            <div class="animate-onscroll">
+
+                                <div class="containerexample">
+                                    <div class="post-image">
+                                        @{
+                                            var langChar3 = @modelData[3].Url.Contains("?") ? "&" : "?";
+                                        }
+                                        <a href="@modelData[3].Url@(langChar3)lang=@langVal">
+                                            <img class="img-responsive min-height-170 hidehomeimgonmobile headerimghegiht imageover"
+                                                 src="@modelData[3].ImageUrl" alt="" style="height:189px;width:230px">
+                                            <div class="text-block hidehomeimgonmobile overlayspace" style="width:100%">
+                                                <h4 class="overlaytextcolorbottom" style="font-size: 14px">
+                                                    @if (lang == null || lang == "" || lang == "ar")
+                                                    {
+                                                        @modelData[3].ArTitle
+                                                    }
+                                                    else
+                                                    {
+                                                        @modelData[3].EnTitle
+                                                    }
+                                                </h4>
+                                            </div>
+                                            <div class="overlay">
+                                                <div class="text">
+                                                    <a href="@modelData[3].Url@(langChar3)lang=@langVal">
+                                                        <p class="justfiyslidertext"
+                                                           style="font-size: 12px !important;line-height: 18px;">
+                                                            @if (lang == null || lang == "" || lang == "ar")
+                                                            {
+                                                                @Html.Raw(@modelData[3].ArDescription)
+                                                            }
+                                                            else
+                                                            {
+                                                                @Html.Raw(@modelData[3].EnDescription)
+                                                            }
+                                                        </p>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>

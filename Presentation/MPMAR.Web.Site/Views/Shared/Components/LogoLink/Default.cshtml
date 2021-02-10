@@ -1,0 +1,47 @@
+﻿@model IEnumerable<MPMAR.Data.HomePageModels.HomePageLogoLink>
+@{
+    string lang = Context.Request.Query["lang"];
+    var data = Model.ToList();
+}
+
+
+<div class="banner-wrapper">
+    <div class="govbox" style="text-align: center; ">
+        <a href="@data[0].Url" target="_blank">
+            <img src="@data[0].ImageUrl" alt="app" style="width: 70%;margin-top: 26px;">
+            @if (lang == "en")
+            {
+                <h3 class="govheader" style="font-size: 20px;margin-top: 5px;">
+                    @data[0].EnTitle
+                </h3>
+            }
+            else
+            {
+                <h3 class="govheader" style="font-size: 20px;margin-top: 5px;">
+                    @data[0].ArTitle
+                </h3>
+            }
+        </a>
+    </div>
+</div>
+
+
+<div class="banner-wrapper">
+    <div class="govbox" style="text-align: center; ">
+        <a href="@data[1].Url" target="_blank">
+            <img src="@data[1].ImageUrl" alt="app" style="width: 80%;margin-top: 18px;">
+            @if (lang == "en")
+            {
+                <h3 class="govheader" style="font-size: 20px;margin-top: 23px;">
+                    @data[1].EnTitle
+                </h3>
+            }
+            else
+            {
+                <h3 class="govheader" style="font-size: 20px;margin-top: 23px;">
+                    @data[1].ArTitle
+                </h3>
+            }
+        </a>
+    </div>
+</div>

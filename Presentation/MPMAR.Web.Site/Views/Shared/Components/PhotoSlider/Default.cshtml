@@ -1,0 +1,67 @@
+﻿@model IEnumerable<MPMAR.Data.HomePageModels.HomePagePhotoSlider>
+@{
+    string lang = Context.Request.Query["lang"];
+    string langVal = lang == "en" ? "en" : "ar";
+    var modelData = Model.ToList();
+}
+
+<div class="row">
+    <div class="col-md-12 padding-5 spacebottommobile">
+
+        <!-- Revolution Slider -->
+        <section class="slider">
+            <div class="flexslider main-flexslider animate-onscroll">
+
+                <ul class="slides">
+
+                    @foreach (var slide in Model)
+                    {
+
+                        var langChar = slide.Url.Contains("?") ? "&" : "?";
+
+                        <li id="main_flex_2" onclick="location.href='@slide.Url@(langChar)lang=@langVal';" style="background: url('@slide.ImageUrl') no-repeat;width:660px;height:380px">
+                            @if (lang == null || lang == "" || lang == "ar")
+                            {
+                                <h2 class="hideondesktop titlemobile">
+                                    @slide.ArTitle
+                                </h2>
+                                <div class="slide align-right hidehomeimgonmobile">
+                                    <h2>@slide.ArTitle</h2>
+                                    <br><br>
+                                    <br><br>
+                                    <p>
+                                        @Html.Raw(slide.ArDescription.Replace("<p>", "").Replace("</p>", "").Replace("<div>", "").Replace("</div>", "").Replace("<br>", ""))
+                                    </p>
+                                    <a href="@slide.Url@(langChar)lang=@langVal" class="button big button-arrow">
+                                        اقرأ
+                                        المزيد
+                                    </a>
+                                </div>
+                            }
+                            else
+                            {
+                                <h2 class="hideondesktop titlemobile" style="text-align:left; float:left;direction:ltr">
+                                    @slide.EnTitle
+                                </h2>
+                                <div class="slide align-left hidehomeimgonmobile">
+                                    <h2 style="text-align:left; float:left;direction:ltr">@slide.EnTitle</h2>
+                                    <br><br>
+
+                                    <p style="text-align:left; float:left;direction:ltr">
+                                        @Html.Raw(slide.EnDescription.Replace("<p>", "").Replace("</p>", "").Replace("<div>", "").Replace("</div>", "").Replace("<br>", ""))
+                                    </p>
+                                    <a href="@slide.Url@(langChar)lang=@langVal" class="button big button-arrow" style="float:right;margin-left:480px;margin-top:112px">
+                                        Read More
+                                    </a>
+                                </div>
+                            }
+                        </li>
+                    }
+
+                </ul>
+                <!-- <script type="text/javascript" src="js/slider.js"></script> -->
+            </div>
+        </section>
+        <!-- /Revolution Slider -->
+    </div>
+</div>

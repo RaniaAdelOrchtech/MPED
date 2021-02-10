@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Interfaces\IPageSectionRepository - Copy.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ExcelDataReader" Version="3.6.0" />
+    <PackageReference Include="MailKit" Version="2.7.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
+    <PackageReference Include="MimeKit" Version="2.9.2" />
+    <PackageReference Include="NEST" Version="7.8.0" />
+    <PackageReference Include="Ninject" Version="3.3.4" />
+    <PackageReference Include="System.Linq.Dynamic.Core" Version="1.0.23" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MPMAR.Analytics.Data\MPMAR.Analytics.Data.csproj" />
+    <ProjectReference Include="..\MPMAR.Data\MPMAR.Data.csproj" />
+    <ProjectReference Include="..\Shared\MPMAR.Entities\MPMAR.Entities.csproj" />
+  </ItemGroup>
+
+
+</Project>

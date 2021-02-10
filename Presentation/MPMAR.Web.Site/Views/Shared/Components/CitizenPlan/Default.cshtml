@@ -1,0 +1,76 @@
+﻿@model MPMAR.Data.HomePageModels.CitizenPlan
+
+@{
+    string lang = Context.Request.Query["lang"];
+    string langVal = lang == "en" ? "en" : "ar";
+    string mainTitle = Model.EnMainTitle;
+    string title = Model.EnTitle;
+    string description = Model.EnDescription;
+    string readMore = "Read More";
+    if (lang == null || lang == "" || lang == "ar")
+    {
+        mainTitle = Model.ArMainTitle;
+        title = Model.ArTitle;
+        description = Model.ArDescription;
+        readMore = "اقرأ المزيد";
+    }
+
+}
+<h3 class="animate-onscroll" style="margin-top: 75px; color: #28A5A3;">@mainTitle</h3>
+
+<div class="row" style="padding: 0 15px;">
+
+    <div class="col-lg-12">
+        <!-- Sidebar -->
+        <div class="row slider-row slider-row-citizenplan">
+            <div class="col-lg-4 col-md-4 col-sm-12" style="padding: 0;">
+
+                <!-- Banner Rotator -->
+                <div class="banner-rotator animate-onscroll" style="margin-top:-1px">
+                    @if (langVal == "en")
+                    {
+                        <img src=@Model.EnImage alt="" style="min-height:341px">
+                    }
+                    else
+                    {
+                        <img src=@Model.Image alt="" style="min-height:341px">
+                    }
+
+
+                    <!-- <video id="mapvideo" autoplay="autoplay" muted loop>
+                        <source src="img/proposed map.mp4" type="video/mp4">
+                    </video> -->
+
+                </div>
+                <!-- /Banner Rotator -->
+            </div>
+
+            <div class="col-lg-8 col-md-8 col-sm-12" style="padding: 0;">
+
+                <!-- Banner Rotator -->
+                <div class="banner-rotator animate-onscroll longdivonmobile"
+                     style="background-color: #28A5A3 ; height: 340.2px;padding: 1px;text-align: center;">
+                    <h3 style="text-align: center; color:#fff">@title</h3>
+                    <h2 style="font-weight: 600;    margin-top: 65px;padding-right: 22px;padding-left: 22px;text-align: justify;font-size: 16px;color:#fff;    line-height: 27px;"
+                        class="fontonmobile" id="citizenplan-HP-text">
+                        @Html.Raw(description)
+                    </h2>
+                    @{
+
+                        var langChar = @Model.Link.Contains("?") ? "&" : "?";
+                    }
+                    <a href=@Model.Link@(langChar)lang=@langVal
+                       class="button  read-more-button big button-arrow shiftleftonmobilebtn">
+                        @readMore
+                    </a>
+
+                </div>
+                <!-- /Banner Rotator -->
+            </div>
+            <!-- /Sidebar -->
+
+        </div>
+    </div>
+
+</div>
+

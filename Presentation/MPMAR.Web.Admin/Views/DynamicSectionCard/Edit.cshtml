@@ -1,0 +1,206 @@
+﻿@model MPMAR.Business.ViewModels.SectionCardEditViewModel
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+
+    var photoPath = Url.Content("~/Uploads/Images/") + Model.ImageUrl ?? "noImage.png";
+    var filePath = "~/Uploads/Files/" + Model.FileUrl ?? "noImage.png";
+    // var photoPath = "~/Uploads/Images/" + Model.ImageUrl ?? "noImage.png";
+}
+
+<h1>Edit Card</h1>
+
+<form enctype="multipart/form-data" asp-controller="DynamicSectionCard" asp-action="Edit" method="post" class="mt-3">
+    <input asp-for="Id" type="hidden" />
+    <input asp-for="SectionVersionId" type="hidden" />
+    <input asp-for="ImageUrl" type="hidden" />
+    <input asp-for="FileUrl" type="hidden" />
+    <input asp-for="CreationDate" type="hidden" />
+    <input asp-for="CreatedById" type="hidden" />
+    <input asp-for="PageRouteVersionId" type="hidden" />
+
+    <div class="form-group row">
+        <label asp-for="EnTitle" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="EnTitle" class="form-control" placeholder="English Title" />
+            <span asp-validation-for="EnTitle" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="ArTitle" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="ArTitle" class="form-control" placeholder="Arabic Title" />
+            <span asp-validation-for="ArTitle" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="EnDescription" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            @Html.TextAreaFor(model => model.EnDescription, new { @class = "form-control summernote" })
+            <span asp-validation-for="EnDescription" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="ArDescription" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            @Html.TextAreaFor(model => model.ArDescription, new { @class = "form-control summernote" })
+            <span asp-validation-for="ArDescription" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="EnImageAlt" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="EnImageAlt" class="form-control" placeholder="English Image Alternative" />
+            <span asp-validation-for="EnImageAlt" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="ArImageAlt" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="ArImageAlt" class="form-control" placeholder="Arabic Image Alternative" />
+            <span asp-validation-for="ArImageAlt" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="Photo" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <div class="custom-file">
+                <input asp-for="Photo" class="form-control custom-file-input imageFile" accept=".png, .jpg, .jpeg" />
+                <label class="custom-file-label">Click here to change photo</label>
+                <span asp-validation-for="Photo" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Image</label>
+        <div class="col-sm-10">
+            <img src="@Model.ImageUrl" class="thumpnail-edit-image" asp-append-version="true" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="File" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <div class="custom-file">
+                <input asp-for="File" class="form-control custom-file-input docFile" />
+                <label class="custom-file-label">Click here to change file</label>
+                <span asp-validation-for="File" class="text-danger"></span>
+            </div>
+            <a href="@Model.FileUrl" title="View/Download File" target="_blank" data-placement="right">Download File</a>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="Order" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="Order" class="form-control" placeholder="Order from left to right" />
+            <span asp-validation-for="Order" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="IsActive" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="IsActive" class="flat" />
+            <span asp-validation-for="IsActive" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="item form-group">
+        <div class="col-md-6 col-sm-6 offset-md-2">
+            <button type="submit" class="btn btn-success">Submit</button>
+            <a asp-controller="DynamicSectionCard" asp-action="Index" asp-route-id="@Model.SectionVersionId" type="button" class="btn btn-primary" asp-route-pageRouteVersionId="@Model.PageRouteVersionId">Cancel</a>
+        </div>
+    </div>
+</form>
+
+@section Scripts{
+    <script>
+        /* Enable html editor */
+        $(document).ready(function () {
+            $('.summernote').summernote({
+                height: 200,
+                toolbar: [['style', ['style']], ['font', ['bold', 'underline', 'clear']], ['fontname', ['fontname']], ['color', ['color']], ['para', ['ul', 'ol', 'paragraph']], ['table', ['table']], ['insert', ['link']], ['view', ['fullscreen', 'codeview', 'help']]]
+            });
+        });
+
+        /* Show and hide partial views depend on selected section type */
+        $('.imagePartial').css("display", "none");
+        $('.videoPartial').css("display", "none");
+
+        debugger;
+        var selectedSectionType = $('#SectionTypeId').val();
+        togglePartialViews(selectedSectionType);
+
+        $('#SectionTypeId').change(function () {
+            /* Get the selected value of dropdownlist */
+            togglePartialViews($(this).val());
+        });
+
+        function togglePartialViews(selectedSectionType) {
+            debugger;
+            var selectedTypeId = selectedSectionType;
+
+            if (selectedTypeId != null && selectedTypeId != "") {
+                $('.imagePartial').css("display", "block");
+                $('.videoPartial').css("display", "block");
+
+                /* Request the partial view with .get request. */
+                $.get('/DynamicPageSection/GetSectionTypes?id=' + selectedTypeId, function (data) {
+                    if (data.data != null) {
+                        if (data.data.mediaType == "None") {
+                            $('.imagePartial').css("display", "none");
+                            $('.videoPartial').css("display", "none");
+                        }
+                        else if (data.data.mediaType == "Image") {
+                            $('.videoPartial').css("display", "none");
+
+                            $('.imagePartial').css("display", "block");
+                        }
+                        else if (data.data.mediaType == "Video") {
+                            $('.imagePartial').css("display", "none");
+
+                            $('.videoPartial').css("display", "block");
+                        }
+                    }
+                });
+            }
+            else {
+                $('.imagePartial').css("display", "none");
+                $('.videoPartial').css("display", "none");
+            }
+        }
+
+        $(document).ready(function () {
+            $('.imageFile').on('change', function () {
+                var fileName = $(this).val().split('\\').pop();
+                var ext = $(this).val().split('.').pop().toLowerCase();
+                if (ext == 'jpeg' || ext == 'jpg' || ext == 'png') {
+                    $(this).next('.custom-file-label').html(fileName);
+                }
+                else {
+                    $(this).val("")
+                    if (fileName != "") {
+
+                        alert('Please upload photo only.');
+                    } else {
+                        $(this).next('.custom-file-label').html("Choose File...");
+                    }
+                    return false;
+                }
+            });
+
+            $('.docFile').on('change', function () {
+                var fileName = $(this).val().split('\\').pop();
+                $(this).next('.custom-file-label').html(fileName);
+            });
+        });
+    </script>
+}

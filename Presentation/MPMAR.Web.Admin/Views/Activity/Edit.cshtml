@@ -1,0 +1,424 @@
+﻿@model MPMAR.Business.Services.Analytics.ViewModels.ActivityVMForCreateEdit
+@using MPMAR.Analytics.Data.Enums
+
+@{
+    ViewData["Title"] = "Edit Activity";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@{
+    var sheetTypeId = 0;
+    if (ViewBag.Type == "Const")
+    {
+        sheetTypeId = 4;
+    }
+    if (ViewBag.Type == "Current")
+    {
+        sheetTypeId = 3;
+    }
+    if (ViewBag.Type == "Sector")
+    {
+        sheetTypeId = 5;
+    }
+}
+
+
+<div>
+    <h4>Definitions > Economic Indicators > Activity > <a asp-controller="Activity" asp-action="Index" asp-route-sheetType="@sheetTypeId">@ViewBag.Type</a> > Edit</h4>
+</div>
+
+@{
+    int SheetType = 0;
+    if (ViewBag.Type == "Const")
+    {
+        SheetType = (int)SheetTypeEnum.ActivityConst;
+    }
+    if (ViewBag.Type == "Current")
+    {
+        SheetType = (int)SheetTypeEnum.ActivityCurrent;
+    }
+    if (ViewBag.Type == "Sector")
+    {
+        SheetType = (int)SheetTypeEnum.SectorGrowthRates;
+    }
+}
+<form enctype="multipart/form-data" asp-controller="Activity" asp-action="Edit" asp-route-sheetType="@SheetType" method="post" class="mt-3 ml-5">
+    <input type="hidden" asp-for="@Model.Id" readonly class="form-control" />
+    <input type="hidden" asp-for="@Model.IsDeleted" readonly class="form-control" />
+    <input type="hidden" asp-for="@Model.ActivityCurrentId" readonly class="form-control" />
+    <input type="hidden" asp-for="@Model.ChangeActionEnum" readonly class="form-control" />
+    <input type="hidden" asp-for="@Model.VersionStatusEnum" readonly class="form-control" />
+    <input type="hidden" asp-for="@Model.CreatedById" readonly class="form-control" />
+
+    <div class="form-group row">
+        <label class="col-sm-3 col-form-label">Indicator Name</label>
+        <div class="col-sm-5">
+            <input value="@ViewBag.IndicatorName" readonly class="form-control" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-3 col-form-label">Source Name</label>
+        <div class="col-sm-5">
+            <input value="@ViewBag.SourceName" readonly class="form-control" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="@Model.DFUnitId" class="col-sm-3 col-form-label">Unit</label>
+        <div class="col-sm-5">
+            <input value="@ViewBag.Unit" readonly class="form-control" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-3 col-form-label">Quarter</label>
+        <div class="col-sm-5">
+            @Html.DropDownList("DFQuarterId", null, "Please select a quarter", htmlAttributes: new { @class = "form-control" })
+            <span asp-validation-for="@Model.DFQuarterId" class="text-danger"></span>
+        </div>
+    </div>
+
+
+
+    <div class="form-group row">
+        <label class="col-sm-3 col-form-label">Year</label>
+        <div class="col-sm-5">
+            @Html.DropDownList("DFYearId", null, "Please select a year", htmlAttributes: new { @class = "form-control" })
+            <span asp-validation-for="@Model.DFYearId" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="@Model.DFSectorId" class="col-sm-3 col-form-label">Sector</label>
+        <div class="col-sm-5">
+            @Html.DropDownList("DFSectorId", null, "Please select a sector", htmlAttributes: new { @class = "form-control" })
+            <span asp-validation-for="@Model.DFSectorId" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="@Model.AgricultureForestryFishing" class="col-sm-3 col-form-label">
+            Agriculture Forestry Fishing
+        </label>
+        <div class="col-sm-5">
+            <input asp-for="@Model.AgricultureForestryFishing" type="number" class="form-control" step="any"/>
+            <span asp-validation-for="@Model.AgricultureForestryFishing" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="@Model.MiningQuarrying" class="col-sm-3 col-form-label">
+            Mining Quarrying
+        </label>
+        <div class="col-sm-5">
+            <input asp-for="@Model.MiningQuarrying" type="number" class="form-control" step="any"/>
+            <span asp-validation-for="@Model.MiningQuarrying" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="@Model.Petroleum" class="col-sm-3 col-form-label"></label>
+        <div class="col-sm-5">
+            <input asp-for="@Model.Petroleum" type="number" class="form-control" step="any"/>
+            <span asp-validation-for="@Model.Petroleum" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="@Model.Gas" class="col-sm-3 col-form-label"></label>
+        <div class="col-sm-5">
+            <input asp-for="@Model.Gas" type="number" class="form-control" step="any"/>
+            <span asp-validation-for="@Model.Gas" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="@Model.OtherExtraction" class="col-sm-3 col-form-label">
+            Other Extraction
+        </label>
+        <div class="col-sm-5">
+            <input asp-for="@Model.OtherExtraction" type="number" class="form-control" step="any"/>
+            <span asp-validation-for="@Model.OtherExtraction" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="@Model.ManufacturingIndustries" class="col-sm-3 col-form-label">
+            Manufacturing Industries
+        </label>
+        <div class="col-sm-5">
+            <input asp-for="@Model.ManufacturingIndustries" type="number" class="form-control" step="any"/>
+            <span asp-validation-for="@Model.ManufacturingIndustries" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="@Model.petroleumRefining" class="col-sm-3 col-form-label">
+            Petroleum Refining
+        </label>
+        <div class="col-sm-5">
+            <input asp-for="@Model.petroleumRefining" type="number" class="form-control" step="any"/>
+            <span asp-validation-for="@Model.petroleumRefining" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="@Model.OtherManufacturing" class="col-sm-3 col-form-label">
+            Other Manufacturing
+        </label>
+        <div class="col-sm-5">
+            <input asp-for="@Model.OtherManufacturing" type="number" class="form-control" step="any"/>
+            <span asp-validation-for="@Model.OtherManufacturing" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="@Model.Electricity" class="col-sm-3 col-form-label"></label>
+        <div class="col-sm-5">
+            <input asp-for="@Model.Electricity" type="number" class="form-control" step="any"/>
+            <span asp-validation-for="@Model.Electricity" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="@Model.WaterSewerageRemediationActivitie" class="col-sm-3 col-form-label">
+            Water Sewerage Remediation Activitie
+        </label>
+        <div class="col-sm-5">
+            <input asp-for="@Model.WaterSewerageRemediationActivitie" type="number" class="form-control" step="any"/>
+            <span asp-validation-for="@Model.WaterSewerageRemediationActivitie" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="@Model.Construction" class="col-sm-3 col-form-label"></label>
+        <div class="col-sm-5">
+            <input asp-for="@Model.Construction" type="number" class="form-control" step="any"/>
+            <span asp-validation-for="@Model.Construction" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="@Model.TransportationAndStorage" class="col-sm-3 col-form-label">
+            Transportation And Storage
+        </label>
+        <div class="col-sm-5">
+            <input asp-for="@Model.TransportationAndStorage" type="number" class="form-control" step="any"/>
+            <span asp-validation-for="@Model.TransportationAndStorage" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="@Model.Communication" class="col-sm-3 col-form-label"></label>
+        <div class="col-sm-5">
+            <input asp-for="@Model.Communication" type="number" class="form-control" step="any"/>
+            <span asp-validation-for="@Model.Communication" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="@Model.Information" class="col-sm-3 col-form-label"></label>
+        <div class="col-sm-5">
+            <input asp-for="@Model.Information" type="number" class="form-control" step="any"/>
+            <span asp-validation-for="@Model.Information" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="@Model.SuezcCanal" class="col-sm-3 col-form-label">
+            Suez Canal
+        </label>
+        <div class="col-sm-5">
+            <input asp-for="@Model.SuezcCanal" type="number" class="form-control" step="any"/>
+            <span asp-validation-for="@Model.SuezcCanal" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="@Model.WholesaleAndRetailTrade" class="col-sm-3 col-form-label">
+            Wholesale And Retail Trade
+        </label>
+        <div class="col-sm-5">
+            <input asp-for="@Model.WholesaleAndRetailTrade" type="number" class="form-control" step="any"/>
+            <span asp-validation-for="@Model.WholesaleAndRetailTrade" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="@Model.FinancialIntermediariesAuxiliaryServices" class="col-sm-3 col-form-label">
+            Financial Intermediaries Auxiliary Services
+        </label>
+        <div class="col-sm-5">
+            <input asp-for="@Model.FinancialIntermediariesAuxiliaryServices" type="number" class="form-control" step="any"/>
+            <span asp-validation-for="@Model.FinancialIntermediariesAuxiliaryServices" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="@Model.SocialSecurityAndInsurance" class="col-sm-3 col-form-label">
+            Social Security And Insurance
+        </label>
+        <div class="col-sm-5">
+            <input asp-for="@Model.SocialSecurityAndInsurance" type="number" class="form-control" step="any"/>
+            <span asp-validation-for="@Model.SocialSecurityAndInsurance" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="@Model.AccommodationAndFoodServiceActivities" class="col-sm-3 col-form-label">
+            Accommodation And Food Service Activities
+        </label>
+        <div class="col-sm-5">
+            <input asp-for="@Model.AccommodationAndFoodServiceActivities" type="number" class="form-control" step="any"/>
+            <span asp-validation-for="@Model.AccommodationAndFoodServiceActivities" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="@Model.RealEstateActivitie" class="col-sm-3 col-form-label">
+            Real Estate Activitie
+        </label>
+        <div class="col-sm-5">
+            <input asp-for="@Model.RealEstateActivitie" type="number" class="form-control" step="any"/>
+            <span asp-validation-for="@Model.RealEstateActivitie" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="@Model.RealEstateOwnership" class="col-sm-3 col-form-label">
+            Real Estate Ownership
+        </label>
+        <div class="col-sm-5">
+            <input asp-for="@Model.RealEstateOwnership" type="number" class="form-control" step="any"/>
+            <span asp-validation-for="@Model.RealEstateOwnership" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="@Model.BusinessServices" class="col-sm-3 col-form-label">
+            Business Services
+        </label>
+        <div class="col-sm-5">
+            <input asp-for="@Model.BusinessServices" type="number" class="form-control" step="any"/>
+            <span asp-validation-for="@Model.BusinessServices" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="@Model.GeneralGovernment" class="col-sm-3 col-form-label">
+            General Government
+        </label>
+        <div class="col-sm-5">
+            <input asp-for="@Model.GeneralGovernment" type="number" class="form-control" step="any"/>
+            <span asp-validation-for="@Model.GeneralGovernment" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="@Model.SocialServices" class="col-sm-3 col-form-label">
+            Social Services
+        </label>
+        <div class="col-sm-5">
+            <input asp-for="@Model.SocialServices" type="number" class="form-control" step="any"/>
+            <span asp-validation-for="@Model.SocialServices" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="@Model.Education" class="col-sm-3 col-form-label"></label>
+        <div class="col-sm-5">
+            <input asp-for="@Model.Education" type="number" class="form-control" step="any"/>
+            <span asp-validation-for="@Model.Education" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="@Model.Health" class="col-sm-3 col-form-label"></label>
+        <div class="col-sm-5">
+            <input asp-for="@Model.Health" type="number" class="form-control" step="any"/>
+            <span asp-validation-for="@Model.Health" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="@Model.OtherServices" class="col-sm-3 col-form-label">
+            Other Services
+        </label>
+        <div class="col-sm-5">
+            <input asp-for="@Model.OtherServices" type="number" class="form-control" step="any"/>
+            <span asp-validation-for="@Model.OtherServices" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="@Model.TotalGDPAtFactorCost" class="col-sm-3 col-form-label">
+            Total GDP At Factor Cost
+        </label>
+        <div class="col-sm-5">
+            <input asp-for="@Model.TotalGDPAtFactorCost" type="number" class="form-control" step="any"/>
+            <span asp-validation-for="@Model.TotalGDPAtFactorCost" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="item form-group">
+        <div class="col-md-6 col-sm-6 offset-md-2">
+            <button type="submit" class="btn btn-success">Submit</button>
+
+            <a asp-controller="Activity" asp-action="Index" asp-route-sheetType="@sheetTypeId" type="button" class="btn btn-danger">Cancel</a>
+        </div>
+    </div>
+</form>
+
+@section Scripts{
+
+    <script>
+        function normalTotalChange() {
+            var e = document.getElementById("normalTotalValue");
+            var value = e.options[e.selectedIndex].value;
+            if (value == "total") {
+                $("#govern").prop("disabled", true);
+            }
+            else if (value == "normal") {
+                $("#govern").prop("disabled", false);
+                $("#region").prop("disabled", false);
+            }
+        }
+
+        $(document).ready(function () {
+            regionChange();
+        });
+
+        function regionChange() {
+            var e = document.getElementById("region");
+            var value = e.options[e.selectedIndex].value;
+
+            $.ajax({
+            type: "GET",
+            async: false,
+                url: "@Url.Action("getGovernsByRegion", "Governorate")",
+                data: { id: value },
+        cache: false,
+        dataType: "html",
+        failure: function () {
+            alert(" An error occurred.");
+        },
+                success: function (result)
+                {
+                    var data = JSON.parse(result);
+
+                    console.log(data);
+
+            $("#govern").html("");
+                    $.each(data, function (i, element) {
+                $("#govern").append(
+                    $('<option></option>').val(element.id).html(element.name));
+            });
+        }
+    });
+        }
+
+
+    </script>
+}
+

@@ -1,0 +1,191 @@
+﻿@model MPMAR.Web.Site.ViewModels.FormerMinistriesViewModel
+@{
+    ViewData["Title"] = ViewBag.PageTitle;
+    string lang = Context.Request.Query["lang"];
+    var url = ViewBag.CurrentDomain + Context.Request.Path;
+}
+<style>
+    .timeline {
+        width: 700px;
+    }
+
+    @@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 1) {
+        .timeline {
+            width: 600px;
+        }
+    }
+
+    @@media only screen and (max-width: 767px) {
+        .timeline {
+            width: 400px;
+        }
+    }
+</style>
+
+@if (lang == "en")
+{
+    <style>
+        @@media (max-width: 767px) {
+            .paddingonmobile {
+                padding-right: 80px !important;
+                padding-left: 20px !important;
+            }
+
+            .timeline__content-desc {
+                padding-right: 40px;
+            }
+          .timeline-item{
+                  padding: 0 80px 80px 30px !important;
+          }
+
+        }
+    </style>
+}
+else
+{
+    <style>
+        @@media (max-width: 767px) {
+            .paddingonmobile {
+                padding-left: 80px !important;
+                padding-right: 20px !important;
+            }
+
+            .timeline__content-desc {
+                padding-left: 40px;
+            }
+        }
+    </style>
+}
+<link href="~/css/timelinestyle.css" rel="stylesheet" />
+<section id="content">
+    <!-- Page Heading -->
+    <section class="section page-heading" style="opacity: 1;">
+
+        <h1>@ViewBag.PageTitle</h1>
+        <p class="breadcrumb"><a href="@Url.Content("~/")">@(lang == "en" ? "Home" : "الرئيسية") </a> / @ViewBag.PagePath</p>
+
+    </section>
+    <!-- Page Heading -->
+    <section class="section full-width-bg gray-bg" style="padding-top:0">
+
+        <div class="timeline-container" id="timeline-1" style=" background-image: url(img/team/MPED-Egypt-ashrafelarabi.jpg); ">
+            <div class="timeline__content">
+                <div class="timeline-header" style="margin-bottom:40px"><h2 class="timeline-header__title">@Model.Title1</h2></div>
+                <div class="timeline">
+
+                    <p class="timeline__content-desc paddingonmobile" style="margin-bottom: 80px;font-family: inherit;color: #000;">@Html.Raw(Model.Description)</p>
+                </div>
+            </div>
+
+            <div class="timeline-header" style="margin-bottom:-80px">
+                <h2 class="timeline-header__title">@Model.Title2</h2>
+            </div>
+
+
+
+
+
+
+            @if (Model.MinistryTimeLine.Any())
+            {
+                <div class="timeline">
+
+                    <div class="timeline-item" style="opacity: 0;height: 80px;padding-bottom: 0px;padding-top: 0px;">
+                        <div class="timeline__content">
+                            <img class="timeline__img" src="~/img/EgyptFlag.jpg">
+                        </div>
+                    </div>
+
+
+                    <div class="timeline-item">
+                        <div class="timeline__content" id="@Model.MinistryTimeLine[0].Id">
+                            <img class="timeline__img" src="@Model.MinistryTimeLine[0].ProfileImageUrl">
+                            <h2 class="timeline__content-title">@Model.MinistryTimeLine[0].Period</h2>
+                            <h3 class="timeline-header__subtitle"> @Model.MinistryTimeLine[0].Name  </h3>
+                            <p class="timeline__content-desc">@Html.Raw(Model.MinistryTimeLine[0].Description.Replace("<p>", "").Replace("</p>", "").Replace("<br>", ""))</p>
+
+                            <div class="social-media">
+                                <span class="small-caption">@ViewBag.ForShare</span>
+                                <ul class="social-icons">
+
+                                    <li class="facebook">
+                                        <a href="@string.Concat("https://www.facebook.com/sharer/sharer.php?u=",url,"#",Model.MinistryTimeLine[0].Id)"
+                                           class="tooltip-ontop" title="" data-original-title="Facebook" target="_blank">
+                                            <i class="icons icon-facebook"></i>
+                                        </a>
+                                    </li>
+
+                                    <li class="twitter">
+                                        <a href="@string.Concat("https://twitter.com/intent/tweet?url=",url,"#",Model.MinistryTimeLine[0].Id)" class="tooltip-ontop"
+                                           title="" data-original-title="Twitter" target="_blank">
+                                            <i class="icons icon-twitter"></i>
+                                        </a>
+                                    </li>
+                                    <li class="email">
+                                        <a href="@string.Concat("mailto:?subject=",Model.MinistryTimeLine[0].Name,"&body=",url,"#",Model.MinistryTimeLine[0].Id) " class="tooltip-ontop" title=""
+                                           data-original-title="Email"><i class="icons icon-mail"></i></a>
+                                    </li>
+
+
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="timeline">
+                        @foreach (var ministr in Model.MinistryTimeLine.Skip(1))
+                        {
+                            <div class="timeline-item" id="@ministr.Id">
+                                <div class="timeline__content">
+                                    <img class="timeline__img" src="@ministr.ProfileImageUrl">
+                                    <h2 class="timeline__content-title">@ministr.Period</h2>
+                                    <h3 class="timeline-header__subtitle"> @ministr.Name  </h3>
+                                    <div class="timeline__content-desc">
+                                        <p class="timeline__content-desc">@Html.Raw(ministr.Description)</p>
+                                    </div>
+                                    <div class="social-media">
+                                        <span class="small-caption">@ViewBag.ForShare</span>
+                                        <ul class="social-icons">
+
+
+                                            <li class="facebook">
+                                                <a href="@string.Concat("https://www.facebook.com/sharer/sharer.php?u=",url,"#",@ministr.Id)"
+                                                   class="tooltip-ontop" title="" data-original-title="Facebook" target="_blank">
+                                                    <i class="icons icon-facebook"></i>
+                                                </a>
+                                            </li>
+
+                                            <li class="twitter">
+                                                <a href="@string.Concat("https://twitter.com/intent/tweet?url=",url,"#",ministr.Id)" class="tooltip-ontop"
+                                                   title="" data-original-title="Twitter" target="_blank">
+                                                    <i class="icons icon-twitter"></i>
+                                                </a>
+                                            </li>
+                                            <li class="email">
+                                                <a href="@string.Concat("mailto:?subject=",ministr.Name,"&body=",url,"#",ministr.Id) " class="tooltip-ontop" title=""
+                                                   data-original-title="Email"><i class="icons icon-mail"></i></a>
+                                            </li>
+
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+
+
+
+
+
+
+
+        </div>
+    </section>
+
+</section>
+@section scripts{
+    <script src="~/js/index.js"></script>
+}

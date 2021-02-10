@@ -1,0 +1,385 @@
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using MPMAR.Analytics.Data.Enums;
+@using MPMAR.Common
+@{
+
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    ViewData["Title"] = "Component " + ViewBag.Component;
+
+
+   
+    string approvalId = Context.Request.Query["approvalId"];
+    string sheetTypeInt = Context.Request.Query["sheetType"];
+    int approvalIdInt = 0;
+    int.TryParse(approvalId, out approvalIdInt);
+
+    var sheetType = SheetType_PrivilegeType.SheetType_PrivilegeType_Map.GetValueOrDefault(int.Parse(sheetTypeInt));
+
+    var bEUsersPrivilegesViewModel = bEUsersPrivilegesService.ValidateIBEUsersPrivilegesViewService(sheetType, this.User.FindFirstValue(ClaimTypes.NameIdentifier), this.User.IsInRole(UserRolesConst.SuperAdmin), approvalId: approvalIdInt);
+}
+
+@if (ViewBag.ComponentEnum == (int)SheetTypeEnum.ComponentConst)
+{
+    <partial name="_ComponentConstant.cshtml" />
+
+    @section scripts {
+        <script type="text/javascript">
+                $(document).ready(function () {
+
+            window.table = $('#data_table').DataTable({
+                "aaSorting": [],
+                "serverSide": true,
+                "scrollX": true,
+                "ajax": {
+                    "url": '@Url.Action("GetAll", "Component")',
+                     "data":{sheetType: '@ViewBag.ComponentEnum',approvalId:'@ViewBag.approvalId'},
+                    "dataSrc": "data",
+                         "type": "POST",
+                    "datatype":"json"
+                },
+                "columns": [
+                    { "data": "indicator" ,"name":"Indicator", render:  $.fn.dataTable.render.ellipsis() },
+                  { "data": "source" ,"name":"Source",render:  $.fn.dataTable.render.ellipsis() },
+                   { "data": "unit", "name":"Unit",render:  $.fn.dataTable.render.ellipsis() },
+                 { "data": "quarter", "name":"Quarter",render:  $.fn.dataTable.render.ellipsis()  },
+                    {"data": "yearFiscal", "name":"YearFiscal",render:  $.fn.dataTable.render.ellipsis() },
+                    { "data": "privateConsumption","name":"PrivateConsumption", render:  $.fn.dataTable.render.ellipsis()  },
+                 { "data": "governmentConsumption","name":"GovernmentConsumption",  render:  $.fn.dataTable.render.ellipsis() },
+                 { "data": "grossCapitalFormation","name":"GrossCapitalFormation", render:  $.fn.dataTable.render.ellipsis() },
+                 { "data": "exportsOfGoodsAndServices","name":"ExportsOfGoodsAndServices", render:  $.fn.dataTable.render.ellipsis() },
+                 { "data": "importsOfGoodsAndServices" ,"name":"ImportsOfGoodsAndServices",render:  $.fn.dataTable.render.ellipsis() },
+                    { "data": "totalGrossDomesticProductAtMarketPrices", "name": "TotalGrossDomesticProductAtMarketPrices", render: $.fn.dataTable.render.ellipsis() },
+                   {
+                "data": "changeActionEnum", "orderable": false, "name": "ChangeActionEnum", "render": function (data, type, row) {
+                     
+                               return  data == 1 ? "New" : data == 2 ? "Update" : "Delete"
+                        }, "visible": ('@(!bEUsersPrivilegesViewModel.IsFromApprovalPage)' == "True")
+                    },
+            {
+                "data": "changeActionEnum", "orderable": false, "name": "ChangeActionEnum", "render": function (data, type, row) {
+                      var isContentManager = '@(!bEUsersPrivilegesViewModel.IsFromApprovalPage)';
+                               return isContentManager != "True" ? data == 1 ? "New" : data == 2 ? "Update" : "Delete" : row.versionStatusEnum == 1 ? "Draft" : row.versionStatusEnum == 2 ? "Submitted" : "Approved"
+                        }
+                    },
+                    {
+                        "data": "id", "orderable": false, "render": function (data, type, row) {
+                            var isContentManager = '@(bEUsersPrivilegesViewModel.CanEdit && !bEUsersPrivilegesViewModel.IsFromApprovalPage)';
+
+                        var edit = '@Url.Action("Edit", "Component")';
+                            return isContentManager == "True" ? '<a href="' + edit + '?id=' + data + '&sheetType=' +@ViewBag.ComponentEnum+ '&isVersion=' + row.isVersion +'" title="Edit" class="anchorActionLink"><i class="fa fa-pencil"></i></a>' : '';
+                        }, "visible": ('@(bEUsersPrivilegesViewModel.CanEdit && !bEUsersPrivilegesViewModel.IsFromApprovalPage)' == "True")
+                    },
+                    {
+                        "data": "id", "orderable": false, "render": function (data, type, row) {
+                            var isContentManager = '@(bEUsersPrivilegesViewModel.CanDelete && !bEUsersPrivilegesViewModel.IsFromApprovalPage)';
+                             var ApproveConst = '@Url.Action("ApproveConst", "Component")';
+                            return isContentManager == "True" ? '<a href="#" title="Delete" data-placement="right"  class="delete anchorActionLink" data-target="#basic" data-toggle="modal" data-id="' + data + '" data-isversion="' + row.isVersion + '"><i class="fa fa-trash"></i></a>' : '<a href="' + ApproveConst + '?approvalId=' + @ViewBag.approvalId + '&componentVersionId=' + data +'" title="Approve" class="anchorActionLink" onclick="DisableAfterClick(event,this)">Approve</a>'
+
+                        }, "visible": ('@(bEUsersPrivilegesViewModel.CanDelete || bEUsersPrivilegesViewModel.CanApprove)' == "True")
+                    },
+                    {
+
+                        "data": "id", "orderable": false, "render": function (data, type, row) {
+                                var isContentManager = '@((bEUsersPrivilegesViewModel.CanEdit || bEUsersPrivilegesViewModel.CanDelete)  && !bEUsersPrivilegesViewModel.IsFromApprovalPage)';
+                            var canAdd = '@bEUsersPrivilegesViewModel.CanAdd';
+
+                            var IgnoreConst = '@Url.Action("IgnoreConst", "Component")';
+                            console.log(isContentManager)
+                            if ((isContentManager == "True" || (canAdd == "True" && row.versionStatusEnum == 1 && row.changeActionEnum == 1 && row.createdById == '@this.User.FindFirstValue(ClaimTypes.NameIdentifier)'))) {
+                                return (row.versionStatusEnum == 1) ? '<a href="#" title="Apply Request" data-placement="right" id="applyItem" class="applyItem customActionLink" data-target="#applyModal" data-toggle="modal" data-id="' + data + '">Apply</a>' +
+                                    '<div class="modal fade" id="applyModal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">' +
+                                    '<div class="modal-dialog">' + '<div class="modal-content">' + '<div class="modal-header">' +
+                                    '<h4 class="modal-title">Apply Request Confirmation</h4>' +
+                                    '</div>' + '<div class="modal-body">Are you sure you want to apply this edit request?</div><div class="modal-footer"><button id="btnContinueApplyRequest" type="button" class="btn btn-danger">Apply Request</button><button data-dismiss="modal" type="button" class="btn btn-primary">Cancel</button></div>' +
+                                    '</div></div></div>' : '<a href="#" style="pointer-events: none;color: #ccc;">Apply</a>'
+                            } else if ('@(bEUsersPrivilegesViewModel.CanApprove && bEUsersPrivilegesViewModel.IsFromApprovalPage)' == "True") {
+                              
+                                return '<a href="' + IgnoreConst + '?approvalId=' + @ViewBag.approvalId + '&componentVersionId=' + data + '" title="Ignore" class="anchorActionLink" onclick="DisableAfterClick(event,this)">Ignore</a>'
+                            }
+                            else {
+                                return ''
+                            }
+                        
+                    }
+                }
+                ]
+                , "fnInitComplete": function (oSettings, json) {
+                    //var table = $('#data_table').DataTable();
+                    //if (table.data().count() <= 10) {
+                    //   document.getElementById("data_table_paginate").style.display = "none";
+                    //        document.getElementById("data_table_length").style.display = "none";
+                    //        document.getElementById("data_table_filter").style.display = "none";
+                    //}
+                }
+            });
+        });
+
+
+
+            var item_to_delete;
+            var isVersion;
+               var sheetTypeId=parseInt('@ViewBag.ComponentEnum');
+            $('#data_table').on('click', '.delete', function () {
+
+                item_to_delete = $(this).data('id');
+                 isVersion = $(this).data('isversion');
+            var data = table.row($(this).parents('tr')).data();
+                                     Swal.fire({
+  title: 'Are you sure?',
+  text: "You want to delete this row",
+  icon: 'warning',
+  showCancelButton: true,
+  confirmButtonColor: '#3085d6',
+  cancelButtonColor: '#d33',
+  confirmButtonText: 'delete'
+}).then((result) => {
+  if (result.value) {
+
+
+      $.ajax({
+           type: "POST",
+          url: '@Url.Action("Delete", "Component")',
+          data: { id: item_to_delete,sheetType:sheetTypeId ,isVersion:isVersion},
+                        }).done(function (res) {
+                            if (res) {
+                                Swal.fire(
+                                   {
+                                   title:'Deleted!',
+                                   text: " has been Deleted.",
+                                   icon: 'success',
+                                    showConfirmButton:false
+                                }
+                                )
+                                   window.location.reload();
+                            } else {
+                                   Swal.fire(
+                                    'Failed',
+                                    "Failed to Delete this row",
+                                    'error'
+                                )
+                            }
+                        });
+  }
+})
+
+        });
+
+
+             var item_to_apply;
+        $('#data_table').on('click', '.applyItem', function () {
+            item_to_apply = $(this).data('id');
+
+        });
+            $('#data_table').on('click', '#btnContinueApplyRequest', function () {
+                var currentItem = $(this);
+                if (currentItem.prop("disabled")) {
+                    e.preventDefault();
+                    return;
+                }
+                currentItem.prop("disabled", true)
+
+            $('#applyModal').modal('hide');
+            $.ajax({
+             type: "POST",
+                url: '@Url.Action("SubmitChangesConst", "Component")',
+                    data: { componentVersionId: item_to_apply },
+                success: function () {
+                $('#applyModal').modal('hide');
+                window.location.reload();
+            },
+            complete: function (data) {
+                $('#applyModal').modal('hide');
+                 window.location.reload();
+            }
+        });
+    });
+
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9.10.9/dist/sweetalert2.all.min.js"></script>
+    }
+
+}
+
+@if (ViewBag.ComponentEnum == (int)SheetTypeEnum.ComponentCurrent)
+{
+    <partial name="_ComponentCurrent.cshtml" />
+
+    @section scripts {
+        <script type="text/javascript">
+                $(document).ready(function () {
+
+            window.table = $('#data_table').DataTable({
+              "aaSorting": [],
+                "serverSide": true,
+                "processing": true,
+                "scrollX": true,
+                "ajax": {
+                    "url": '@Url.Action("GetAll", "Component")',
+                     "data":{sheetType: '@ViewBag.ComponentEnum',approvalId:'@ViewBag.approvalId'},
+                    "dataSrc": "data",
+                         "type": "POST",
+                    "datatype":"json"
+                },
+                      "columns": [
+                    { "data": "indicator" ,"name":"Indicator", "render": function (data, type, row) {
+                            var dataVal = (data == null) ? "N/A" : "" + data;
+                            return dataVal;
+                    }},
+                  { "data": "source" ,"name":"Source", "render": function (data, type, row) {
+                            var dataVal = (data == null) ? "N/A" : "" + data;
+                            return dataVal;
+                    }},
+                   { "data": "unit", "name":"Unit",render:  $.fn.dataTable.render.ellipsis()},
+                 { "data": "quarter", "name":"Quarter",render:  $.fn.dataTable.render.ellipsis()},
+                  { "data": "yearFiscal" ,"name":"YearFiscal", "render": function (data, type, row) {
+                            var dataVal = (data == null) ? "N/A" : "" + data;
+                            return dataVal;
+                    }},
+                    { "data": "privateConsumption","name":"PrivateConsumption",  render:  $.fn.dataTable.render.ellipsis()},
+                 { "data": "governmentConsumption","name":"GovernmentConsumption",  render:  $.fn.dataTable.render.ellipsis()},
+                 { "data": "grossCapitalFormation","name":"GrossCapitalFormation", render:  $.fn.dataTable.render.ellipsis()},
+                 { "data": "exportsOfGoodsAndServices","name":"ExportsOfGoodsAndServices", render:  $.fn.dataTable.render.ellipsis()},
+                 { "data": "importsOfGoodsAndServices" ,"name":"ImportsOfGoodsAndServices", "render": function (data, type, row) {
+                            var dataVal = (data == null) ? "N/A" : "" + data;
+                            return dataVal;
+                    }},
+                 { "data": "totalGrossDomesticProductAtMarketPrices","name":"TotalGrossDomesticProductAtMarketPrices", render:  $.fn.dataTable.render.ellipsis()},      {
+                "data": "changeActionEnum", "orderable": false, "name": "ChangeActionEnum", "render": function (data, type, row) {
+                      var isContentManager = '@(!bEUsersPrivilegesViewModel.IsFromApprovalPage)';
+                               return  data == 1 ? "New" : data == 2 ? "Update" : "Delete"
+                        }, "visible": ('@(!bEUsersPrivilegesViewModel.IsFromApprovalPage)' == "True")
+                    },
+            {
+                "data": "changeActionEnum", "orderable": false, "name": "ChangeActionEnum", "render": function (data, type, row) {
+                      var isContentManager = '@(!bEUsersPrivilegesViewModel.IsFromApprovalPage)';
+                               return isContentManager != "True" ? data == 1 ? "New" : data == 2 ? "Update" : "Delete" : row.versionStatusEnum == 1 ? "Draft" : row.versionStatusEnum == 2 ? "Submitted" : "Approved"
+                        }
+                    },
+                    {
+                        "data": "id", "orderable": false, "render": function (data, type, row) {
+                            var isContentManager = '@(bEUsersPrivilegesViewModel.CanEdit && !bEUsersPrivilegesViewModel.IsFromApprovalPage)';
+
+                        var edit = '@Url.Action("Edit", "Component")';
+                            return isContentManager == "True" ? '<a href="' + edit + '?id=' + data + '&sheetType=' +@ViewBag.ComponentEnum+ '&isVersion=' + row.isVersion +'" title="Edit" class="anchorActionLink"><i class="fa fa-pencil"></i></a>' : '';
+                        }, "visible": ('@(bEUsersPrivilegesViewModel.CanEdit && !bEUsersPrivilegesViewModel.IsFromApprovalPage)' == "True")
+                    },
+                    {
+                        "data": "id", "orderable": false, "render": function (data, type, row) {
+                            var isContentManager = '@(bEUsersPrivilegesViewModel.CanDelete && !bEUsersPrivilegesViewModel.IsFromApprovalPage)';
+                             var ApproveCurrent = '@Url.Action("ApproveCurrent", "Component")';
+                            return  isContentManager == "True" ?  '<a href="#" title="Delete" data-placement="right"  class="delete anchorActionLink" data-target="#basic" data-toggle="modal" data-id="' + data + '" data-isversion="' + row.isVersion + '"><i class="fa fa-trash"></i></a>':'<a href="' + ApproveCurrent + '?approvalId=' + @ViewBag.approvalId + '&componentVersionId=' +data+'" title="Approve" class="anchorActionLink">Approve</a>'
+
+                        }, "visible": ('@(bEUsersPrivilegesViewModel.CanDelete || bEUsersPrivilegesViewModel.CanApprove)' == "True")
+                    },
+                    {
+
+                        "data": "id", "orderable": false, "render": function (data, type, row) {
+                                              var isContentManager = '@((bEUsersPrivilegesViewModel.CanEdit || bEUsersPrivilegesViewModel.CanDelete)  && !bEUsersPrivilegesViewModel.IsFromApprovalPage)';
+                            var canAdd = '@bEUsersPrivilegesViewModel.CanAdd';
+                             var IgnoreCurrent = '@Url.Action("IgnoreCurrent", "Component")';
+                                   if ((isContentManager == "True" || (canAdd == "True" && row.versionStatusEnum == 1 && row.changeActionEnum == 1 && row.createdById == '@this.User.FindFirstValue(ClaimTypes.NameIdentifier)'))) {
+                                return (row.versionStatusEnum == 1) ? '<a href="#" title="Apply Request" data-placement="right" id="applyItem" class="applyItem customActionLink" data-target="#applyModal" data-toggle="modal" data-id="' + data + '">Apply</a>' +
+                                    '<div class="modal fade" id="applyModal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">' +
+                                    '<div class="modal-dialog">' + '<div class="modal-content">' + '<div class="modal-header">' +
+                                    '<h4 class="modal-title">Apply Request Confirmation</h4>' +
+                                    '</div>' + '<div class="modal-body">Are you sure you want to apply this edit request?</div><div class="modal-footer"><button id="btnContinueApplyRequest" type="button" class="btn btn-danger">Apply Request</button><button data-dismiss="modal" type="button" class="btn btn-primary">Cancel</button></div>' +
+                                    '</div></div></div>' : '<a href="#" style="pointer-events: none;color: #ccc;">Apply</a>'
+                            } else if ('@(bEUsersPrivilegesViewModel.CanApprove && bEUsersPrivilegesViewModel.IsFromApprovalPage)' == "True") {
+                              
+                                       return '<a href="' + IgnoreCurrent + '?approvalId=' + @ViewBag.approvalId + '&componentVersionId=' + data + '" title="Ignore" class="anchorActionLink">Ignore</a>'
+                            }
+                            else {
+                                return ''
+                            }
+                    }
+                }
+                ]
+                      ,"fnInitComplete": function (oSettings, json) {
+
+                }
+            });
+        });
+
+
+
+            var item_to_delete;
+            var isVersion;
+            var sheetTypeId=parseInt('@ViewBag.ComponentEnum');
+            $('#data_table').on('click', '.delete', function () {
+
+                item_to_delete = $(this).data('id');
+                 isVersion = $(this).data('isversion');
+            var data = table.row($(this).parents('tr')).data();
+                                     Swal.fire({
+  title: 'Are you sure?',
+  text: "You want to delete this row",
+  icon: 'warning',
+  showCancelButton: true,
+  confirmButtonColor: '#3085d6',
+  cancelButtonColor: '#d33',
+  confirmButtonText: 'delete'
+}).then((result) => {
+  if (result.value) {
+
+
+      $.ajax({
+                            type: "POST",
+          url: '@Url.Action("Delete", "Component")',
+          data: { id: item_to_delete,sheetType:sheetTypeId,isVersion:isVersion },
+                        }).done(function (res) {
+                            if (res) {
+                                Swal.fire(
+                                 {
+                                   title:'Deleted!',
+                                   text: " has been Deleted.",
+                                   icon: 'success',
+                                    showConfirmButton:false
+                                }
+                                )
+                                window.location.reload();
+                            } else {
+                                   Swal.fire(
+                                    'Failed',
+                                    "Failed to Delete this row",
+                                    'error'
+                                )
+                            }
+                        });
+  }
+})
+
+        });
+
+
+                    var item_to_apply;
+        $('#data_table').on('click', '.applyItem', function () {
+            item_to_apply = $(this).data('id');
+
+        });
+            $('#data_table').on('click', '#btnContinueApplyRequest', function () {
+                var currentItem = $(this);
+                if (currentItem.prop("disabled")) {
+                    e.preventDefault();
+                    return;
+                }
+                currentItem.prop("disabled", true)
+
+            $('#applyModal').modal('hide');
+            $.ajax({
+             type: "POST",
+                url: '@Url.Action("SubmitChangesCurrent", "Component")',
+                    data: { componentVersionId: item_to_apply },
+            success: function () {
+                window.location.reload();
+            },
+            complete: function (data) {
+                $('#applyModal').modal('hide');
+                 window.location.reload();
+            }
+        });
+    });
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9.10.9/dist/sweetalert2.all.min.js"></script>
+    }
+
+}

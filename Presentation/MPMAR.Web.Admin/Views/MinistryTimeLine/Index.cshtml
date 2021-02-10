@@ -1,0 +1,117 @@
+﻿@model MinistryTimeLine
+@{
+    ViewBag.Title = "Page Event";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+<h4>Page Event</h4>
+<a asp-controller="MinistryTimeLine" asp-action="Create" type="button" class="btn btn-primary index-create-button">Create New Event</a>
+<table id="data_table" class="table table-striped table-bordered" style="width:100%">
+    <thead>
+        <tr>
+            <th style="width: 20%">EnName</th>
+            <th style="width: 20%">ArName</th>
+            <th style="width: 20%">EnDescription</th>
+            <th style="width: 20%">ArDescription</th>
+            <th style="width: 20%">EnAddress</th>
+            <th style="width: 20%">ArAddress</th>
+            <th style="width: 20%">StartDate</th>
+            <th style="width: 20%">EndDate</th>
+            <th style="width: 4%">Order</th>
+            <th style="width: 6%">Active</th>
+            @*<th style="width: 6%">Deleted</th>*@
+            <th style="width: 4%"></th>
+            <th style="width: 4%"></th>
+            <th style="width: 4%"></th>
+        </tr>
+    </thead>
+</table>
+<table>
+    <tr>
+        <td class="btn-mais-info text-primary">
+            <br /><p>
+                <strong><a asp-controller="StaticPageRoute" asp-action="Index">Back to previous page</a></strong>
+            </p>
+        </td>
+    </tr>
+</table>
+
+
+
+
+@section scripts {
+    <script type="text/javascript">
+    $(document).ready(function () {
+        $('#data_table')
+            .DataTable({
+            "ajax": { "url": '@Url.Action("GetPageEvent", "MinistryTimeLine", new { id = 0 })', "dataSrc": "data" },
+                "columns": [
+      { "data": "enTitle"  ,render:  $.fn.dataTable.render.ellipsis() }
+      ,{ "data": "arTitle" ,render:  $.fn.dataTable.render.ellipsis() }
+      ,{ "data": "enDescription" ,render:  $.fn.dataTable.render.ellipsis() }
+      ,{ "data": "arDescription" ,render:  $.fn.dataTable.render.ellipsis() }
+      ,{ "data": "enAddress" ,render:  $.fn.dataTable.render.ellipsis() }
+      ,{ "data": "arAddress" ,render:  $.fn.dataTable.render.ellipsis() }
+      ,{ "data": "eventStartDate" }
+      ,{ "data": "eventEndDate" }
+      ,{ "data": "order" }
+      ,{ "data": "isActive" }
+                    ,
+                    //{ "data": "isDeleted" },
+                {
+                    "data": "id", "orderable": false, "render": function (data, type, row) {
+                        var details = '@Url.Action("Details", "MinistryTimeLine")';
+                        return '<a href="' + details + '?id=' + data + '" title="Details" class="anchorActionLink"><i class="fa fa-eye"></i></a>';
+                    }
+                },
+                {
+                    "data": "id", "orderable": false, "render": function (data, type, row) {
+                        var edit = '@Url.Action("Edit", "MinistryTimeLine")';
+                        return '<a href="' + edit + '?id=' + data + '" title="Edit" class="anchorActionLink"><i class="fa fa-pencil"></i></a>';
+                    }
+                },
+                {
+                    "data": "id", "orderable": false, "render": function (data, type, row) {
+                        debugger;
+                        return '<a href="#" title="Delete" data-placement="right" id="deleteItem" class="deleteItem anchorActionLink" data-target="#basic" data-toggle="modal" data-id="' + data + '"><i class="fa fa-trash"></i></a>' +
+                            '<div class="modal fade" id="basic" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">' +
+                            '<div class="modal-dialog">' + '<div class="modal-content">' + '<div class="modal-header">' +
+                            '<h4 class="modal-title">Delete Confirmation</h4>' +
+                            '</div>' + '<div class="modal-body">Are you sure you want to delete?</div><div class="modal-footer"><button id="btnContinueDelete" type="button" class="btn btn-danger">Delete</button><button data-dismiss="modal" type="button" class="btn btn-primary">Cancel</button></div>' +
+                            '</div></div></div>';
+                    }
+                }
+                ]
+                ,"fnInitComplete": function (oSettings, json) {
+                    var table = $('#data_table').DataTable();
+                    if (table.data().count() <= 10) {
+                       document.getElementById("data_table_paginate").style.display = "none";
+                            document.getElementById("data_table_length").style.display = "none";
+                            document.getElementById("data_table_filter").style.display = "none";
+                    }
+                  
+                }
+        });
+    });
+
+        
+
+    var item_to_delete;
+    $('#data_table').on('click', '.deleteItem', function () {
+        item_to_delete = $(this).data('id');
+    });
+
+    $('#data_table').on('click', '#btnContinueDelete', function () {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("Delete", "MinistryTimeLine")',
+            data: { id: item_to_delete },
+            success: function () {
+                window.location.reload();
+            },
+                complete: function (data) {
+                $('#basic').modal('hide');
+            }
+        });
+    });
+    </script>
+}

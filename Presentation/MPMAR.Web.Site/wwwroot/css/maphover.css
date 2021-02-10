@@ -1,0 +1,795 @@
+.new-valley {
+    position: absolute;
+    background: white;
+    margin-right: 450px;
+    margin-top: -407px;
+    width: 220px;
+    height: 75px;
+    text-align: center;
+    padding: 25px;
+    border-radius: 10px;
+    display: none;
+}
+
+.new-valley-example:hover .new-valley {
+    display: block;
+}
+
+
+.new-valley:after {
+    content: " ";
+    position: absolute;
+    right: 90px;
+    bottom: -15px;
+    border-top: 15px solid white;
+    border-right: 15px solid transparent;
+    border-left: 15px solid transparent;
+    border-bottom: none;
+}
+
+
+.Aswan {
+    position: absolute;
+    background: white;
+    margin-right: 151px;
+    margin-top: -344px;
+    width: 220px;
+    height: 75px;
+    text-align: center;
+    padding: 25px;
+    border-radius: 10px;
+    display: none;
+}
+
+.Aswan-example:hover .Aswan {
+    display: block;
+}
+
+
+.Aswan:after {
+    content: " ";
+    position: absolute;
+    right: 90px;
+    bottom: -15px;
+    border-top: 15px solid white;
+    border-right: 15px solid transparent;
+    border-left: 15px solid transparent;
+    border-bottom: none;
+}
+
+.Red-Sea {
+    position: absolute;
+    background: white;
+    margin-right: 34px;
+    margin-top: -365px;
+    width: 220px;
+    height: 75px;
+    text-align: center;
+    padding: 25px;
+    border-radius: 10px;
+    display: none;
+}
+
+.Red-Sea-example:hover .Red-Sea {
+    display: block;
+}
+
+
+.Red-Sea:after {
+    content: " ";
+    position: absolute;
+    right: 90px;
+    bottom: -15px;
+    border-top: 15px solid white;
+    border-right: 15px solid transparent;
+    border-left: 15px solid transparent;
+    border-bottom: none;
+}
+
+.Luxor {
+    position: absolute;
+    background: white;
+    margin-right: 134px;
+    margin-top: -429px;
+    width: 220px;
+    height: 75px;
+    text-align: center;
+    padding: 25px;
+    border-radius: 10px;
+    display: none;
+}
+
+.Luxor-example:hover .Luxor {
+    display: block;
+}
+
+
+.Luxor:after {
+    content: " ";
+    position: absolute;
+    right: 90px;
+    bottom: -15px;
+    border-top: 15px solid white;
+    border-right: 15px solid transparent;
+    border-left: 15px solid transparent;
+    border-bottom: none;
+}
+
+.Qena {
+    position: absolute;
+    background: white;
+    margin-right: 127px;
+    margin-top: -496px;
+    width: 220px;
+    height: 75px;
+    text-align: center;
+    padding: 25px;
+    border-radius: 10px;
+    display: none;
+}
+
+.Qena-example:hover .Qena {
+    display: block;
+}
+
+
+.Qena:after {
+    content: " ";
+    position: absolute;
+    right: 90px;
+    bottom: -15px;
+    border-top: 15px solid white;
+    border-right: 15px solid transparent;
+    border-left: 15px solid transparent;
+    border-bottom: none;
+}
+
+.Sohag {
+    position: absolute;
+    background: white;
+    margin-right: 167px;
+    margin-top: -530px;
+    width: 220px;
+    height: 75px;
+    text-align: center;
+    padding: 25px;
+    border-radius: 10px;
+    display: none;
+}
+
+.Sohag-example:hover .Sohag {
+    display: block;
+}
+
+
+.Sohag:after {
+    content: " ";
+    position: absolute;
+    right: 90px;
+    bottom: -15px;
+    border-top: 15px solid white;
+    border-right: 15px solid transparent;
+    border-left: 15px solid transparent;
+    border-bottom: none;
+}
+
+.Asyut {
+    position: absolute;
+    background: white;
+    margin-right: 201px;
+    margin-top: -576px;
+    width: 220px;
+    height: 75px;
+    text-align: center;
+    padding: 25px;
+    border-radius: 10px;
+    display: none;
+}
+
+.Asyut-example:hover .Asyut {
+    display: block;
+}
+
+
+.Asyut:after {
+    content: " ";
+    position: absolute;
+    right: 90px;
+    bottom: -15px;
+    border-top: 15px solid white;
+    border-right: 15px solid transparent;
+    border-left: 15px solid transparent;
+    border-bottom: none;
+}
+
+.Minya {
+    position: absolute;
+    background: white;
+    margin-right: 248px;
+    margin-top: -628px;
+    width: 220px;
+    height: 75px;
+    text-align: center;
+    padding: 25px;
+    border-radius: 10px;
+    display: none;
+}
+
+.Minya-example:hover .Minya {
+    display: block;
+}
+
+
+.Minya:after {
+    content: " ";
+    position: absolute;
+    right: 90px;
+    bottom: -15px;
+    border-top: 15px solid white;
+    border-right: 15px solid transparent;
+    border-left: 15px solid transparent;
+    border-bottom: none;
+}
+
+.Beni-Suef {
+    position: absolute;
+    background: white;
+    margin-right: 237px;
+    margin-top: -681px;
+    width: 220px;
+    height: 75px;
+    text-align: center;
+    padding: 25px;
+    border-radius: 10px;
+    display: none;
+}
+
+.Beni-Suef-example:hover .Beni-Suef {
+    display: block;
+}
+
+
+.Beni-Suef:after {
+    content: " ";
+    position: absolute;
+    right: 90px;
+    bottom: -15px;
+    border-top: 15px solid white;
+    border-right: 15px solid transparent;
+    border-left: 15px solid transparent;
+    border-bottom: none;
+}
+
+.Faiyum {
+    position: absolute;
+    background: white;
+    margin-right: 298px;
+    margin-top: -713px;
+    width: 220px;
+    height: 75px;
+    text-align: center;
+    padding: 25px;
+    border-radius: 10px;
+    display: none;
+}
+
+.Faiyum-example:hover .Faiyum {
+    display: block;
+}
+
+
+.Faiyum:after {
+    content: " ";
+    position: absolute;
+    right: 90px;
+    bottom: -15px;
+    border-top: 15px solid white;
+    border-right: 15px solid transparent;
+    border-left: 15px solid transparent;
+    border-bottom: none;
+}
+
+.Matruh {
+    position: absolute;
+    background: white;
+    margin-right: 502px;
+    margin-top: -831px;
+    width: 220px;
+    height: 75px;
+    text-align: center;
+    padding: 25px;
+    border-radius: 10px;
+    display: none;
+}
+
+.Matruh-example:hover .Matruh {
+    display: block;
+}
+
+
+.Matruh:after {
+    content: " ";
+    position: absolute;
+    right: 90px;
+    bottom: -15px;
+    border-top: 15px solid white;
+    border-right: 15px solid transparent;
+    border-left: 15px solid transparent;
+    border-bottom: none;
+}
+
+.South-Sinai {
+    position: absolute;
+    background: white;
+    margin-right: 93px;
+    margin-top: -726px;
+    width: 220px;
+    height: 75px;
+    text-align: center;
+    padding: 25px;
+    border-radius: 10px;
+    display: none;
+}
+
+.South-Sinai-example:hover .South-Sinai {
+    display: block;
+}
+
+
+.South-Sinai:after {
+    content: " ";
+    position: absolute;
+    right: 90px;
+    bottom: -15px;
+    border-top: 15px solid white;
+    border-right: 15px solid transparent;
+    border-left: 15px solid transparent;
+    border-bottom: none;
+}
+
+.North-Sinai {
+    position: absolute;
+    background: white;
+    margin-right: 103px;
+    margin-top: -828px;
+    width: 220px;
+    height: 75px;
+    text-align: center;
+    padding: 24px;
+    border-radius: 10px;
+    display: none;
+}
+
+.North-Sinai-example:hover .North-Sinai {
+    display: block;
+}
+
+
+.North-Sinai:after {
+    content: " ";
+    position: absolute;
+    right: 90px;
+    bottom: -15px;
+    border-top: 15px solid white;
+    border-right: 15px solid transparent;
+    border-left: 15px solid transparent;
+    border-bottom: none;
+}
+
+.Giza {
+    position: absolute;
+    background: white;
+    margin-right: 286px;
+    margin-top: -756px;
+    width: 220px;
+    height: 75px;
+    text-align: center;
+    padding: 25px;
+    border-radius: 10px;
+    display: none;
+}
+
+.Giza-example:hover .Giza {
+    display: block;
+}
+
+
+.Giza:after {
+    content: " ";
+    position: absolute;
+    right: 90px;
+    bottom: -15px;
+    border-top: 15px solid white;
+    border-right: 15px solid transparent;
+    border-left: 15px solid transparent;
+    border-bottom: none;
+}
+
+.Cairo {
+    position: absolute;
+    background: white;
+    margin-right: 225px;
+    margin-top: -757px;
+    width: 220px;
+    height: 75px;
+    text-align: center;
+    padding: 25px;
+    border-radius: 10px;
+    display: none;
+}
+
+.Cairo-example:hover .Cairo {
+    display: block;
+}
+
+
+.Cairo:after {
+    content: " ";
+    position: absolute;
+    right: 90px;
+    bottom: -15px;
+    border-top: 15px solid white;
+    border-right: 15px solid transparent;
+    border-left: 15px solid transparent;
+    border-bottom: none;
+}
+
+.Suez {
+    position: absolute;
+    background: white;
+    margin-right: 189px;
+    margin-top: -771px;
+    width: 220px;
+    height: 75px;
+    text-align: center;
+    padding: 25px;
+    border-radius: 10px;
+    display: none;
+}
+
+.Suez-example:hover .Suez {
+    display: block;
+}
+
+
+.Suez:after {
+    content: " ";
+    position: absolute;
+    right: 90px;
+    bottom: -15px;
+    border-top: 15px solid white;
+    border-right: 15px solid transparent;
+    border-left: 15px solid transparent;
+    border-bottom: none;
+}
+
+
+.Qalyubia {
+    position: absolute;
+    background: white;
+    margin-right: 242px;    
+    margin-top: -789px;
+    width: 220px;
+    height: 75px;
+    text-align: center;
+    padding: 25px;
+    border-radius: 10px;
+    display: none;
+}
+
+.Qalyubia-example:hover .Qalyubia {
+    display: block;
+}
+
+
+.Qalyubia:after {
+    content: " ";
+    position: absolute;
+    right: 90px;
+    bottom: -15px;
+    border-top: 15px solid white;
+    border-right: 15px solid transparent;
+    border-left: 15px solid transparent;
+    border-bottom: none;
+}
+
+
+.Ismailia {
+    position: absolute;
+    background: white;
+    margin-right: 175px;
+    margin-top: -805px;
+    width: 220px;
+    height: 75px;
+    text-align: center;
+    padding: 25px;
+    border-radius: 10px;
+    display: none;
+}
+
+.Ismailia-example:hover .Ismailia {
+    display: block;
+}
+
+
+.Ismailia:after {
+    content: " ";
+    position: absolute;
+    right: 90px;
+    bottom: -15px;
+    border-top: 15px solid white;
+    border-right: 15px solid transparent;
+    border-left: 15px solid transparent;
+    border-bottom: none;
+}
+
+
+.Monufia {
+    position: absolute;
+    background: white;
+    margin-right: 272px;
+    margin-top: -801px;
+    width: 220px;
+    height: 75px;
+    text-align: center;
+    padding: 25px;
+    border-radius: 10px;
+    display: none;
+}
+
+.Monufia-example:hover .Monufia {
+    display: block;
+}
+
+
+.Monufia:after {
+    content: " ";
+    position: absolute;
+    right: 90px;
+    bottom: -15px;
+    border-top: 15px solid white;
+    border-right: 15px solid transparent;
+    border-left: 15px solid transparent;
+    border-bottom: none;
+}
+
+
+.Alexandria {
+    position: absolute;
+    background: white;
+    margin-right: 346px;
+    margin-top: -807px;
+    width: 220px;
+    height: 75px;
+    text-align: center;
+    padding: 25px;
+    border-radius: 10px;
+    display: none;
+}
+
+.Alexandria-example:hover .Alexandria {
+    display: block;
+}
+
+
+.Alexandria:after {
+    content: " ";
+    position: absolute;
+    right: 90px;
+    bottom: -15px;
+    border-top: 15px solid white;
+    border-right: 15px solid transparent;
+    border-left: 15px solid transparent;
+    border-bottom: none;
+}
+
+
+.Beheira {
+    position: absolute;
+    background: white;
+    margin-right: 307px;
+    margin-top: -831px;
+    width: 220px;
+    height: 75px;
+    text-align: center;
+    padding: 25px;
+    border-radius: 10px;
+    display: none;
+}
+
+.Beheira-example:hover .Beheira {
+    display: block;
+}
+
+
+.Beheira:after {
+    content: " ";
+    position: absolute;
+    right: 90px;
+    bottom: -15px;
+    border-top: 15px solid white;
+    border-right: 15px solid transparent;
+    border-left: 15px solid transparent;
+    border-bottom: none;
+}
+
+
+.Gharbia {
+    position: absolute;
+    background: white;
+    margin-right: 263px;
+    margin-top: -832px;
+    width: 220px;
+    height: 75px;
+    text-align: center;
+    padding: 25px;
+    border-radius: 10px;
+    display: none;
+}
+
+.Gharbia-example:hover .Gharbia {
+    display: block;
+}
+
+
+.Gharbia:after {
+    content: " ";
+    position: absolute;
+    right: 90px;
+    bottom: -15px;
+    border-top: 15px solid white;
+    border-right: 15px solid transparent;
+    border-left: 15px solid transparent;
+    border-bottom: none;
+}
+
+
+.Kafr-El-Sheikh {
+    position: absolute;
+    background: white;
+    margin-right: 278px;
+    margin-top: -866px;
+    width: 220px;
+    height: 75px;
+    text-align: center;
+    padding: 25px;
+    border-radius: 10px;
+    display: none;
+}
+
+.Kafr-El-Sheikh-example:hover .Kafr-El-Sheikh {
+    display: block;
+}
+
+
+.Kafr-El-Sheikh:after {
+    content: " ";
+    position: absolute;
+    right: 90px;
+    bottom: -15px;
+    border-top: 15px solid white;
+    border-right: 15px solid transparent;
+    border-left: 15px solid transparent;
+    border-bottom: none;
+}
+
+
+.Sharqia {
+    position: absolute;
+    background: white;
+    margin-right: 210px;
+    margin-top: -823px;
+    width: 220px;
+    height: 75px;
+    text-align: center;
+    padding: 25px;
+    border-radius: 10px;
+    display: none;
+}
+
+.Sharqia-example:hover .Sharqia {
+    display: block;
+}
+
+
+.Sharqia:after {
+    content: " ";
+    position: absolute;
+    right: 90px;
+    bottom: -15px;
+    border-top: 15px solid white;
+    border-right: 15px solid transparent;
+    border-left: 15px solid transparent;
+    border-bottom: none;
+}
+
+
+
+.Dakahlia {
+    position: absolute;
+    background: white;
+    margin-right: 235px;
+    margin-top: -852px;
+    width: 220px;
+    height: 75px;
+    text-align: center;
+    padding: 25px;
+    border-radius: 10px;
+    display: none;
+}
+
+.Dakahlia-example:hover .Dakahlia {
+    display: block;
+}
+
+
+.Dakahlia:after {
+    content: " ";
+    position: absolute;
+    right: 90px;
+    bottom: -15px;
+    border-top: 15px solid white;
+    border-right: 15px solid transparent;
+    border-left: 15px solid transparent;
+    border-bottom: none;
+}
+
+
+.Damietta {
+    position: absolute;
+    background: white;
+    margin-right: 212px;
+    margin-top: -875px;
+    width: 220px;
+    height: 75px;
+    text-align: center;
+    padding: 25px;
+    border-radius: 10px;
+    display: none;
+}
+
+.Damietta-example:hover .Damietta {
+    display: block;
+}
+
+
+.Damietta:after {
+    content: " ";
+    position: absolute;
+    right: 90px;
+    bottom: -15px;
+    border-top: 15px solid white;
+    border-right: 15px solid transparent;
+    border-left: 15px solid transparent;
+    border-bottom: none;
+}
+
+
+.Port-Said {
+    position: absolute;
+    background: white;
+    margin-right: 185px;
+    margin-top: -850px;
+    width: 220px;
+    height: 75px;
+    text-align: center;
+    padding: 25px;
+    border-radius: 10px;
+    display: none;
+}
+
+.Port-Said-example:hover .Port-Said {
+    display: block;
+}
+
+
+.Port-Said:after {
+    content: " ";
+    position: absolute;
+    right: 90px;
+    bottom: -15px;
+    border-top: 15px solid white;
+    border-right: 15px solid transparent;
+    border-left: 15px solid transparent;
+    border-bottom: none;
+}

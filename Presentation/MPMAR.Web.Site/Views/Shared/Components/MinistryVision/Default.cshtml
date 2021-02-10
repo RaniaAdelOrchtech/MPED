@@ -1,0 +1,53 @@
+﻿@model MPMAR.Data.HomePageModels.MinistryVission
+
+@{
+    string lang = Context.Request.Query["lang"];
+     string langVal = lang == "en" ? "en" : "ar";
+    string title = "";
+    string description = "";
+    string readMore= "Read More";
+    if (lang == null || lang == "" || lang == "ar")
+    {
+        title = Model.ArTitle;
+        description = Model.ArDescription;
+        readMore = "اقرأ المزيد";
+    }
+    else
+    {
+        title = Model.EnTitle;
+        description = Model.EnDescription;
+    }
+}
+
+<div class="row" style="padding: 0 15px;">
+    <h3 class="animate-onscroll no-margin-top" id="topchorme" style="color: #28A5A3;">@title </h3>
+
+    <div class="col-lg-12"
+         style="background-image: url('@Model.BackGroundImage') ;background-position: center;background-repeat: no-repeat;background-size: cover;    margin-bottom: 20px;">
+        <!-- Sidebar -->
+        <div class="row slider-row" style="padding: 40px 40px">
+            <div class="col-lg-12 col-md-12 col-sm-12">
+
+                <!-- Banner Rotator -->
+                <div class="banner-rotator animate-onscroll nogoldhover"
+                     style="background-color: rgba(40, 165, 163, 0.89);padding: 25px;    text-align: center;">
+
+                    <h2 style="text-align: center; color:#fff;font-size: 16px;line-height: 1.4;"
+                        class="fontonmobile">
+                        @Html.Raw(description)
+                    </h2>
+                    @{
+                        var langChar = @Model.Link.Contains("?") ? "&" : "?";
+                    }
+                    <a href="@Model.Link@(langChar)lang=@langVal" class="button"
+                       style="background: #c89637;color: #fff;">@readMore</a>
+
+                </div>
+                <!-- /Banner Rotator -->
+            </div>
+            <!-- /Sidebar -->
+
+        </div>
+    </div>
+
+</div>

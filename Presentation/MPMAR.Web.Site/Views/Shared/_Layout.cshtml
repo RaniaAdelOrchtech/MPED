@@ -1,0 +1,764 @@
+﻿@using MPMAR.Web.Site.Common;
+@using Microsoft.Extensions.Configuration;
+@using MPMAR.Business.Interfaces;
+@inject IConfiguration _configuration;
+@inject IHP_BasicInfoReopsitory _hP_BasicInfoReopsitory;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-174449767-2"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-174449767-2');
+    </script>
+
+    @{
+        string lang = Context.Request.Query["lang"];
+        var imageBaseURL = _configuration.GetValue<string>("BackEndDomain");
+        var homePageBasicInfo = _hP_BasicInfoReopsitory.GetAll().FirstOrDefault();
+        var favIconUrl = "img/favicon.ico";
+        if (!string.IsNullOrEmpty(homePageBasicInfo.FavIconUrl))
+            favIconUrl = imageBaseURL + homePageBasicInfo.FavIconUrl;
+    }
+
+    <!-- Meta Tags -->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="robots" content="index, follow" />
+    <meta name="keywords" content="وزارة التخطيط, The Ministry of Planning, Ministry of Planning" />
+    <meta name="description" content="@ViewBag.Description" />
+    <meta name="og:title" content="@ViewBag.OgTitle" />
+    <meta name="og:description" content="@ViewBag.Description" />
+    <meta name="og:image" content="@ViewBag.OgImagePath" />
+    <meta name="og:url" content="@ViewBag.URL" />
+    <meta name="twitter:title" content="@ViewBag.TwitterTitle" />
+    <meta name="twitter:description" content="@ViewBag.Description" />
+    <meta name="twitter:image" content="@ViewBag.OgImagePath" />
+    <meta name="twitter:card" content="summary" />
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1">
+
+    <!-- Title -->
+    <title>@ViewData["Title"]</title>
+    @*<meta name="description" content=" @ViewData["Description"]">
+        <meta name="og:title" property="og:title" content="@ViewData["ogtitle"]">
+        <meta name="twitter:card" content=" @ViewData["twittercard"]">*@
+    @*<meta name="viewport" content="width=device-width, initial-scale=1">*@
+    <link rel="canonical" href="@ViewBag.URL">
+
+    <!-- Google Fonts -->
+    @*<link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Great+Vibes' rel='stylesheet' type='text/css'>*@
+
+
+    <!-- Google Fonts -->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,300,600,700,800'
+          rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Great+Vibes' rel='stylesheet' type='text/css'>
+    <link href="https://fonts.googleapis.com/css?family=Tajawal&display=swap" rel="stylesheet">
+
+    <!-- Favicon -->
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="@favIconUrl">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    @if (lang != "en")
+    {
+
+        <link rel="stylesheet" href="//cdn.rawgit.com/morteza/bootstrap-rtl/v3.3.4/dist/css/bootstrap-rtl.min.css">
+    }
+
+    @*<link href="~/css/bootstrap.min.css" rel="stylesheet" type="text/css">*@
+    <link href="~/css/fontello.css" rel="stylesheet" type="text/css">
+    <link href="~/css/flexslider.css" rel="stylesheet" type="text/css">
+    <link href="~/js/revolution-slider/css/settings.css" rel="stylesheet" type="text/css" media="screen" />
+    <link href="~/css/owl.carousel.css" rel="stylesheet" type="text/css">
+    <link href="~/css/responsive-calendar.css" rel="stylesheet" type="text/css">
+    <link href="~/css/chosen.css" rel="stylesheet" type="text/css">
+    <link href="css/maphover.css" rel="stylesheet" type="text/css">
+    <link href="~/jackbox/css/jackbox.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/cloud-zoom.css" rel="stylesheet" type="text/css" />
+
+    @if (ViewBag.PageName == "HomePage")
+    {
+        <link href="~/css/style@(lang == "en" ? "_en" : "").css" rel="stylesheet" type="text/css">
+        <link href="~/css/new-style.css" rel="stylesheet" type="text/css">
+        @*<link href="css/rtl.css" rel="stylesheet" type="text/css">*@
+
+        <!--Analytics-->
+        <link href="~/css/comboTreePlugin.css" rel="stylesheet" />
+        <link href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
+
+        @if (lang == "en")
+        { }
+        else
+        {
+            <link href="~/css/rtl.css" rel="stylesheet" type="text/css" />
+        }
+    }
+    else
+    {
+        <link href="~/css/style@(lang == "en" ? "_en" : "").css" rel="stylesheet" type="text/css">
+        @*<link href="css/rtl.css" rel="stylesheet" type="text/css">*@
+
+        <!--Analytics-->
+        <link href="~/css/comboTreePlugin.css" rel="stylesheet" />
+        <link href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
+
+        @if (lang == "en")
+        { }
+        else
+        {
+            <link href="~/css/rtl.css" rel="stylesheet" type="text/css" />
+        }
+    }
+
+
+
+    <style type="text/css">
+
+
+
+        @@media (max-width: 767px) {
+            .search-icon {
+                text-align: center !important;
+                font-size: 20px !important;
+            }
+
+            .EI-P {
+                text-align: center !important
+            }
+
+            .page-heading h1, .page-heading p {
+                margin-left: 20px !important;
+            }
+
+            .socialMedia {
+                margin-left: 10px !important;
+            }
+
+
+            a.button, button {
+                padding-top: 10px !important;
+            }
+
+            blockquote {
+                padding: 100px 10px !important;
+            }
+
+                blockquote:before {
+                    top: 30px !important;
+                }
+
+            div[id='Ministry Mission'] {
+                margin-top: 0 !important;
+            }
+
+            .icon-right-dir:before, .icon-left-dir:before {
+                font-size: 145%;
+            }
+
+            .dynamicContainer {
+                padding-right: 30px !important;
+            }
+        }
+
+        .no-fouc {
+            display: none;
+        }
+
+        .example {
+            position: relative;
+            padding: 0;
+            display: block;
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        .contentdown {
+            opacity: 0;
+            font-size: 20px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            color: #000;
+            font-weight: 600;
+            background-color: rgba(242, 244, 249, 0.88);
+            width: 100%;
+            height: 100%;
+            -webkit-transition: all 400ms ease-out;
+            -moz-transition: all 400ms ease-out;
+            -o-transition: all 400ms ease-out;
+            -ms-transition: all 400ms ease-out;
+            transition: all 400ms ease-out;
+            text-align: center;
+        }
+
+        .example .contentdown:hover {
+            opacity: 1;
+        }
+
+        .example .contentdown .textdown {
+            height: 0;
+            opacity: 1;
+            transition-delay: 0s;
+            transition-duration: 0.4s;
+        }
+
+        .example .contentdown:hover .textdown {
+            opacity: 1;
+            transform: translateY(60px);
+            -webkit-transform: translateY(60px);
+        }
+
+        .textdown a {
+            color: #000;
+        }
+
+        .nogoldhover a:hover {
+            color: #fff !important;
+        }
+
+        #video {
+            object-fit: initial;
+            width: 100%;
+            height: 365px;
+        }
+
+        #mapvideo {
+            object-fit: initial;
+            width: 100%;
+            height: 321px;
+        }
+
+        @@media (max-width: 767px) {
+            .reportsarrows {
+                margin-top: 11px !important;
+            }
+
+            h1 {
+                font-size: 23px !important;
+            }
+
+            .containerexample .content:hover .text {
+                margin-left: 45px;
+            }
+        }
+    </style>
+
+    <style>
+        .containerexample {
+            position: relative;
+        }
+
+        .overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(0, 0, 0, 1);
+            overflow: hidden;
+            width: 100%;
+            height: 0;
+            transition: .5s ease;
+        }
+
+        .containerexample:hover .overlay {
+            height: 60%;
+            background: rgba(0, 0, 0, 1);
+            filter: progid: DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr='#7c000000', endColorstr='#7c000000');
+            border-right: 5px solid #c89637;
+        }
+
+        .text {
+            color: white;
+            font-size: 20px;
+            position: absolute;
+            padding-right: 10px;
+            padding-left: 10px;
+            top: 50%;
+            -webkit-transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%);
+            transform: translate(0, -50%);
+        }
+
+        .justfiyslidertext {
+            color: #fff;
+        }
+
+        @@media only screen and (-webkit-min-device-pixel-ratio: 1.5) and (max-height: 1366px) and (min-width: 1024px) {
+            #mapvideo {
+                object-fit: initial;
+                width: 100%;
+                height: 363px;
+            }
+
+            .slider-row {
+                padding: 10px 0px !important;
+            }
+
+            .nogoldhover {
+                padding: 15px !important;
+            }
+        }
+    </style>
+
+    <style type="text/css">
+
+        a.button.big.button-arrow.download-news-btn:hover {
+            color: #fff !important;
+        }
+
+
+
+        #main_flex_1 {
+            background: url(img/MPED-Egypt-perception-of-financing-and-completing-the-project-of-the-international-branch-of-Cairo-University.jpg) no-repeat;
+        }
+
+        #main_flex_2 {
+            background: url(img/MPED-Egypt-the-budget-of-the-Ministry-of-State-for-Information.jpg) no-repeat;
+        }
+
+        #main_flex_3 {
+            background: url(img/MPED-Egypt-coronavirus.jpg) no-repeat;
+        }
+
+        .main-flexslider p + a.button {
+            margin-top: 63px;
+            float: left;
+            display: block;
+            position: fixed;
+            direction: rtl;
+        }
+
+        #main_flex_1 .slide {
+            padding-left: 100px;
+        }
+
+        .main-flexslider .slide {
+            padding: 165px 15px;
+        }
+
+        /*check LTR*/
+        .main-flexslider p {
+            float: right;
+            text-align: right;
+            direction: rtl;
+            display: block;
+            margin-top: 0px;
+        }
+
+        .main-flexslider .slides > li {
+            height: 380px;
+        }
+
+        .main-flexslider h2 {
+            text-align: right;
+            font-size: 20px;
+            margin-bottom: 10px;
+            float: right;
+            font-weight: 800;
+            line-height: 30px;
+        }
+
+        .flexslider a.button.button-arrow:after {
+            margin-left: -10px;
+            margin-right: 6px;
+        }
+
+        .flex-direction-nav a:hover {
+            background: #28a5a3;
+            text-decoration: none;
+        }
+
+        p.reports {
+            height: 150px;
+        }
+
+        .breadcrumb {
+            background-color: #ffffff;
+            padding: 0
+        }
+
+        .hideondesktop {
+            display: none;
+        }
+
+        @@media screen and (max-width: 500px) {
+            .hideondesktop {
+                display: block;
+            }
+
+            .titlemobile {
+                font-size: 12px !important;
+                margin-top: 72px !important;
+                padding: 20px !important;
+                line-height: 20px !important;
+            }
+        }
+
+        @@media all and (device-width: 768px) and (device-height: 1024px) and (orientation:portrait) {
+            .hideondesktop {
+                display: block;
+            }
+
+            .titlemobile {
+                font-size: 20px !important;
+                margin-top: 210px !important;
+                padding: 20px !important;
+                line-height: 20px !important;
+            }
+        }
+    </style>
+    <link href="~/css/other.css" rel="stylesheet" type="text/css">
+
+
+    <!-- jQuery -->
+    <script src="~/js/jquery-1.11.0.min.js"></script>
+    <script src="~/js/jquery-ui-1.10.4.min.js"></script>
+
+    @*<script src="https://code.jquery.com/jquery-1.12.4.min.js"
+                integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ"
+                crossorigin="anonymous">
+        </script>*@
+
+    <!-- Preloader -->
+    <script src="~/js/jquery.queryloader2.min.js"></script>
+
+    <script type="text/javascript">
+        $('html').addClass('no-fouc');
+
+        $(document).ready(function () {
+
+            $('html').show();
+
+            var window_w = $(window).width();
+            var window_h = $(window).height();
+            var window_s = $(window).scrollTop();
+
+            $("body").queryLoader2({
+                backgroundColor: '#f2f4f9',
+                barColor: '#63b2f5',
+                barHeight: 4,
+                percentage: false,
+                deepSearch: true,
+                minimumTime: 1000,
+                onComplete: function () {
+
+                    $('.animate-onscroll').filter(function (index) {
+
+                        return this.offsetTop < (window_s + window_h);
+
+                    }).each(function (index, value) {
+
+                        var el = $(this);
+                        var el_y = $(this).offset().top;
+
+                        if ((window_s) > el_y) {
+                            $(el).addClass('animated fadeInDown').removeClass('animate-onscroll');
+                            setTimeout(function () {
+                                $(el).css('opacity', '1').removeClass('animated fadeInDown');
+                            }, 2000);
+                        }
+
+                    });
+
+                }
+            });
+
+        });</script>
+
+    @*<script src="http://alexgorbatchev.com/pub/sh/current/scripts/shCore.js" type="text/javascript"></script>
+        <script src="http://alexgorbatchev.com/pub/sh/current/scripts/shAutoloader.js" type="text/javascript"></script>*@
+
+    <script type="text/javascript">
+
+        jQuery(document).ready(function () {
+            // store the slider in a local variable
+            var jQuerywindow = jQuery(window),
+                flexslider;
+
+
+
+            jQuery(function () {
+                SyntaxHighlighter.all();
+            });
+
+            jQuery('.flexslider').flexslider({
+                animation: "slide",
+                animationLoop: true,
+                pauseOnAction: false,
+                pauseOnHover: true,
+                prevText: " ",
+                nextText: " ",
+
+                start: function (slider) {
+                    flexslider = slider;
+                }
+            });
+
+        });
+    </script>
+
+    <style>
+        blockquote {
+            text-align: center !important;
+        }
+    </style>
+
+    @if (lang == "en")
+    {
+
+        <style>
+            .flex-control-nav {
+                /*                margin-bottom: 80px;*/
+                left: -40px
+            }
+
+
+            @@media (max-width: 767px) {
+                h1 {
+                    font-size: 22px !important;
+                }
+                /*   .social-icons {
+                    margin-right: 110px !important;
+                }
+                 */
+            }
+
+            @@media (max-width: 767px) {
+                .fontonmobile {
+                    margin-top: -9px !important;
+                }
+            }
+
+            @@media (max-width: 767px) {
+                .newsletter-form {
+                    margin-right: 50px !important;
+                    margin-top: 10px !important;
+                }
+            }
+
+            /*  @@media (max-width: 767px) {
+                .sitemapmobile {
+                    margin-top: -3px !important;
+                    margin-right: 47px !important;
+                }*/
+            }
+
+            @@media (max-width: 991px) and (min-width: 768px) {
+
+                .headersocialonmobile {
+                    margin-top: -78px !important;
+                }
+            }
+
+            /* @@media (max-width: 991px) and (min-width: 768px) {
+                .sitemapmobile {
+                    margin-top: -74px !important;
+                    margin-right: 222px !important;
+                }
+            }*/
+
+            @@media (max-width: 767px) {
+                .owl-header .carousel-arrows {
+                    top: -47px !important;
+                }
+
+                .social-media-footer {
+                    margin-right: 23px !important;
+                    margin-left: -10px !important;
+                }
+
+                .sitemapmobile-footer {
+                    float: left !important;
+                    direction: rtl;
+                    white-space: break-spaces;
+                    text-align: left;
+                    margin-top: 0px !important;
+                }
+            }
+
+            @@media (max-width: 991px) and (min-width: 768px) {
+                .sitemapmobile {
+                    float: left !important;
+                    direction: rtl;
+                    white-space: break-spaces;
+                    text-align: left;
+                    margin-top: 0px !important;
+                    margin-left: 18% !important;
+                    margin-right: 0px;
+                }
+            }
+        </style>
+    }
+    else
+    {
+        <style>
+            @@media (max-width: 767px) {
+                .newsletter-form {
+                    margin-top: 9px !important;
+                    margin-bottom: 24px !important;
+                }
+
+
+
+
+
+                .social-media {
+                    margin-left: 25px !important;
+                }
+
+                .social-media-footer {
+                    margin-left: 23px !important;
+                    margin-right: 0 !important;
+                }
+            }
+
+            /*   @@media (max-width: 767px) {
+                .sitemapmobile {
+                    margin-top: -2px !important;
+                    margin-right: -143px !important;
+                }
+            }*/
+
+            @@media (max-width: 991px) and (min-width: 768px) {
+                .headersocialonmobile {
+                    margin-left: 136px !important;
+                    margin-top: -74px !important;
+                }
+            }
+
+            @@media (max-width: 991px) and (min-width: 768px) {
+                .sitemapmobile {
+                    margin-right: 15%;
+                    float: right !important;
+                    direction: ltr;
+                    white-space: break-spaces;
+                    text-align: right;
+                    margin-top: 0px !important;
+                }
+            }
+
+            @@media (max-width: 767px) {
+                .sitemapmobile-footer {
+                    float: right !important;
+                    direction: ltr;
+                    white-space: break-spaces;
+                    text-align: right;
+                    margin-top: 0px !important;
+                }
+            }
+        </style>
+    }
+
+</head>
+<body class="sticky-header-on tablet-sticky-header">
+
+    <div id="fb-root"></div>
+    <script>
+        (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s); js.id = id;
+            js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+    </script>
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            <partial name="_CookieConsentPartial" />
+        </main>
+        @await Component.InvokeAsync("NavigationMenu")
+
+        @RenderBody()
+
+        @await Component.InvokeAsync("FooterMenu")
+        <a href="#" id="button-to-top" style="display:none"><i class="icons icon-up-dir"></i></a>
+    </div>
+
+
+    <!-- /Footer -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    @*<script type="text/javascript" src="~/js/bootstrap.min.js"></script>*@
+    <!-- Modernizr -->
+    <script type="text/javascript" src="~/js/modernizr.js"></script>
+    <!-- Sliders/Carousels -->
+    <script type="text/javascript" src="~/js/jquery.flexslider-min.js"></script>
+    <script type="text/javascript" src="~/js/owl.carousel.min.js"></script>
+    <!-- Revolution Slider  -->
+    <script type="text/javascript" src="~/js/revolution-slider/js/jquery.themepunch.plugins.min.js"></script>
+    <script type="text/javascript" src="~/js/revolution-slider/js/jquery.themepunch.revolution.min.js"></script>
+    <!-- Calendar -->
+    <script type="text/javascript" src="~/js/responsive-calendar.min.js"></script>
+    <!-- Raty -->
+    <script type="text/javascript" src="~/js/jquery.raty.min.js"></script>
+    <!-- Chosen -->
+    <script type="text/javascript" src="~/js/chosen.jquery.min.js"></script>
+    <!-- jFlickrFeed -->
+    <script type="text/javascript" src="~/js/jflickrfeed.min.js"></script>
+    <!-- InstaFeed -->
+    <script type="text/javascript" src="~/js/instafeed.min.js"></script>
+
+    <!-- Twitter -->
+    <script type="text/javascript" src="~/js/jquery.tweet.min.js"></script>
+    <!-- MixItUp -->
+    <script type="text/javascript" src="~/js/jquery.mixitup.js"></script>
+    <!-- JackBox -->
+    <script type="text/javascript" src="~/js/jackbox-packed.min.js"></script>
+    <!-- CloudZoom -->
+    <script type="text/javascript" src="~/js/zoomsl-3.0.min.js"></script>
+    <!-- Main Script -->
+    <script type="text/javascript" src="~/js/script.js"></script>
+    <!--Analytics-->
+    <script src="~/js/comboTreePlugin.js"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.flash.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.print.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.print.min.js"></script>
+    @*<script src="https://code.highcharts.com/highcharts.js"></script>
+        <script src="https://code.highcharts.com/modules/series-label.js"></script>
+        <script src="https://code.highcharts.com/modules/exporting.js"></script>
+        <script src="https://code.highcharts.com/modules/export-data.js"></script>
+        <script src="https://code.highcharts.com/modules/accessibility.js"></script>*@
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+    @RenderSection("Scripts", required: false)
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            if ($(window).width() > 1000) {
+
+                $("body").css("padding-top", "192px")
+            }
+             console.log('url: '+'@ViewBag.FavIconUrl')
+            changeFavicon('@ViewBag.FavIconUrl');
+
+
+        })
+        function changeFavicon(src) {
+                var link = document.createElement('link'),
+                    oldLink = document.getElementById('dynamic-favicon');
+                link.id = 'dynamic-favicon';
+                link.rel = 'shortcut icon';
+                link.href = src;
+                if (oldLink) {
+                    document.head.removeChild(oldLink);
+                }
+                document.head.appendChild(link);
+            }
+
+
+    </script>
+
+
+</body>
+</html>

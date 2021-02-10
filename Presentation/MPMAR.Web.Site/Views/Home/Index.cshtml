@@ -1,0 +1,116 @@
+﻿@{
+    string lang = Context.Request.Query["lang"];
+    ViewData["Title"] = lang == "en" ? "Home" : "الرئيسية";
+}
+@if (lang == "en")
+{
+
+    <style>
+
+     
+
+        @@media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {
+            .headersocialonmobile {
+                margin-right: 42px !important;
+                margin-left: 168px !important;
+                margin-top: -10px !important;
+            }
+        }
+
+        /*.newsletter-form {
+            margin-left: 125px !important;
+        }*/
+
+        /*   .headersocail{
+            margin-right:-175px !important
+        }*/
+
+
+    </style>
+}
+<style>
+    @@media (max-width: 767px) {
+        .mobile-order.row {
+            display: flex;
+            flex-flow: column;
+        }
+
+        .col-lg-9.col-md-9.col-sm-8.mobile-second-box {
+            order: 1;
+        }
+
+        .col-lg-3.col-md-3.col-sm-4.sidebar {
+            order: 2;
+        }
+    }
+</style>
+
+<div>
+    <section id="content">
+        <!-- Section -->
+        @await Component.InvokeAsync("Photos")
+        <!-- /Section -->
+        <!-- Section -->
+        <section class="section full-width-bg gray-bg">
+
+            <div class="mobile-order row">
+
+                @await Component.InvokeAsync("RightMenuHomePage")
+
+
+                <div class="col-lg-9 col-md-9 col-sm-8 mobile-second-box">
+
+                    @await Component.InvokeAsync("MinistryVision")
+
+
+                    <!-- Owl Carousel -->
+                    @await Component.InvokeAsync("Publications")
+                    <!-- /Owl Carousel -->
+                </div>
+
+
+            </div>
+        </section>
+        <!-- Section -->
+        <section class="section full-width-bg gray-bg" class="eventsup" style="margin-top: -110px;">
+
+            @await Component.InvokeAsync("Economic")
+            <div class="row" style="padding: 0 15px;">
+
+            </div>
+            @await Component.InvokeAsync("Monitoring")
+
+
+
+            @await Component.InvokeAsync("CitizenPlan")
+
+
+
+            <!-- Section -->
+            <section class="section2 full-width-bg">
+
+
+                @await Component.InvokeAsync("Afflities")
+
+
+            </section>
+        </section>
+        <!-- /Section -->
+    </section>
+    <!-- Back To Top -->
+    <a href="#" id="button-to-top"><i class="icons icon-up-dir"></i></a>
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            jQuery(document).ready(function () {
+                var owl = jQuery('.owl-carousel');
+                owl.owlCarousel({
+                    loop: true,
+                    autoPlay: true,
+                });
+            });
+        });
+    </script>
+}

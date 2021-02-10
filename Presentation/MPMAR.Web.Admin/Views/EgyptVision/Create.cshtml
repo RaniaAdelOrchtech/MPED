@@ -1,0 +1,254 @@
+﻿@model EgyptVisionEditViewModel
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+<div>
+    <h4><a asp-controller="StaticPageRoute" asp-action="Index">Static Page</a> > <a asp-controller="EgyptVision" asp-action="Index">Page Egypt Vision</a> > Add</h4>
+</div>
+
+
+<form enctype="multipart/form-data" asp-controller="EgyptVision" asp-action="Create" method="post" class="mt-3" onsubmit="DisableAfterClick(event,this)">
+    <input asp-for="PageRouteVersionId" type="hidden" value="14" />
+    <div class="form-group row">
+        <label asp-for="EnEgyptVisionName" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="EnEgyptVisionName" class="form-control" placeholder="En Vision Name" maxlength="90" />
+            <span asp-validation-for="EnEgyptVisionName" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="ArEgyptVisionName" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="ArEgyptVisionName" class="form-control" placeholder="Ar Vision Name" maxlength="90" />
+            <span asp-validation-for="ArEgyptVisionName" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="EnEgyptVisionSmallDesc" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            @Html.TextAreaFor(model => model.EnEgyptVisionSmallDesc, new { @class = "form-control summernote", @maxlength = "1060" })
+            <span asp-validation-for="EnEgyptVisionSmallDesc" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="ArEgyptVisionSmallDesc" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            @Html.TextAreaFor(model => model.ArEgyptVisionSmallDesc, new { @class = "form-control summernote", @maxlength = "1060" })
+            <span asp-validation-for="ArEgyptVisionSmallDesc" class="text-danger"></span>
+        </div>
+    </div>
+
+
+
+    <div class="form-group row">
+        <label asp-for="EnImageFile" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <div class="custom-file">
+                <input asp-for="EnImageFile" class="form-control custom-file-input" accept="image/png, image/jpeg, image/jpg, image/gif, image/bmp, image/icon" />
+                <label class="custom-file-label">Choose File...</label>
+                <span asp-validation-for="EnImageFile" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="ArImageFile" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <div class="custom-file">
+                <input asp-for="ArImageFile" class="form-control custom-file-input" accept="image/png, image/jpeg, image/jpg, image/gif, image/bmp, image/icon" />
+                <label class="custom-file-label">Choose File...</label>
+                <span asp-validation-for="ArImageFile" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+    @*<div class="form-group row">
+            <label asp-for="Order" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="Order" class="form-control" placeholder="Order from left to right" />
+                <span asp-validation-for="Order" class="text-danger"></span>
+            </div>
+        </div>*@
+    @*<div class="form-group row">
+            <label asp-for="ImagePositionIsRight" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="ImagePositionIsRight" class="flat" />
+                <span asp-validation-for="ImagePositionIsRight" class="text-danger"></span>
+            </div>
+        </div>*@
+    <div class="form-group row">
+        <label asp-for="IsActive" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="IsActive" class="flat" />
+            <span asp-validation-for="IsActive" class="text-danger"></span>
+        </div>
+    </div>
+
+    @*<div class="ln_solid"></div>
+        <h3>Search Engine Optimization Data</h3>
+
+        <div class="form-group row">
+            <label asp-for="SeoTitleEN" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="SeoTitleEN" class="form-control" placeholder="English Page Title" />
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="SeoTitleAR" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="SeoTitleAR" class="form-control" placeholder="Arabic Page Title" />
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="SeoDescriptionEN" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="SeoDescriptionEN" class="form-control" placeholder="English Page Description" />
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="SeoDescriptionAR" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="SeoDescriptionAR" class="form-control" placeholder="Arabic Page Description" />
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="SeoOgTitleEN" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="SeoOgTitleEN" class="form-control" placeholder="English Facebook Og Title" />
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="SeoOgTitleAR" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="SeoOgTitleAR" class="form-control" placeholder="Arabic Facebook Og Title" />
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="SeoTwitterCardEN" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="SeoTwitterCardEN" class="form-control" placeholder="English Twitter Card" />
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="SeoTwitterCardAR" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="SeoTwitterCardAR" class="form-control" placeholder="Arabic Twitter Card" />
+            </div>
+        </div>*@
+
+
+
+    <div class="item form-group">
+        <div class="col-md-6 col-sm-6 offset-md-2">
+            <button type="submit" class="btn btn-success">Submit</button>
+            <a asp-controller="EgyptVision" asp-action="Index" type="button" class="btn btn-primary">Cancel</a>
+        </div>
+    </div>
+</form>
+
+@section Scripts{
+    <script>
+        /* Enable html editor */
+        $(document).ready(function () {
+            $('.summernote').summernote({
+                height: 200,
+                toolbar: [['style', ['style']], ['font', ['bold', 'underline', 'clear']], ['fontname', ['fontname']], ['color', ['color']], ['para', ['ul', 'ol', 'paragraph']], ['table', ['table']], ['insert', ['link']], ['view', ['fullscreen', 'codeview', 'help']]]
+            });
+        });
+
+        $(document).ready(function () {
+            //$('.custom-file-input').on('change', function () {
+            //    var fileName = $(this).val().split('\\').pop();
+            //    $(this).next('.custom-file-label').html(fileName);
+            //});
+            $("#Text2").MaxLength(
+                {
+                    MaxLength: 15,
+                    CharacterCountControl: $('#counter')
+                });
+
+            //$('.custom-file-input').on('change', function () {
+            //    var fileName = $(this).val().split('\\').pop();
+            //    var ext = $(this).val().split('.').pop().toLowerCase();
+            //    if (ext == 'png' || ext == 'jpg' || ext == 'jpeg' || ext == 'gif') {
+            //        $(this).next('.custom-file-label').html(fileName);
+            //    }
+            //    else {
+            //        alert('Please upload Image file only.');
+            //        return false;
+            //    }
+            //});
+            $('.custom-file-input').on('change', function () {
+                var fileName = $(this).val().split('\\').pop();
+                // $(this).next('.custom-file-label').html(fileName);
+                var ext = $(this).val().split('.').pop().toLowerCase();
+                if (ext == 'png' || ext == 'jpg' || ext == 'jpeg' || ext == 'gif' || ext == 'icon' || ext == 'bmp') {
+                    $(this).next('.custom-file-label').html(fileName);
+                }
+                else {
+                    alert('Please upload image file only.');
+                    return false;
+                }
+            });
+        });
+
+
+        $(document).ready(function () {
+            $('.colorpicker').spectrum({
+                showInput: true,
+                preferredFormat: "hex"
+            });
+
+            $('.sp-container .sp-input').each(function () {
+                this.defaultValue = this.value;
+            });
+        });
+
+        function CheckForChanges() {
+            if (GetHasChanges()) {
+                alert("Yes we have changes!!!");
+            } else {
+                alert("No changes!!!");
+            }
+        }
+
+        function GetHasChanges() {
+            var hasChanges = false;
+
+            $(":input:not(:button):not([type=hidden])").each(function () {
+                if ((this.type == "text" || this.type == "textarea" || this.type == "hidden" || this.type == "number") && this.defaultValue != this.value) {
+                    hasChanges = true;
+                    return false;
+                } else {
+                    if ((this.type == "radio" || this.type == "checkbox") && this.defaultChecked != this.checked) {
+                        hasChanges = true;
+                        return false;
+                    } else {
+                        if ((this.type == "select-one" || this.type == "select-multiple")) {
+                            for (var x = 0; x < this.length; x++) {
+                                if (this.options[x].selected != this.options[x].defaultSelected) {
+                                    hasChanges = true;
+                                    return false;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            return hasChanges;
+        }
+    </script>
+}

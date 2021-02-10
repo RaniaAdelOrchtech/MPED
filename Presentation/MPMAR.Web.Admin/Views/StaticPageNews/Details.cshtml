@@ -1,0 +1,91 @@
+﻿@using MPMAR.Common
+@model MPMAR.Business.ViewModels.NewsViewModel
+@{
+    ViewBag.Title = "News";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+
+    var photoPath = Model.url;
+
+        string approvalId = Context.Request.Query["approvalId"];
+    int approvalIdInt = 0;
+    int.TryParse(approvalId, out approvalIdInt);
+
+    var bEUsersPrivilegesViewModel = bEUsersPrivilegesService.ValidateIBEUsersPrivilegesViewService(PrivilegesPageType.StaticPage, this.User.FindFirstValue(ClaimTypes.NameIdentifier), this.User.IsInRole(UserRolesConst.SuperAdmin), StaticPagesIdsConst.News, approvalIdInt);
+
+}
+
+@if (!bEUsersPrivilegesViewModel.IsFromApprovalPage)
+{
+    <div>
+        <h4><a asp-controller="StaticPageRoute" asp-action="Index">Static Page</a> > <a asp-controller="StaticPageNews" asp-action="Index" asp-route-id="@Model.PageRouteId">News</a> > Detail </h4>
+    </div>
+}
+    <table class="pull-left col-md-12 ">
+        <tbody>
+            <tr>
+                <td class="h6" style="width: 30%"><strong><label>English Title</label></strong></td>
+                <td class="h5">@Model.EnTitle</td>
+            </tr>
+
+            <tr>
+                <td class="h6"><strong><label>Arabic Title</label></strong></td>
+                <td class="h5">@Model.ArTitle</td>
+            </tr>
+            <tr>
+                <td class="h6"><strong><label>English Short Description</label></strong></td>
+                <td class="h5">@Html.Raw(@Model.EnShortDescription)</td>
+            </tr>
+
+            <tr>
+                <td class="h6"><strong><label>Arabic Short Description</label></strong></td>
+                <td class="h5">@Html.Raw(@Model.ArShortDescription)</td>
+            </tr>
+            <tr>
+                <td class="h6"><strong><label>English Description</label></strong></td>
+                <td class="h5">@Html.Raw(@Model.EnDescription)</td>
+            </tr>
+
+            <tr>
+                <td class="h6"><strong><label>Arabic Description</label></strong></td>
+                <td class="h5">@Html.Raw(@Model.ArDescription)</td>
+            </tr>
+           
+
+            <tr>
+                <td class="h6"><strong><label>Is Active</label></strong></td>
+                <td class="h5">@(@Model.IsActive ? "Yes" : "No") </td>
+            </tr>
+
+
+            <tr>
+                <td class="h6"><strong><label>Image</label></strong></td>
+                <td>
+                    <img src="@photoPath" class="thumpnail-edit-image" asp-append-version="true" />
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="btn-mais-info text-primary">
+                    <br />
+                    @if (bEUsersPrivilegesViewModel.CanApprove && bEUsersPrivilegesViewModel.IsFromApprovalPage)
+                    {
+                        <a asp-action="Approve" asp-route-id="@Model.Id" asp-route-approvalId="@ViewBag.ApprovalId" type="button" class="btn btn-primary" onclick="DisableAfterClick(event,this)">Approve</a>
+                        <a asp-action="Ignore" asp-route-id="@Model.Id" asp-route-approvalId="@ViewBag.ApprovalId" type="button" class="btn btn-primary" onclick="DisableAfterClick(event,this)">Ignore</a>
+                    }
+                    else if(bEUsersPrivilegesViewModel.CanEdit && !bEUsersPrivilegesViewModel.IsFromApprovalPage)
+                    {
+                        <p>
+                            <strong><a asp-controller="StaticPageNews" asp-action="Edit" asp-route-id="@Model.Id" asp-route-pageRouteId="@Model.PageRouteId">Edit</a> |</strong>
+                            <strong><a asp-controller="StaticPageNews" asp-action="Index" asp-route-pageRouteId="@Model.PageRouteId">Back to previous page</a></strong>
+                        </p>
+                    }
+                </td>
+                <td> </td>
+                <td class="h5"></td>
+            </tr>
+
+        </tbody>
+    </table>

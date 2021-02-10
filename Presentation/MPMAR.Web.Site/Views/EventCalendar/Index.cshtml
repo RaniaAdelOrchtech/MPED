@@ -1,0 +1,488 @@
+﻿@model MPMAR.Web.Site.ViewModels.ViewPageEvents
+@*List<MPMAR.Web.Site.ViewModels.ViewPageEventVersions>*@
+@{
+    ViewData["Title"] = ViewBag.Title;
+}
+@{
+    string lang = Context.Request.Query["lang"];
+    string WeekView = Context.Request.Query["wv"];
+    string WeekViewNext = Context.Request.Query["wvn"];
+    string MonthViewNext = Context.Request.Query["mvn"];
+}
+@{
+    int currentMonth = DateTime.Now.AddMonths(MonthViewNext == null ? 0 : Convert.ToInt32(MonthViewNext)).Month;
+    int currentYear = DateTime.Now.AddMonths(MonthViewNext == null ? 0 : Convert.ToInt32(MonthViewNext)).Year;
+    DateTime firstDay = new DateTime(DateTime.Now.AddMonths(MonthViewNext == null ? 0 : Convert.ToInt32(MonthViewNext)).Year, DateTime.Now.AddMonths(MonthViewNext == null ? 0 : Convert.ToInt32(MonthViewNext)).Month, 1);
+
+    int daysInCurrentMonth = DateTime.DaysInMonth(firstDay.Year, firstDay.Month);
+    List<DateTime> CurrentWeekDays = MPMAR.Web.Site.Controllers.EventCalendarController.GetWeeks(DayOfWeek.Monday, (WeekViewNext == "" ? DateTime.Today.AddDays(-1) : DateTime.Today.AddDays(Convert.ToInt32(WeekViewNext) * 7 - 1)), Convert.ToInt32(WeekViewNext));
+
+
+    DateTime lastDay = new DateTime(currentYear, currentMonth, daysInCurrentMonth);
+    // Sunday casted to int gives 0 but that will not work for us, we need 7 to be able to calculate number of empty cells correctly
+    int dayOfWeekFirst = ((int)firstDay.DayOfWeek > 0) ? (int)firstDay.DayOfWeek : 7;
+    int dayOfWeekLast = ((int)lastDay.DayOfWeek > 0) ? (int)lastDay.DayOfWeek : 7;
+}
+<style type="text/css">
+
+    .no-fouc {
+        display: none;
+    }
+
+    .event-calendar td:hover {
+        background: #dfb156 !important;
+        color: #fff;
+    }
+
+    .event-calendar td .events li:hover .event-popover {
+        background-color: #7E7E7E;
+        color: #fff;
+    }
+
+    .event-popover h6 a {
+        color: #e0b157 !important;
+        font-weight: 600;
+    }
+
+    .event-popover .event-meta li i {
+        color: #e0b157;
+    }
+
+    .event-popover .event-meta li {
+        color: #fff;
+    }
+
+    .event-popover:after {
+        border-top: 8px solid #7e7e7e;
+    }
+
+    .event-calendar td:hover .events li {
+        border-color: transparent !important;
+    }
+
+    .small-caption {
+        color: #fafbfd;
+    }
+
+
+    a.button.button-arrow:after {
+        color: #fff;
+    }
+
+    a.button.button-arrow:hover:after {
+        color: #dfb156;
+    }
+</style>
+<script>
+    $(document).ready(function () {
+        $('.filter-dropdown>li').mouseover(function () {
+            $('.filter-dropdown').addClass('opened');
+        });
+        $('.filter-dropdown>li').mouseout(function () {
+            $('.filter-dropdown').removeClass('opened').addClass('closed');
+        });
+    });
+</script>
+<section class="section page-heading" style="opacity: 1;">
+
+    <h1>@ViewBag.Title</h1>
+    <p class="breadcrumb"><a href="@Url.Content("~/")">@(lang == "en" ? "Home" : "الرئيسية") </a> / @ViewBag.Nav / @ViewBag.Title </p>
+
+</section>
+
+<section class="section full-width-bg gray-bg">
+
+    <div class="row">
+
+
+        <div class="col-lg-12 col-md-12 col-sm-12">
+
+
+            <form class="white-box" style="display: none; opacity: 1;">
+
+                <h5>  ابحث في فعاليات الوزارة </h5>
+
+                <div class="inline-inputs">
+
+                    <div class="col-lg-3 col-md-3 col-sm-4">
+                        <input placeholder="اختر التاريخ" style="
+                                width: 100%;
+                                border: 1px solid #dee0e5;
+                                padding: 8px 10px;
+                                background: #fafbfd;
+                                color: #95999e;
+                                border-radius: 2px;
+                                -webkit-border-radius: 2px;
+                                -moz-border-radius: 2px;
+                            " type="text" onfocus="(this.type='date')" onblur="(this.type='text')">
+                    </div>
+
+                    <div class="col-lg-7 col-md-7 col-sm-5">
+                        <input type="text" placeholder="ابحث">
+                    </div>
+
+                    <div class="col-lg-2 col-md-2 col-sm-3">
+                        <button class="medium"><i class="icons icon-search"></i> بحث </button>
+                    </div>
+
+                </div>
+
+            </form>
+
+
+            <!-- Events Calendar -->
+            <div class="events-calendar">
+
+                <!-- Events Calendar Header -->
+
+                <div class="calendar-header" style="opacity: 1;">
+
+                    <div class="row">
+
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <h3>
+
+                                @(lang == "en" ? "EVENTS OF " + firstDay.ToString("MMMM yyyy") : firstDay.ToString("MMMM", System.Globalization.CultureInfo.GetCultureInfo("ar-EG")) + "أحداث شهر"+" "+ firstDay.ToString("yyyy"))
+                                
+                                
+
+                            </h3>
+                        </div>
+
+                        <div class="col-lg-6 col-md-6 col-sm-6 align-right">
+                            <label>
+                                @(lang == "en" ? "Show" : "اعرض")
+                            </label>
+                            <ul class="filter-dropdown">
+                                <li>
+                                    <span> @(lang == "en" ? (WeekView != null ? "Week" : "Month") : (WeekView != null ? "أسبوع" : "شهر"))</span>
+                                    <ul>
+                                        <li class="filter" data-filter="all" style="@(WeekView != null?"":"display:none;")">
+                                            <a href="EventCalendar" style="display:block;">
+                                                @(lang == "en" ? "Month" : "شهر")
+                                            </a>
+                                        </li>
+                                        <li class="filter" data-filter="all" style="@(WeekView != null?"display:none;":"")">
+                                            <a href="EventCalendar?wv=wv" style="display:block;">
+                                                @(lang == "en" ? "Week" : "أسبوع")
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </div>
+
+                </div>
+                <!-- /Events Calendar Header --> 
+                <table class="event-calendar" style="opacity: 1;">
+                    <tbody>
+
+<tr class="calendar-days">
+
+                            @if (lang == "en")
+                            {
+
+                                <th style="background-color: #dfb156;color: #fff;">
+                                    Monday
+                                </th>
+                                <th style="background-color: #dfb156;color: #fff;">
+                                    Tuesday
+                                </th>
+                                <th style="background-color: #dfb156;color: #fff;">
+                                    Wednesday
+                                </th>
+                                <th style="background-color: #dfb156;color: #fff;">
+                                    Thusday
+                                </th>
+                                <th style="background-color: #dfb156;color: #fff;">
+                                    Friday
+                                </th>
+                                <th style="background-color: #dfb156;color: #fff;">
+                                    Saturday
+                                </th>
+                                <th style="background-color: #dfb156;color: #fff;">
+                                    Sunday
+                                </th>
+                            }
+                            else
+                            {
+
+                                <th style="background-color: #dfb156;color: #fff;">
+                                    الاثنين
+                                </th>
+                                <th style="background-color: #dfb156;color: #fff;">
+                                    الثلاثاء
+                                </th>
+                                <th style="background-color: #dfb156;color: #fff;">
+                                    الأربعاء
+                                </th>
+                                <th style="background-color: #dfb156;color: #fff;">
+                                    الخميس
+                                </th>
+                                <th style="background-color: #dfb156;color: #fff;">
+                                    الجمعة
+                                </th>
+                                <th style="background-color: #dfb156;color: #fff;">
+                                    السبت
+                                </th>
+                                <th style="background-color: #dfb156;color: #fff;">
+                                    الأحد
+                                </th>
+                            }
+
+                        </tr>
+
+                        <tr align="center">
+                            @if (WeekView == "wv")
+                            {
+                                int CalendarDayColor = 0;
+                                @foreach (var CurrentWeekDay in CurrentWeekDays)
+                                {
+                                    DateTime renderedDay = new DateTime(CurrentWeekDay.Year, CurrentWeekDay.Month, CurrentWeekDay.Day);
+                                    if (renderedDay.DayOfWeek == DayOfWeek.Sunday)
+                                    {
+                                        @:<td class="calendar-holiday"><span class="day">@CurrentWeekDay.Day</span></td></tr><tr align="center">
+                                    }
+                                    else
+                                    {
+                                        if (Model.ViewPageEventVersions.Where(j => new DateTime(j.EventStartDate.Year, j.EventStartDate.Month, j.EventStartDate.Day) == renderedDay || new DateTime(j.EventEndDate.Year, j.EventEndDate.Month, j.EventEndDate.Day) == renderedDay).Count() > 0)
+                                        {
+                                            <td style="background-color: @(CalendarDayColor%3==0?"#28A5A3":(CalendarDayColor%3==1?"#3EC8C6":"#48E2E0"));color: #fff;">
+                                                <span class="day">@CurrentWeekDay.Day</span><ul class="events">
+                                                    @foreach (var item in Model.ViewPageEventVersions.Where(j => new DateTime(j.EventStartDate.Year, j.EventStartDate.Month, j.EventStartDate.Day) == renderedDay || new DateTime(j.EventEndDate.Year, j.EventEndDate.Month, j.EventEndDate.Day) == renderedDay))
+                                                    {
+                                                        <li>
+                                                            <a href="EventCalendar/EventDetial?id=@item.Id" asp-controller="EventCalendar" asp-action="EventDetial" asp-route-id="@item.Id"> @(lang == "en" ? item.EnTitle : item.ArTitle)</a>
+                                                            <div class="event-popover">
+                                                                <h6> <a href="EventCalendar/EventDetial?id=@item.Id" asp-controller="EventCalendar" asp-action="EventDetial" asp-route-id="@item.Id">
+                                                                    
+                                                                      @(lang == "en" ? item.EnTitle +" " + firstDay.ToString("MMMM yyyy") : firstDay.ToString("MMMM", System.Globalization.CultureInfo.GetCultureInfo("ar-EG")) +  item.ArTitle +" "+ firstDay.ToString("yyyy"))
+                                                                     </a></h6>
+                                                                <ul class="event-meta">
+                                                                    @if(lang == "en")
+                                                                    {
+                                                                    <li><i class="icons icon-clock"></i> @(item.EventStartDate + "-" + item.EventEndDate)</li>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                    <li style="direction: ltr !important;"> @(item.EventStartDate + "-" + item.EventEndDate)<i class="icons icon-clock"></i></li>
+                                                                    }
+
+                                                                    <li><i class="icons icon-location"></i>@(lang == "en" ? item.EnAddress : item.ArAddress)</li>
+                                                                </ul>
+                                                                @if (item.EnUrl != null)
+                                                                {
+                                                                    <img src="@item.EnUrl" alt="" width="300">
+                                                                }
+
+                                                                @(lang == "en" ? Html.Raw(item.EnDescription) : Html.Raw(item.ArDescription))
+                                                            <div class="social-media">
+                                                                <span class="small-caption">
+                                                                    @(lang == "en" ? "share" : "شارك")
+                                                                    
+                                                                </span>
+                                                                <ul class="social-icons">
+                                                                    <li class="facebook"><a href="https://www.facebook.com/sharer/sharer.php?u=http://212.129.13.21:1986/EventCalendar/EventDetial?id=@item.Id" class="tooltip-ontop" title="" data-original-title="Facebook"><i class="icons icon-facebook"></i></a></li>
+                                                                    <li class="twitter"><a href="https://twitter.com/share" class="tooltip-ontop" title="" data-original-title="Twitter"><i class="icons icon-twitter"></i></a></li>
+                                                                    <li class="email"><a href="mailto:" class="tooltip-ontop" title="" data-original-title="Email"><i class="icons icon-mail"></i></a></li>
+                                                                </ul>
+                                                            </div>
+                                                                @*<div class="social-media">
+                                                                    <span class="small-caption">بيانات التواصل</span>
+                                                                    <ul class="social-icons">
+                                                                        @if (item.EventSocialLinks != null)
+                                                                            @foreach (var ite in item.EventSocialLinks.Split(','))
+                                                                            {
+                                                                                <li class="@ite.Split(':')[0]"><a href="@ite.Split(':')[1]"><i class="icons icon-@ite.Split(':')[0]"></i></a></li>
+                                                                            }
+                                                                    </ul>
+                                                                </div>*@
+                                                            </div>
+                                                        </li>
+
+                                                    }
+
+                                                </ul>
+                                            </td>
+                                            CalendarDayColor = CalendarDayColor + 1;
+                                        }
+                                        else
+                                        {
+                                            <td class="no-events"><span class="day">@CurrentWeekDay.Day</span></td>
+                                        }
+
+                                    }
+                                }
+
+                            }
+                            else
+                            {
+                                int CalendarDayColor = 0;
+                                <!-- filling up space of previous month -->
+                                @for (int a = 1; a < dayOfWeekFirst; a++)
+                                {
+                                    @:<td class="not-this-month"></td>
+                                }
+                                <!-- filling up space of current month -->
+                                @for (int i = 1; i <= daysInCurrentMonth; i++)
+                                {
+                                    DateTime renderedDay = new DateTime(firstDay.Year, firstDay.Month, i);
+
+
+                                    // if Sunday
+                                    if (renderedDay.DayOfWeek == DayOfWeek.Sunday)
+                                    {
+                                        @:<td class="calendar-holiday"><span class="day">@i</span></td></tr><tr align="center">
+                                    }
+
+                                    else
+                                    {
+                                        if (Model.ViewPageEventVersions.Where(j => new DateTime(j.EventStartDate.Year, j.EventStartDate.Month, j.EventStartDate.Day) == renderedDay || new DateTime(j.EventEndDate.Year, j.EventEndDate.Month, j.EventEndDate.Day) == renderedDay).Count() > 0)
+                                        {
+                                            <td style="background-color: @(CalendarDayColor%3==0?"#28A5A3":(CalendarDayColor%3==1?"#3EC8C6":"#48E2E0"));color: #fff;">
+                                                <span class="day">@i</span><ul class="events">
+                                                    @foreach (var item in Model.ViewPageEventVersions.Where(j => new DateTime(j.EventStartDate.Year, j.EventStartDate.Month, j.EventStartDate.Day) == renderedDay || new DateTime(j.EventEndDate.Year, j.EventEndDate.Month, j.EventEndDate.Day) == renderedDay))
+                                                    {
+                                                        <li>
+                                                            <a href="EventCalendar/EventDetial?id=@item.Id" asp-controller="EventCalendar" asp-action="EventDetial" asp-route-id="@item.Id"> @(lang == "en" ? item.EnTitle : item.ArTitle)</a>
+                                                            <div class="event-popover">
+                                                                <h6> <a href="EventCalendar/EventDetial?id=@item.Id" asp-controller="EventCalendar" asp-action="EventDetial" asp-route-id="@item.Id"> 
+                                                                     @(lang == "en" ? item.EnTitle +" " + firstDay.ToString("MMMM yyyy") : firstDay.ToString("MMMM", System.Globalization.CultureInfo.GetCultureInfo("ar-EG")) +  item.ArTitle +" "+ firstDay.ToString("yyyy"))
+                                                                     </a></h6>
+                                                                <ul class="event-meta">
+                                                                    @if(lang == "en")
+                                                                    {
+                                                                    <li><i class="icons icon-clock"></i> @(item.EventStartDate + "-" + item.EventEndDate)</li>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                    <li style="direction: ltr !important;"> @(item.EventStartDate + "-" + item.EventEndDate)<i class="icons icon-clock"></i></li>
+                                                                    }
+                                                                    <li><i class="icons icon-location"></i>@(lang == "en" ? item.EnAddress : item.ArAddress)</li>
+                                                                </ul>
+                                                                @if (item.EnUrl != null)
+                                                                {
+                                                                    <img src="@item.EnUrl" alt="" width="300">
+                                                                }
+                                                                @(lang == "en" ? Html.Raw(item.EnDescription) : Html.Raw(item.ArDescription))
+
+                                                                <div class="social-media">
+                                                                    <span class="small-caption">@(lang == "en" ? "share" : "شارك")</span>
+                                                                    <ul class="social-icons">
+                                                                        <li class="facebook"><a href="https://www.facebook.com/sharer/sharer.php?u=http://212.129.13.21:1987/EventCalendar/EventDetial?id=@item.Id" class="tooltip-ontop" title="" data-original-title="Facebook"><i class="icons icon-facebook"></i></a></li>
+                                                                        <li class="twitter"><a href="https://twitter.com/share" class="tooltip-ontop" title="" data-original-title="Twitter"><i class="icons icon-twitter"></i></a></li>
+                                                                        <li class="email"><a href="mailto:" class="tooltip-ontop" title="" data-original-title="Email"><i class="icons icon-mail"></i></a></li>
+                                                                    </ul>
+                                                                    </div>
+                                                                @*<div class="social-media">
+                                                                    <span class="small-caption">بيانات التواصل</span>
+                                                                    <ul class="social-icons">
+                                                                        @if (item.EventSocialLinks != null)
+                                                                            @foreach (var ite in item.EventSocialLinks.Split(','))
+                                                                            {
+                                                                                <li class="@ite.Split(':')[0]"><a href="@ite.Split(':')[1]"><i class="icons icon-@ite.Split(':')[0]"></i></a></li>
+                                                                            }
+                                                                    </ul>
+                                                                </div>*@
+                                                            </div>
+                                                        </li>
+
+                                                    }
+
+                                                </ul>
+                                            </td>
+                                             CalendarDayColor = CalendarDayColor + 1;
+                                        }
+                                        else
+                                        {
+                                            <td class="no-events"><span class="day">@i</span></td>
+                                        }
+
+                                    }
+                                }
+                                <!-- filling up space of next month -->
+                                @for (int a = 1; a <= 7 - dayOfWeekLast; a++)
+                                {
+                                    <td class="not-this-month"></td>
+                                }
+                            }
+                        </tr>
+
+
+                    </tbody>
+                </table>
+
+                <div class="row">
+
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 align-left" style="opacity: 1;">
+                        @if (WeekViewNext != "" && WeekViewNext != null)
+                        {
+                        <a href="EventCalendar?wv=wv&wvn=@(Convert.ToInt32(WeekViewNext)-1)" class="button big button-arrow-before">
+                            @(lang == "en" ? "Previous" : "السابق")
+                        </a>
+                        }
+                        else if (MonthViewNext != "" && MonthViewNext != null)
+                        {
+                            <a href="EventCalendar?mvn=@(Convert.ToInt32(MonthViewNext)-1)" class="button big button-arrow-before">
+                                @(lang == "en" ? DateTime.Now.AddMonths(Convert.ToInt32(MonthViewNext) - 1).ToString("MMMM") : DateTime.Now.AddMonths(Convert.ToInt32(MonthViewNext) - 1).ToString("MMMM", System.Globalization.CultureInfo.GetCultureInfo("ar-EG")))
+                            </a>
+                        }
+                        else if (WeekView != "" && WeekView != null)
+                        {
+                            <a href="EventCalendar?wv=wv&wvn=-1" class="button big button-arrow-before">
+                                 @(lang == "en" ? "Previous":"السابق")
+
+                              
+                                
+                            </a>
+                        }
+                        else
+                        {
+                            <a href="EventCalendar?mvn=-1" class="button big button-arrow-before">
+                                @(lang == "en" ? DateTime.Now.AddMonths(-1).ToString("MMMM") : DateTime.Now.AddMonths(-1).ToString("MMMM", System.Globalization.CultureInfo.GetCultureInfo("ar-EG")))
+                            </a>
+                        }
+
+
+                    </div>
+
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 align-right" style="opacity: 1;">
+
+                        @if (WeekViewNext != "" && WeekViewNext != null)
+                        {
+                            <a href="EventCalendar?wv=wv&wvn=@(Convert.ToInt32(WeekViewNext)+1)" class="button big button-arrow">
+                                
+                                 @(lang == "en" ? "Next":"التالي")
+                            </a>
+                        }
+                        else if (MonthViewNext != "" && MonthViewNext != null)
+                        {
+
+
+                            <a href="EventCalendar?mvn=@(Convert.ToInt32(MonthViewNext)+1)" class="button big button-arrow">
+
+                                @(lang == "en" ? DateTime.Now.AddMonths(Convert.ToInt32(MonthViewNext) + 1).ToString("MMMM") : DateTime.Now.AddMonths(Convert.ToInt32(MonthViewNext) + 1).ToString("MMMM", System.Globalization.CultureInfo.GetCultureInfo("ar-EG")))
+                            </a>
+                        }
+                        else if (WeekView != "" && WeekView != null)
+                        {
+                            <a href="EventCalendar?wv=wv&wvn=1" class="button big button-arrow">
+                            @(lang == "en" ? "Next":"التالي")
+                            </a>
+                        }
+                        else
+                        {
+                            <a href="EventCalendar?mvn=1" class="button big button-arrow">
+                                @(lang == "en" ? DateTime.Now.AddMonths(1).ToString("MMMM") : DateTime.Now.AddMonths(1).ToString("MMMM", System.Globalization.CultureInfo.GetCultureInfo("ar-EG")))
+                            </a>
+                          
+                        }
+                    </div>
+                </div>
+            </div>
+            <!-- /Events Calendar -->
+        </div>
+    </div>
+</section>

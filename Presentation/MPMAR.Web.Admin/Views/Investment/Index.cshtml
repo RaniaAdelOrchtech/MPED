@@ -1,0 +1,267 @@
+﻿@using MPMAR.Common
+@{
+    ViewData["Title"] = "Investment";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+
+    string approvalId = Context.Request.Query["approvalId"];
+    int approvalIdInt = 0;
+    int.TryParse(approvalId, out approvalIdInt);
+
+    var bEUsersPrivilegesViewModel = bEUsersPrivilegesService.ValidateIBEUsersPrivilegesViewService(PrivilegesPageType.Investment, this.User.FindFirstValue(ClaimTypes.NameIdentifier), this.User.IsInRole(UserRolesConst.SuperAdmin), approvalId: approvalIdInt);
+}
+
+<div>
+    <h4>Definitions > Economic Indicators > Investment </h4>
+</div>
+@if (bEUsersPrivilegesViewModel.CanAdd && !bEUsersPrivilegesViewModel.IsFromApprovalPage)
+{
+    <a asp-controller="Investment" asp-action="Create" class="btn btn-primary index-create-button">Add</a>
+}
+<table id="data_table" class="table table-striped table-bordered" style="width:100%">
+    <thead>
+        <tr>
+            <th style="width: 20%">Indicator</th>
+            <th style="width: 20%">Source</th>
+            <th style="width: 20%">Unit</th>
+            <th style="width: 20%">Quarter</th>
+            <th style="width: 20%">Year</th>
+            <th style="width: 20%">Agriculture</th>
+            <th style="width: 20%">Petroleum</th>
+            <th style="width: 20%">Natural Gas</th>
+            <th style="width: 20%">Other extractions</th>
+            <th style="width: 20%">Petroleum refining</th>
+            <th style="width: 20%">Other manufacturing</th>
+            <th style="width: 20%">Electricity</th>
+            <th style="width: 20%">Water and sewerage</th>
+            <th style="width: 20%">Construction</th>
+            <th style="width: 20%">Storage and transportation</th>
+            <th style="width: 20%">Information and communication</th>
+            <th style="width: 20%">Suez Canal</th>
+            <th style="width: 20%">Wholesale and retail trade</th>
+            <th style="width: 20%">Financial intermediary, insurance, and social security</th>
+            <th style="width: 20%">Accommodation and food service activities</th>
+            <th style="width: 20%">Real estate activities</th>
+            <th style="width: 20%">Education</th>
+            <th style="width: 20%">Health</th>
+            <th style="width: 20%">Other services</th>
+            <th style="width: 20%">Total Investments</th>
+            @if (bEUsersPrivilegesViewModel.IsFromApprovalPage)
+            {
+                <th style="width: 5%"></th>
+            }
+            else
+            {
+                <th style="width: 20%;min-width:60px">Action</th>
+
+            }
+            <th style="width: 20%;min-width:60px">Status</th>
+            <th></th>
+            @if (bEUsersPrivilegesViewModel.IsFromApprovalPage)
+            {
+                <th style="width: 20%;min-width:50px"></th>
+            }
+            else
+            {
+                <th style="width: 5%"></th>
+
+            }
+            <th style="width: 20%;min-width:40px"></th>
+        </tr>
+    </thead>
+</table>
+
+@section scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            window.table = $('#data_table').DataTable({
+                "aaSorting": [],
+                "scrollX": true,
+         "serverSide": true,
+                "ajax": {
+                    "url": '@Url.Action("GetAll", "Investment")',
+                    "dataSrc": "data",
+                     "data":{approvalId:'@ViewBag.approvalId'},
+                      "type": "POST",
+                    "datatype":"json"
+                },
+                "columns": [
+                    { "data": "indicator" ,"name":"Indicator",render:  $.fn.dataTable.render.ellipsis()},
+                  { "data": "_Source" ,"name":"_Source",render:  $.fn.dataTable.render.ellipsis()},
+                   { "data": "unit","name":"Unit",render:  $.fn.dataTable.render.ellipsis() },
+                 { "data": "_Quarter","name":"_Quarter",render:  $.fn.dataTable.render.ellipsis() },
+                 { "data": "_Year" ,"name":"_Year",render:  $.fn.dataTable.render.ellipsis()},
+                     {
+                        "data": "agriculture","name":"Agriculture",render:  $.fn.dataTable.render.ellipsis()},
+                    { "data": "petroleum" ,"name":"Petroleum",render:  $.fn.dataTable.render.ellipsis()},
+                 { "data": "naturalGas","name":"NaturalGas",render:  $.fn.dataTable.render.ellipsis() },
+                 { "data": "otherExtractions","name":"OtherExtractions",render:  $.fn.dataTable.render.ellipsis() },
+                 { "data": "petroleumRefining","name":"PetroleumRefining",render:  $.fn.dataTable.render.ellipsis() },
+                 { "data": "otherManufacturing" ,"name":"OtherManufacturing",render:  $.fn.dataTable.render.ellipsis()},
+                 { "data": "electricity","name":"Electricity",render:  $.fn.dataTable.render.ellipsis() },
+                 { "data": "waterAndSewerage","name":"WaterAndSewerage",render:  $.fn.dataTable.render.ellipsis() },
+                 { "data": "construction","name":"Construction" ,render:  $.fn.dataTable.render.ellipsis()},
+                 { "data": "storageAndTransportation","name":"StorageAndTransportation",render:  $.fn.dataTable.render.ellipsis() },
+                 { "data": "informationAndCommunication","name":"InformationAndCommunication",render:  $.fn.dataTable.render.ellipsis()},
+                 { "data": "suezCanal","name":"SuezCanal",render:  $.fn.dataTable.render.ellipsis() },
+                 { "data": "wholesaleAndRetailTrade","name":"WholesaleAndRetailTrade" ,render:  $.fn.dataTable.render.ellipsis()},
+                 { "data": "financialIntermediaryInsuranceAndSocialSecurity","name":"FinancialIntermediaryInsuranceAndSocialSecurity",render:  $.fn.dataTable.render.ellipsis() },
+                 { "data": "accommodationAndFoodServiceActivities","name":"AccommodationAndFoodServiceActivities",render:  $.fn.dataTable.render.ellipsis() },
+                 { "data": "realEstateActivities","name":"RealEstateActivities" ,render:  $.fn.dataTable.render.ellipsis()},
+                 { "data": "education","name":"Education" ,render:  $.fn.dataTable.render.ellipsis()},
+                 { "data": "health","name":"Health", render:  $.fn.dataTable.render.ellipsis()},
+                 { "data": "otherSrvices","name":"OtherSrvices",render:  $.fn.dataTable.render.ellipsis() },
+                 { "data": "totalInvestments","name":"TotalInvestments",render:  $.fn.dataTable.render.ellipsis()
+                    },
+                   {
+                "data": "changeActionEnum", "orderable": false, "name": "ChangeActionEnum", "render": function (data, type, row) {
+                      var isContentManager = '@(!bEUsersPrivilegesViewModel.IsFromApprovalPage)';
+                               return  data == 1 ? "New" : data == 2 ? "Update" : "Delete"
+                        }, "visible": ('@(!bEUsersPrivilegesViewModel.IsFromApprovalPage)' == "True")
+                    },
+            {
+                "data": "changeActionEnum", "orderable": false, "name": "ChangeActionEnum", "render": function (data, type, row) {
+                      var isContentManager = '@(!bEUsersPrivilegesViewModel.IsFromApprovalPage)';
+                               return isContentManager != "True" ? data == 1 ? "New" : data == 2 ? "Update" : "Delete" : row.versionStatusEnum == 1 ? "Draft" : row.versionStatusEnum == 2 ? "Submitted" : "Approved"
+                        }
+                    },
+                    {
+                        "data": "id", "orderable": false, "render": function (data, type, row) {
+                            var isContentManager = '@(bEUsersPrivilegesViewModel.CanEdit && !bEUsersPrivilegesViewModel.IsFromApprovalPage)';
+
+                        var edit = '@Url.Action("Edit", "Investment")';
+                            return isContentManager == "True" ? '<a href="' + edit + '?id=' + data+ '&isVersion=' + row.isVersion +'" title="Edit" class="anchorActionLink"><i class="fa fa-pencil"></i></a>' : '';
+                        }, "visible": ('@(bEUsersPrivilegesViewModel.CanEdit && !bEUsersPrivilegesViewModel.IsFromApprovalPage)' == "True")
+                    },
+                    {
+                        "data": "id", "orderable": false, "render": function (data, type, row) {
+                            var isContentManager = '@(bEUsersPrivilegesViewModel.CanDelete && !bEUsersPrivilegesViewModel.IsFromApprovalPage)';
+                             var Approve = '@Url.Action("Approve", "Investment")';
+                            return isContentManager == "True" ? '<a href="#" title="Delete" data-placement="right"  class="delete anchorActionLink" data-target="#basic" data-toggle="modal" data-id="' + data + '" data-isversion="' + row.isVersion + '"><i class="fa fa-trash"></i></a>' : '<a href="' + Approve + '?approvalId=' + @ViewBag.approvalId + '&componentVersionId=' + data +'" title="Approve" class="anchorActionLink" onclick="DisableAfterClick(event,this)">Approve</a>'
+
+                        }, "visible": ('@(bEUsersPrivilegesViewModel.CanDelete || bEUsersPrivilegesViewModel.CanApprove)' == "True")
+                    },
+                    {
+
+                        "data": "id", "orderable": false, "render": function (data, type, row) {
+                                             var isContentManager = '@((bEUsersPrivilegesViewModel.CanEdit || bEUsersPrivilegesViewModel.CanDelete)  && !bEUsersPrivilegesViewModel.IsFromApprovalPage)';
+                            var canAdd = '@bEUsersPrivilegesViewModel.CanAdd';
+
+                             var Ignore = '@Url.Action("Ignore", "Investment")';
+                     if ((isContentManager == "True" || (canAdd == "True" && row.versionStatusEnum == 1 && row.changeActionEnum == 1 && row.createdById == '@this.User.FindFirstValue(ClaimTypes.NameIdentifier)'))) {
+                                return (row.versionStatusEnum == 1) ? '<a href="#" title="Apply Request" data-placement="right" id="applyItem" class="applyItem customActionLink" data-target="#applyModal" data-toggle="modal" data-id="' + data + '">Apply</a>' +
+                                    '<div class="modal fade" id="applyModal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">' +
+                                    '<div class="modal-dialog">' + '<div class="modal-content">' + '<div class="modal-header">' +
+                                    '<h4 class="modal-title">Apply Request Confirmation</h4>' +
+                                    '</div>' + '<div class="modal-body">Are you sure you want to apply this edit request?</div><div class="modal-footer"><button id="btnContinueApplyRequest" type="button" class="btn btn-danger">Apply Request</button><button data-dismiss="modal" type="button" class="btn btn-primary">Cancel</button></div>' +
+                                    '</div></div></div>' : '<a href="#" style="pointer-events: none;color: #ccc;">Apply</a>'
+                            } else if ('@(bEUsersPrivilegesViewModel.CanApprove && bEUsersPrivilegesViewModel.IsFromApprovalPage)' == "True") {
+
+                         return '<a href="' + Ignore + '?approvalId=' + @ViewBag.approvalId + '&componentVersionId=' + data + '" title="Ignore" class="anchorActionLink" onclick="DisableAfterClick(event,this)">Ignore</a>'
+                            }
+                            else {
+                                return ''
+                            }
+                    }
+                }
+                ]
+                ,"fnInitComplete": function (oSettings, json) {
+                    //var table = $('#data_table').DataTable();
+                    //if (table.data().count() <= 10) {
+                    //   document.getElementById("data_table_paginate").style.display = "none";
+                    //        document.getElementById("data_table_length").style.display = "none";
+                    //        document.getElementById("data_table_filter").style.display = "none";
+                    //}
+                }
+            });
+        });
+
+
+
+        var item_to_delete;
+        var isVersion;
+        $('#data_table').on('click', '.delete', function () {
+            item_to_delete = $(this).data('id');
+            isVersion = $(this).data('isversion');
+            console.log("ssss "+isVersion);
+            var data = table.row($(this).parents('tr')).data();
+                                     Swal.fire({
+  title: 'Are you sure?',
+  text: "You want to delete this row",
+  icon: 'warning',
+  showCancelButton: true,
+  confirmButtonColor: '#3085d6',
+  cancelButtonColor: '#d33',
+  confirmButtonText: 'delete'
+}).then((result) => {
+  if (result.value) {
+
+
+      $.ajax({
+                            type: "POST",
+          url: '@Url.Action("Delete", "Investment")',
+          data: { id: item_to_delete,isVersion:isVersion },
+                        }).done(function (res) {
+                            if (res) {
+                                Swal.fire({
+                                   title:'Deleted!',
+                                   text: " has been Deleted.",
+                                   icon: 'success',
+                                    showConfirmButton:false
+                                }
+
+                                )
+                               window.location.reload();
+                            } else {
+                                   Swal.fire(
+                                    'Failed',
+                                    "Failed to Delete this row",
+                                    'error'
+                                )
+                            }
+                        });
+  }
+})
+
+        });
+
+
+
+            var item_to_apply;
+        $('#data_table').on('click', '.applyItem', function () {
+            item_to_apply = $(this).data('id');
+
+        });
+            $('#data_table').on('click', '#btnContinueApplyRequest', function () {
+                var currentItem = $(this);
+                if (currentItem.prop("disabled")) {
+                    e.preventDefault();
+                    return;
+                }
+                currentItem.prop("disabled", true)
+
+            $('#applyModal').modal('hide');
+            $.ajax({
+             type: "POST",
+                url: '@Url.Action("SubmitChangesConst", "Investment")',
+                data: { investmentVersionId: item_to_apply },
+            success: function () {
+                window.location.reload();
+            },
+            complete: function (data) {
+                $('#applyModal').modal('hide');
+                 window.location.reload();
+            }
+        });
+    });
+
+
+
+
+
+
+
+
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9.10.9/dist/sweetalert2.all.min.js"></script>
+}
+

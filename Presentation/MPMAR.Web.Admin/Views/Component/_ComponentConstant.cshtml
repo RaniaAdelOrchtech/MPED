@@ -1,0 +1,61 @@
+﻿@using MPMAR.Analytics.Data.Enums;
+@using MPMAR.Common
+@{
+    var sheetType = (int)SheetTypeEnum.ComponentConst;
+
+
+    string approvalId = Context.Request.Query["approvalId"];
+    string sheetTypeInt = Context.Request.Query["sheetType"];
+    int approvalIdInt = 0;
+    int.TryParse(approvalId, out approvalIdInt);
+
+    var privilegeSheetType = SheetType_PrivilegeType.SheetType_PrivilegeType_Map.GetValueOrDefault(int.Parse(sheetTypeInt));
+
+    var bEUsersPrivilegesViewModel = bEUsersPrivilegesService.ValidateIBEUsersPrivilegesViewService(privilegeSheetType, this.User.FindFirstValue(ClaimTypes.NameIdentifier), this.User.IsInRole(UserRolesConst.SuperAdmin), approvalId: approvalIdInt);
+}
+<div>
+    <h4>Definitions > Economic Indicators > Component > Constant </h4>
+</div>
+@if (bEUsersPrivilegesViewModel.CanAdd && !bEUsersPrivilegesViewModel.IsFromApprovalPage)
+{
+    <a asp-controller="Component" asp-action="Create" asp-route-sheetType='@sheetType' class="btn btn-primary index-create-button">Add</a>
+}
+<table id="data_table" class="table table-striped table-bordered" style="width:150%">
+    <thead>
+        <tr>
+            <th style="width: 15%">Indicator</th>
+            <th style="width: 15%">Source</th>
+            <th style="width: 15%">Unit</th>
+            <th style="width: 15%">Quarter</th>
+            <th style="width: 15%">Fiscal Year</th>
+            <th style="width: 10%">Private Consumption</th>
+            <th style="width: 10%">Government Consumption</th>
+            <th style="width: 10%">Gross Capital Formation</th>
+            <th style="width: 10%">Exports Of Goods And Services</th>
+            <th style="width: 10%">Imports Of Goods And Services</th>
+            <th style="width: 10%">Total Gross Domestic Product At Market Prices</th>
+            @if (bEUsersPrivilegesViewModel.IsFromApprovalPage)
+            {
+                <th style="width: 5%"></th>
+            }
+            else
+            {
+                <th style="width: 20%;min-width:60px">Action</th>
+
+            }
+            <th style="width: 20%;min-width:60px">Status</th>
+            <th></th>
+            @if (bEUsersPrivilegesViewModel.IsFromApprovalPage)
+            {
+                <th style="width: 20%;min-width:50px"></th>
+            }
+            else
+            {
+                <th style="width: 5%"></th>
+
+            }
+            <th style="width: 20%;min-width:40px"></th>
+        </tr>
+    </thead>
+</table>
+

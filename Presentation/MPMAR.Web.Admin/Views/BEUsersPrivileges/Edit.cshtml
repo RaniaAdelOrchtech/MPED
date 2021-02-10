@@ -1,0 +1,195 @@
+﻿@model IEnumerable<ApplicationUser>
+@{
+    ViewData["Title"] = "Edit ";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+
+    var subApplicationName = Configuration.GetSection("SubApplicationName").Value;
+}
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+
+<style>
+    .panel {
+        margin-top: 30px !important
+    }
+
+    .trPageName {
+        width: 100%;
+    }
+</style>
+
+
+<select id="usersList" class="js-example-basic-single" name="state" style="min-width:250px" onchange="ChangeUsersList(this)">
+
+
+    <option value="0">Select User</option>
+    @foreach (var item in Model)
+    {
+        <option id="@item.Id" value="@item.Id">@item.UserName</option>
+
+    }
+</select>
+
+
+@*<div class="btn-group">
+        <a class="btn dropdown-toggle" data-toggle="dropdown" style="background-color:#2a3f54;color:white" href="#">
+            User <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu">
+            @foreach (var item in Model)
+            {
+
+                <li><a id="@item.Id" class="dropdown-item" onclick="ChangeUsersList('@item.Id')">@item.UserName</a></li>
+            }
+
+        </ul>
+    </div>*@
+
+
+<div id="userPrivilegesDiv" style="margin-top:30px">
+
+</div>
+
+
+
+@section scripts {
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.3.0/jquery.form.min.js" integrity="sha384-qlmct0AOBiA2VPZkMY3+2WqkHtIQ9lSdAsAn5RUJD/3vA5MKDgSGcdmIv4ycVxyn" crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+
+    <script>
+
+        $(function () {
+             $('.js-example-basic-single').select2();
+
+            window.currentUserId=0
+            $(".dropdown-menu li a").click(function () {
+
+                $(".btn:first-child").html($(this).text() + ' <span class="caret"></span>');
+
+            });
+
+
+            var selectedUserId = '@((ViewBag.SelectedUserId)??0)';
+            if (selectedUserId != 0) {
+                $("#" + selectedUserId).click()
+            }
+
+
+        });
+
+
+
+        function ChangeUsersList(userId) {
+            currentUserId=$(userId).val()
+            console.log("userId: " + currentUserId)
+          ChangeUsersListVal(currentUserId)
+
+        }
+        function ChangeUsersListVal(currentUserIdVal) {
+              if (currentUserIdVal != 0) {
+                $.ajax({
+                    url: '@(subApplicationName +"/BEUsersPrivileges/GetUserPrivileges")',
+                    type: "GET",
+                    data: { userId: currentUserIdVal }
+                }).done(function (partialViewResult) {
+                    $("#userPrivilegesDiv").html(partialViewResult);
+                });
+            } else {
+                 $("#userPrivilegesDiv").html('');
+            }
+        }
+
+
+        function ActiveView(item) {
+            var currentCheck = $(item);
+            var currentCheckValue = currentCheck.prop('checked')
+
+            var parentRow = $(item).parent().parent().children('td');
+
+            var viewCheck = parentRow.eq(2).children("input");
+            var addCheck = parentRow.eq(3).children("input");
+            var editCheck = parentRow.eq(4).children("input");
+            var deleteCheck = parentRow.eq(5).children("input");
+            var approveCheck = parentRow.eq(6).children("input");
+            var oldViewCheck = parentRow.eq(7).children("input");
+
+            var checkValue = addCheck.prop('checked') || editCheck.prop('checked') || deleteCheck.prop('checked') || approveCheck.prop('checked')
+            if (currentCheck.hasClass('SPGlobalEdit') || currentCheck.hasClass('SPGlobalApprove')) {
+
+                var globalSpViewValue = $('.SPGlobalEdit').first().prop('checked') || $('.SPGlobalApprove').first().prop('checked')
+                debugger
+                    viewCheck.prop('checked', globalSpViewValue ||  $('.SPGlobalOldView').first().prop('checked'))
+                 $(".SPGlobalView").first().prop("disabled", globalSpViewValue)
+            }
+            else if (currentCheck.hasClass('DpGlobalApprove') || currentCheck.hasClass('DpGlobalDelete'))
+            {
+                var dbViewChecks = $('.DbViewCheck');
+                if (currentCheckValue) {
+
+                    dbViewChecks.prop('checked', true)
+                    dbViewChecks.prop("disabled", true)
+
+                } else {
+                    dbViewChecks.each(function (index) {
+                        var currentParentRow = dbViewChecks.eq(index).parent().parent().children('td');
+                        var currentAddCheck = currentParentRow.eq(3).children("input");
+                        var currentEditCheck = currentParentRow.eq(4).children("input");
+                        var currentDeleteCheck = currentParentRow.eq(5).children("input");
+
+
+                        var currentcheckValue = currentAddCheck.prop('checked') || currentEditCheck.prop('checked') || currentDeleteCheck.prop('checked') || $(".DpGlobalApprove").first().prop('checked') || $(".DpGlobalDelete").first().prop('checked')
+
+                        dbViewChecks.eq(index).prop("disabled", currentcheckValue)
+                        dbViewChecks.eq(index).prop("checked", currentcheckValue)
+
+                    })
+
+                }
+
+                     viewCheck.prop("disabled", checkValue)
+                     viewCheck.prop("checked", checkValue)
+            }
+            else if (currentCheck.hasClass('DbCheck') && ($(".DpGlobalApprove").first().prop('checked') || $(".DpGlobalDelete").first().prop('checked'))) {
+
+                     viewCheck.prop('checked', true)
+                     viewCheck.prop("disabled", true)
+
+            }
+            else {
+
+             if (checkValue) {
+                viewCheck.prop('checked', true)
+                viewCheck.prop("disabled", true)
+             } else {
+                 if (!currentCheck.hasClass('hpBasicInfo')) {
+
+                 viewCheck.prop('checked', oldViewCheck.prop('checked'))
+                     viewCheck.prop("disabled", false)
+                 } else {
+                     viewCheck.prop('checked', false)
+                 }
+            }
+            }
+
+
+        }
+
+
+        function SubmitPrivilegeForm() {
+            $("#privilegeFormId").ajaxSubmit({
+                url: '@(subApplicationName +"/BEUsersPrivileges/edit")',
+                type: 'post',
+                success: function(data)
+                    {
+                     ChangeUsersListVal(currentUserId)
+                    }
+            })
+
+
+        }
+
+
+
+    </script>
+}

@@ -1,0 +1,143 @@
+﻿@using MPMAR.Common
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+
+    string approvalId = Context.Request.Query["approvalId"];
+    int approvalIdInt = 0;
+    int.TryParse(approvalId, out approvalIdInt);
+
+    var bEUsersPrivilegesViewModel = bEUsersPrivilegesService.ValidateIBEUsersPrivilegesViewService(PrivilegesPageType.HPPhotos, this.User.FindFirstValue(ClaimTypes.NameIdentifier), this.User.IsInRole(UserRolesConst.SuperAdmin), approvalId: approvalIdInt);
+}
+
+
+<div>
+    <h4>Home Page > Photos</h4>
+</div>
+
+
+@if (bEUsersPrivilegesViewModel.CanApprove && bEUsersPrivilegesViewModel.IsFromApprovalPage)
+{
+    <a asp-action="Approve" asp-route-approvalId="@ViewBag.ApprovalId" type="button" class="btn btn-primary" onclick="DisableAfterClick(event,this)">Approve</a>
+    <a asp-action="Ignore" asp-route-approvalId="@ViewBag.ApprovalId" type="button" class="btn btn-primary" onclick="DisableAfterClick(event,this)">Ignore</a>
+}
+else if (bEUsersPrivilegesViewModel.CanSubmit && !bEUsersPrivilegesViewModel.IsFromApprovalPage)
+{
+    <a type="button" class="btn btn-success" asp-route-relatedId="@ViewBag.RelatedId" asp-controller="HP_Photos" asp-action="SubmitChanges">Submit</a>
+
+}
+
+<table id="data_table" class="table table-striped table-bordered" style="width:100%">
+    <thead>
+        <tr>
+            <th style="width: 8%">Image</th>
+            <th style="width: 20%">Arabic Title</th>
+            <th style="width: 20%">Arabic Description</th>
+            <th style="width: 20%">English Title</th>
+            <th style="width: 20%">English Description</th>
+            <th style="width: 12%">Url</th>
+            <th style="width: 20%"></th>
+        </tr>
+    </thead>
+</table>
+
+
+<!--model dialog-->
+<div class="modal1">
+    <div class="modalWrap">
+        <span id="close"> X </span>
+
+        <div id="yourDiv"></div>
+    </div>
+</div>
+
+
+@section scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            window.table = $('#data_table').DataTable({
+                "aaSorting": [],
+                "scrollX": true,
+                "ajax": {"url": '@Url.Action("GetAllPhotos", "HP_Photos")', "dataSrc": "data"},
+                "columns": [
+                    {
+                        "data": "imageUrl", "name": "ImageUrl", "render": function (data, type, row) {
+                            return '<a href="#" title="View Image" data-placement="right" id="imageItem" class="imageItem anchorActionLink" data-id="' + row.imageUrl + '">Image</a>';
+                        }
+                    },
+                    {
+                        "data": "arTitle", "name": "ArTitle", render:  $.fn.dataTable.render.ellipsis()
+                    },
+                    {
+                        "data": "arDescription", "name": "ArDescription", render:  $.fn.dataTable.render.ellipsis()
+                    },
+                    {
+                        "data": "enTitle", "name": "EnTitle", render:  $.fn.dataTable.render.ellipsis()
+                    },
+                    {
+                        "data": "enDescription", "name": "EnDescription",render:  $.fn.dataTable.render.ellipsis()
+                    },
+                    {
+                        "data": "url", "name": "Url", render:  $.fn.dataTable.render.ellipsis()
+                    },
+                    {
+                    "data": "id", "orderable": false, "render": function (data, type, row) {
+                 var edit = '@Url.Action("Edit", "HP_Photos")';
+                             var isContentManager = '@(bEUsersPrivilegesViewModel.CanEdit && !bEUsersPrivilegesViewModel.IsFromApprovalPage)';
+                        return isContentManager == "True" ? '<a href="' + edit + '/' + data +'?approvalId=' + @ViewBag.approvalId + '" title="Edit" class="anchorActionLink"><i class="fa fa-pencil"></i></a>': '';
+                    }
+                    },
+                ]
+                ,"fnInitComplete": function (oSettings, json) {
+                    var table = $('#data_table').DataTable();
+                    if (table.data().count() <= 10) {
+                       document.getElementById("data_table_paginate").style.display = "none";
+                            document.getElementById("data_table_length").style.display = "none";
+                            document.getElementById("data_table_filter").style.display = "none";
+                    }
+
+                }
+            });
+        });
+
+
+
+
+          $("#close").click(function () {
+        $(".modal1").fadeOut("fast");
+        $("#yourDiv").css({
+            "overflow": "hidden",
+            "height": "auto"
+        });
+    });
+
+    $(".modalWrap").on("click", function (e) {
+        e.stopPropagation();
+    });
+        $('#data_table').on('click', '.imageItem', function () {
+
+                var img = $('<img id="dynamic">');
+                img.attr('src', $(this).data('id'));
+        $(".modal1").fadeIn("fast");
+        $("#yourDiv img").remove();
+        img.clone().appendTo("#yourDiv");
+        var hyt = $("#yourDiv").height();
+        if (hyt > 400) {
+            $("#yourDiv").css({
+                "overflow": "hidden",
+                "height": "400px"
+            });
+            $("#yourDiv img").css({
+                "max-height": "98%"
+            });
+        } else if (hyt <= 400) {
+            $("#yourDiv").css({
+                "overflow": "hidden",
+                "height": "auto"
+            });
+        }
+    });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9.10.9/dist/sweetalert2.all.min.js"></script>
+}
+

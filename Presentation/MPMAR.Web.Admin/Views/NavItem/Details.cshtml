@@ -1,0 +1,63 @@
+﻿@model NavItemVersionViewModel
+@using MPMAR.Common
+@{
+    ViewBag.Title = "Nav Item";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+
+    string approvalId = Context.Request.Query["approvalId"];
+    int approvalIdInt = 0;
+    int.TryParse(approvalId, out approvalIdInt);
+
+    var bEUsersPrivilegesViewModel = bEUsersPrivilegesService.ValidateIBEUsersPrivilegesViewService(PrivilegesPageType.NavItems, this.User.FindFirstValue(ClaimTypes.NameIdentifier), this.User.IsInRole(UserRolesConst.SuperAdmin), approvalId: approvalIdInt);
+}
+
+@*<h1>Nav Item Details</h1>*@
+
+
+<div>
+    <h4>Definitions > <a asp-controller="NavItem" asp-action="Index" asp-route-approvalId="@Model.approvalId">Nav Item </a> > Detail</h4>
+</div>
+
+<table class="pull-left col-md-8 ">
+    <tbody>
+        <tr>
+            <td class="h6"><strong>English Name</strong></td>
+            <td> </td>
+            <td class="h5">@Model.EnName</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong>Arabic Name</strong></td>
+            <td> </td>
+            <td class="h5">@Model.ArName</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong>Order</strong></td>
+            <td> </td>
+            <td class="h5">@Model.Order</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong>Is Active</strong></td>
+            <td> </td>
+            <td class="h5">@(Model.IsActive ? "Yes" : "No") </td>
+        </tr>
+
+        <tr>
+            <td class="btn-mais-info text-primary">
+                <br />
+                <p>
+                    @if (bEUsersPrivilegesViewModel.CanEdit && !bEUsersPrivilegesViewModel.IsFromApprovalPage)
+                    {
+                        <strong><a asp-controller="NavItem" asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |</strong>
+                    }
+                    <strong><a asp-controller="NavItem" asp-action="Index" asp-route-approvalId="@Model.approvalId">Back to previous page</a></strong>
+                </p>
+            </td>
+            <td> </td>
+            <td class="h5"></td>
+        </tr>
+
+    </tbody>
+</table>

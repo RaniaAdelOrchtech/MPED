@@ -1,0 +1,66 @@
+﻿@model IEnumerable<MPMAR.Data.PageEvent>
+@{
+    string lang = Context.Request.Query["lang"];
+    string mainTitle = "Events";
+    var data = Model.ToList();
+    string readMore = "Read More";
+
+    if (lang == null || lang == "" || lang == "ar")
+    {
+
+        mainTitle = "فعاليات الوزارة";
+
+        readMore = "اقرأ المزيد";
+    }
+
+}
+@if (ViewBag.ActivatePage)
+{
+    <div class="sidebar-box white animate-onscroll" style="margin-top: 51px;">
+        <h3>@mainTitle</h3>
+        <ul class="upcoming-events">
+
+            @for (int i = 0; i < data.Count; i++)
+            {
+                var backgroundColor = "#c89637";
+                if (i % 2 == 0)
+                    backgroundColor = "#28A5A3";
+                var title = data[i].EnTitle;
+                var address = data[i].EnAddress;
+                if (lang == null || lang == "" || lang == "ar")
+                {
+                    title = data[i].ArTitle;
+                    address = data[i].ArAddress;
+                }
+
+                <li>
+                    <div class="date">
+                        <span style="background: @backgroundColor;color: #fff;">
+                            <span class="day">@data[i].EventStartDate.Value.Day</span>
+                            <span class="month">@data[i].EventStartDate.Value.Month</span>
+                        </span>
+                    </div>
+
+                    <div class="event-content">
+                        <h6>
+                            <a href="event-post-v14.html">
+                                @title
+                            </a>
+                        </h6>
+                        <ul class="event-meta">
+                            <li style="display: none;">
+                                <i class="icons icon-clock"></i> 4:00 pm - 6:00 pm
+                            </li>
+                            <li><i class="icons icon-location"></i>@address</li>
+                        </ul>
+                    </div>
+                </li>
+            }
+
+
+
+
+        </ul>
+        <a href="~/EventCalendar" class="button transparent button-arrow goldhover">@readMore</a>
+    </div>
+}

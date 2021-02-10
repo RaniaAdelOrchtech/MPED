@@ -1,0 +1,35 @@
+﻿@model PageRouteEditViewModel
+@using MPMAR.Common
+@{
+    ViewBag.Title = "Page";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+
+        string approvalId = Context.Request.Query["approvalId"];
+    int approvalIdInt = 0;
+    int.TryParse(approvalId, out approvalIdInt);
+
+    var bEUsersPrivilegesViewModel = bEUsersPrivilegesService.ValidateIBEUsersPrivilegesViewService(PrivilegesPageType.StaticPage, this.User.FindFirstValue(ClaimTypes.NameIdentifier), this.User.IsInRole(UserRolesConst.SuperAdmin), approvalId: approvalIdInt);
+}
+
+<h1>Edit Page</h1>
+<h3>Main Data</h3>
+@if (ViewBag.DisableEditFlage == true && bEUsersPrivilegesViewModel.CanEdit && !bEUsersPrivilegesViewModel.IsFromApprovalPage)
+{
+<div class="alert alert-warning">
+    <strong>NOTE!</strong> Your old changes haven't been approved yet, and your new changes will be auto-submitted.
+</div>
+}
+<partial name="_ViewPageRouteVersion" model="Model" />
+
+@if (bEUsersPrivilegesViewModel.IsFromApprovalPage)
+{
+    @section scripts {
+        <script>
+            $(document).ready(function () {
+
+                $("input").attr("disabled", "true")
+                $("select").attr("disabled", "true")
+            })
+        </script>
+    }
+}

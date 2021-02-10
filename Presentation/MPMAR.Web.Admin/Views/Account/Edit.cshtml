@@ -1,0 +1,52 @@
+﻿@model MPMAR.Entities.EditUserRoleViewModel
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+    <div>
+       
+        <div>
+            <h4>Super Admin > <a asp-controller="Account" asp-action="Index">User Managment</a> > Edit</h4>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <form asp-action="Edit">
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="EmailConfirmed" />
+                    <input type="hidden" asp-for="TwoFactorEnabled" />
+                    <input type="hidden" asp-for="IsFirstLogin" />
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2",style="padding:10" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", disabled = "disabled",style="margin-left:30px;" } })
+                            @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="checkbox">
+                            <label asp-for="IsSuperAdmin" style="margin-top:15px;margin-left:8px">
+                                @Html.DisplayNameFor(m => m.IsSuperAdmin)
+                                <input asp-for="IsSuperAdmin" style="
+                                margin-top: 5px;
+                                margin-left: 5px;
+                            " />
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Save" class="btn btn-primary" />
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div>
+            <a asp-controller="Account" asp-action="Index">Back to previous page</a>
+        </div>
+
+    </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

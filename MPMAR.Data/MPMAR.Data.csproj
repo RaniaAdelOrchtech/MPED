@@ -1,0 +1,99 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="ViewModels\**" />
+    <EmbeddedResource Remove="ViewModels\**" />
+    <None Remove="ViewModels\**" />
+
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="DbInitializer.cs" />
+    <Compile Remove="Migrations\20200205085811_AddHasNavItemFlagToPageRouteTable.cs" />
+    <Compile Remove="Migrations\20200205085811_AddHasNavItemFlagToPageRouteTable.Designer.cs" />
+    <Compile Remove="Migrations\20200205090848_AddHasNavItemFlagToPageRouteTable.cs" />
+    <Compile Remove="Migrations\20200205090848_AddHasNavItemFlagToPageRouteTable.Designer.cs" />
+    <Compile Remove="Migrations\20200206175710_EditDynamicPageContent.cs" />
+    <Compile Remove="Migrations\20200206175710_EditDynamicPageContent.Designer.cs" />
+    <Compile Remove="Migrations\20200215113158_AddStatusTable.cs" />
+    <Compile Remove="Migrations\20200215113158_AddStatusTable.Designer.cs" />
+    <Compile Remove="Migrations\20200215134301_EditNavItemNavItemVersionRelation.cs" />
+    <Compile Remove="Migrations\20200215134301_EditNavItemNavItemVersionRelation.Designer.cs" />
+    <Compile Remove="Migrations\20200216041807_EditRelationBetweenPageRouteAndPageRouteSection.cs" />
+    <Compile Remove="Migrations\20200216041807_EditRelationBetweenPageRouteAndPageRouteSection.Designer.cs" />
+    <Compile Remove="Migrations\20200407114544_test.cs" />
+    <Compile Remove="Migrations\20200407114544_test.Designer.cs" />
+    <Compile Remove="Migrations\20200407115132_FormerMinistriesMig.cs" />
+    <Compile Remove="Migrations\20200407115132_FormerMinistriesMig.Designer.cs" />
+    <Compile Remove="Migrations\20200407115815_FormerMinistriesMig.cs" />
+    <Compile Remove="Migrations\20200407115815_FormerMinistriesMig.Designer.cs" />
+    <Compile Remove="Migrations\20200407133345_FormerMinistriesMig.cs" />
+    <Compile Remove="Migrations\20200407133345_FormerMinistriesMig.Designer.cs" />
+    <Compile Remove="Migrations\20200421083523_add FooterMenuTitle table.cs" />
+    <Compile Remove="Migrations\20200421083523_add FooterMenuTitle table.Designer.cs" />
+    <Compile Remove="Migrations\20200421085058_add FooterMenuTitle table.cs" />
+    <Compile Remove="Migrations\20200421085058_add FooterMenuTitle table.Designer.cs" />
+    <Compile Remove="Migrations\20200421085521_add FooterMenuTitle table.cs" />
+    <Compile Remove="Migrations\20200421085521_add FooterMenuTitle table.Designer.cs" />
+    <Compile Remove="Migrations\20200421131543_add MinistryVission table.cs" />
+    <Compile Remove="Migrations\20200421131543_add MinistryVission table.Designer.cs" />
+    <Compile Remove="Migrations\20200421164002_add Publication table.cs" />
+    <Compile Remove="Migrations\20200421164002_add Publication table.Designer.cs" />
+    <Compile Remove="Migrations\20200422190955_add Monitoring.cs" />
+    <Compile Remove="Migrations\20200422190955_add Monitoring.Designer.cs" />
+    <Compile Remove="Migrations\20200430091943_CityPlanMig.cs" />
+    <Compile Remove="Migrations\20200430091943_CityPlanMig.Designer.cs" />
+    <Compile Remove="Migrations\20200502130048_AddFooterMenuTitleVersionsAndLeftMenuItemVersionsTable.cs" />
+    <Compile Remove="Migrations\20200502130048_AddFooterMenuTitleVersionsAndLeftMenuItemVersionsTable.Designer.cs" />
+    <Compile Remove="Migrations\20200503084025_updateNavItemVersion.cs" />
+    <Compile Remove="Migrations\20200503084025_updateNavItemVersion.Designer.cs" />
+    <Compile Remove="Migrations\20200503084747_updateNavItemVersion2.cs" />
+    <Compile Remove="Migrations\20200503084747_updateNavItemVersion2.Designer.cs" />
+    <Compile Remove="Migrations\20200503085339_updateNavItemVersion.cs" />
+    <Compile Remove="Migrations\20200503085339_updateNavItemVersion.Designer.cs" />
+    <Compile Remove="Migrations\20200507130944_AddNewsVersionTable.cs" />
+    <Compile Remove="Migrations\20200507130944_AddNewsVersionTable.Designer.cs" />
+    <Compile Remove="Migrations\20200507132003_AddNewsVersionTable.cs" />
+    <Compile Remove="Migrations\20200507132003_AddNewsVersionTable.Designer.cs" />
+    <Compile Remove="Migrations\20200507133147_AddNewsVersionTable.cs" />
+    <Compile Remove="Migrations\20200507133147_AddNewsVersionTable.Designer.cs" />
+    <Compile Remove="Migrations\20200507134223_AddNewsVersionTable.cs" />
+    <Compile Remove="Migrations\20200507134223_AddNewsVersionTable.Designer.cs" />
+    <Compile Remove="Migrations\20200513125507_AddLogPropMig.cs" />
+    <Compile Remove="Migrations\20200513125507_AddLogPropMig.Designer.cs" />
+    <Compile Remove="Migrations\20200519111231_AddLogoLinkAndLogoLinkVersionHomePageTables.cs" />
+    <Compile Remove="Migrations\20200519111231_AddLogoLinkAndLogoLinkVersionHomePageTables.Designer.cs" />
+    <Compile Remove="Migrations\20200520095748_EventAndPhotVerMig.cs" />
+    <Compile Remove="Migrations\20200520095748_EventAndPhotVerMig.Designer.cs" />
+    <Compile Remove="Migrations\20200608105756_add_dfGov.cs" />
+    <Compile Remove="Migrations\20200608105756_add_dfGov.Designer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Scripts\SiteMapInitData.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\SiteMapInitData.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="3.1.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.0" />
+    <PackageReference Include="NEST" Version="7.8.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MPMAR.Analytics.Data\MPMAR.Analytics.Data.csproj" />
+  </ItemGroup>
+
+</Project>

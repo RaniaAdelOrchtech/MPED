@@ -1,0 +1,92 @@
+﻿@model PageRouteEditViewModel
+@{ 
+    var navItem = Model.NavItems.FirstOrDefault(x => x.Id==Model.NavItemId);
+}
+<table class="pull-left col-md-12 ">
+    <tbody>
+        <tr>
+            <td class="h6" style="width: 30%"><strong><label asp-for="EnName"></label></strong></td>
+            <td class="h5">@Model.EnName</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="ArName"></label></strong></td>
+            <td class="h5">@Model.ArName</td>
+        </tr>
+
+        @if (navItem != null)
+        {
+            <tr>
+                <td class="h6"><strong>Nav Item En</strong></td>
+                <td class="h5">@navItem.EnName</td>
+            </tr>
+
+            <tr>
+                <td class="h6"><strong>Nav Item Ar</strong></td>
+                <td class="h5">@navItem.ArName</td>
+            </tr>
+        }
+
+        <tr>
+            <td class="h6"><strong><label asp-for="Order"></label></strong></td>
+            <td class="h5">@Model.Order</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="IsActive"></label></strong></td>
+            <td class="h5">@(Model.IsActive ? "Yes" : "No") </td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="SeoTitleEN"></label></strong></td>
+            <td class="h5">@Model.SeoTitleEN</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="SeoTitleAR"></label></strong></td>
+            <td class="h5">@Model.SeoTitleAR</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="SeoDescriptionEN"></label></strong></td>
+            <td class="h5">@Model.SeoDescriptionEN</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="SeoDescriptionAR"></label></strong></td>
+            <td class="h5">@Model.SeoDescriptionAR</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="SeoOgTitleEN"></label></strong></td>
+            <td class="h5">@Model.SeoOgTitleEN</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="SeoOgTitleAR"></label></strong></td>
+            <td class="h5">@Model.SeoOgTitleAR</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="SeoTwitterCardEN"></label></strong></td>
+            <td class="h5">@Model.SeoTwitterCardEN</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="SeoTwitterCardAR"></label></strong></td>
+            <td class="h5">@Model.SeoTwitterCardAR</td>
+        </tr>
+
+        <tr>
+            <td class="btn-mais-info text-primary">
+                <br />
+                <p>
+                    <strong><a  asp-action="Index">Back to previous page</a></strong>
+                </p>
+            </td>
+            <td> </td>
+            <td class="h5"></td>
+        </tr>
+
+    </tbody>
+</table>

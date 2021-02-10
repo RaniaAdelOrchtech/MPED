@@ -1,0 +1,155 @@
+﻿@model MPMAR.Business.ViewModels.PageEventViewModel
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<style>
+    td.h5 {
+        white-space: -moz-pre-wrap !important;
+        white-space: -webkit-pre-wrap;
+        white-space: -pre-wrap;
+        white-space: -o-pre-wrap;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        word-break: break-all;
+        white-space: normal;
+        PADDING: 8px;
+    }
+
+    td.h6 {
+        line-height: 1.4 !important;
+        PADDING: 8px;
+    }
+
+    table, th, td {
+        border: 1px solid black;
+    }
+</style>
+
+<div>
+    <h4><a asp-controller="StaticPageRoute" asp-action="Index">Static Page</a> > <a asp-controller="PageEventVersion" asp-action="Index">Page Event Version</a> > Detail</h4>
+</div>
+
+
+
+
+<table class="pull-left col-md-12 ">
+    <tbody>
+
+        <tr>
+            <td class="h6" style="width: 30% "><strong>En Event Title</strong></td>
+            <td class="h5">@Model.EnTitle</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong>Ar Event Title</strong></td>
+            <td class="h5">@Model.ArTitle</td>
+        </tr>
+        <tr>
+            <td class="h6" style="width: 30% "><strong>En Description</strong></td>
+            <td class="h5">@Model.EnDescription</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong>Ar Description</strong></td>
+            <td class="h5">@Model.ArDescription</td>
+        </tr>
+
+
+
+        <tr>
+            <td class="h6"><strong>Active</strong></td>
+            <td class="h5">@(Model.IsActive ? "Yes" : "No") </td>
+        </tr>
+
+
+        <tr>
+            <td class="h6"><strong>EnAddress</strong></td>
+            <td class="h5">@Model.EnAddress </td>
+        </tr>
+        <tr>
+            <td class="h6"><strong>ArAddress</strong></td>
+            <td class="h5">@Model.ArAddress </td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong>Map Url</strong></td>
+            <td class="h5">@Model.EventLocationUrl </td>
+        </tr>
+        <tr>
+            <td class="h6"><strong>ArAddress</strong></td>
+            <td class="h5">@Model.ArAddress </td>
+        </tr>
+        <tr>
+            <td class="h6"><strong>Popup Image</strong></td>
+            <td>
+                <img src="@Model.EnUrl" class="thumpnail-edit-image" asp-append-version="true" />
+            </td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong>Detial Image</strong></td>
+            <td>
+                <img src="@Model.ArUrl" class="thumpnail-edit-image" asp-append-version="true" />
+            </td>
+        </tr>
+        <tr>
+            <td class="h6"><strong>EventStartDate</strong></td>
+            <td class="h5">@Model.EventStartDate </td>
+        </tr>
+        <tr>
+            <td class="h6"><strong>EventEndDate</strong></td>
+            <td class="h5">@Model.EventEndDate </td>
+        </tr>
+
+
+        <tr>
+            <td class="h6"><strong>En Seo Title</strong></td>
+            <td class="h5">@Model.SeoTitleEN</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong>Ar Seo Title</strong></td>
+            <td class="h5">@Model.SeoTitleAR</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong>En Seo Description</strong></td>
+            <td class="h5">@Model.SeoDescriptionEN</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong>Ar Seo Description</strong></td>
+            <td class="h5">@Model.SeoDescriptionAR</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="SeoOgTitleEN"></label></strong></td>
+            <td class="h5">@Model.SeoOgTitleEN</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="SeoOgTitleAR"></label></strong></td>
+            <td class="h5">@Model.SeoOgTitleAR</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="SeoTwitterCardEN"></label></strong></td>
+            <td class="h5">@Model.SeoTwitterCardEN</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="SeoTwitterCardAR"></label></strong></td>
+            <td class="h5">@Model.SeoTwitterCardAR</td>
+        </tr>
+    </tbody>
+</table>
+<div>
+    <div class="col-md-4 col-sm-4" style="padding-top: 10px;">
+        <a asp-controller="PageEventVersions" asp-action="Edit" asp-route-id="@Model.Id" type="button" class="btn btn-success">Edit</a>
+        <a asp-action="Index" type="button" class="btn btn-primary">Back to previous page</a>
+    </div>
+</div>
+

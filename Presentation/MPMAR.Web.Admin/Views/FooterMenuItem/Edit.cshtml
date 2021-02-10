@@ -1,0 +1,124 @@
+﻿@model FooterMenuItemViewModel
+@using MPMAR.Common
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+
+    string approvalId = Context.Request.Query["approvalId"];
+    int approvalIdInt = 0;
+    int.TryParse(approvalId, out approvalIdInt);
+
+    var bEUsersPrivilegesViewModel = bEUsersPrivilegesService.ValidateIBEUsersPrivilegesViewService(PrivilegesPageType.FooterMenuItems, this.User.FindFirstValue(ClaimTypes.NameIdentifier), this.User.IsInRole(UserRolesConst.SuperAdmin), approvalId: approvalIdInt);
+}
+
+@*<h4>Edit Footer Menu System</h4>*@
+
+
+
+<div>
+    <h4>Definitions > <a asp-controller="FooterMenuItem" asp-action="Index">Footer Menu Item </a> > Edit</h4>
+</div>
+@if (ViewBag.DisableEditFlage == true && bEUsersPrivilegesViewModel.CanSubmit && !bEUsersPrivilegesViewModel.IsFromApprovalPage)
+{
+    <div class="alert alert-warning">
+        <strong>NOTE!</strong> Your old changes haven't been approved yet, and your new changes will be auto-submitted.
+    </div>
+}
+
+<form enctype="multipart/form-data" asp-controller="FooterMenuItem" asp-action="Edit" method="post" class="mt-3">
+    <input asp-for="Id" type="hidden" />
+    <input asp-for="VersionStatusEnum" type="hidden" />
+    <input asp-for="FooterMenuItemId" type="hidden" />
+    <input asp-for="ChangeActionEnum" type="hidden" />
+    <input asp-for="IsDeleted" type="hidden" />
+    <div class="form-group row">
+        <label asp-for="EnTitle" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="EnTitle" class="form-control" placeholder="English Title" />
+            <span asp-validation-for="EnTitle" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="ArTitle" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="ArTitle" class="form-control" placeholder="Arabic Title" />
+            <span asp-validation-for="ArTitle" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="Link" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="Link" class="form-control" placeholder="Link" />
+            <span asp-validation-for="Link" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="Order" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="Order" class="form-control" placeholder="Item List Order" />
+            <span asp-validation-for="Order" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="IsActive" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="IsActive" class="flat" />
+            <span asp-validation-for="IsActive" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Footer Menu Title</label>
+        <div class="col-sm-10">
+            @Html.DropDownList("FooterMenuTitleId", null, "Select Footer Menu Title", htmlAttributes: new { @class = "form-control" })
+            <span asp-validation-for="@Model.FooterMenuTitleId" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="item form-group">
+        <div class="col-md-6 col-sm-6 offset-md-2">
+            <button type="submit" class="btn btn-success">Save</button>
+            <a asp-controller="FooterMenuItem" asp-action="Index" type="button" class="btn btn-primary">Cancel</a>
+        </div>
+    </div>
+</form>
+
+@section Scripts{
+    <script>
+        /* Enable html editor */
+        $(document).ready(function () {
+            $('.summernote').summernote({
+                height: 200,
+                toolbar: [
+                    //[groupname, [button list]]
+
+                    ['style', ['bold', 'italic', 'underline', 'clear']]
+                    , ['font', ['strikethrough', 'superscript', 'subscript']]
+                    , ['fontsize', ['fontsize']]
+                    , ['color', ['color']]
+                    , ['para', ['ul', 'ol'/*, 'paragraph'*/]]
+                    //,['height', ['height']]
+                ]
+            });
+        });
+
+        $(document).ready(function () {
+            //$('.custom-file-input').on('change', function () {
+            //    var fileName = $(this).val().split('\\').pop();
+            //    $(this).next('.custom-file-label').html(fileName);
+            //});
+            $('.custom-file-input').on('change', function () {
+                var fileName = $(this).val().split('\\').pop();
+                // $(this).next('.custom-file-label').html(fileName);
+                var ext = $(this).val().split('.').pop().toLowerCase();
+                if (ext == 'png' || ext == 'jpg' || ext == 'jpeg' || ext == 'gif' || ext == 'icon' || ext == 'bmp') {
+                    $(this).next('.custom-file-label').html(fileName);
+                }
+                else {
+                    alert('Please upload image file only.');
+                    return false;
+                }
+            });
+        });</script>
+}

@@ -1,0 +1,95 @@
+﻿@model List<MPMAR.Data.EgyptVision>
+
+@{
+    string lang = Context.Request.Query["lang"];
+    Int32 Id = Convert.ToInt32(Context.Request.Query["PAId"]);
+    var modelData = Model.OrderBy(m => m.Id).ToList();
+
+    ViewData["Title"] = ViewBag.Title;
+
+}
+<!-- Page Heading -->
+<style>
+    @@media (max-width: 767px) {
+        .EV2030 {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+    }
+</style>
+<section class="section page-heading animate-onscroll">
+    @if (lang == null || lang == "" || lang == "ar")
+    {
+        <h1>@ViewBag.Title  </h1>
+        <p class="breadcrumb"><a href="secondoptionhomepage.html">الرئيسية</a> / @ViewBag.Nav / @ViewBag.Title </p>
+
+    }
+    else
+    {
+        <h1> @ViewBag.Title  </h1>
+        <p class="breadcrumb"><a href="secondoptionhomepage.html">Home</a> / @ViewBag.Nav / @ViewBag.Title </p>
+
+    }
+
+</section>
+<!-- Page Heading -->
+<!-- Section -->
+<section class="section full-width-bg gray-bg">
+
+    <div class="row">
+
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <img class="animate-onscroll standardimgsize" src="@(lang == "en" ? modelData[0].EnImagePath : modelData[0].ArImagePath)" alt="">
+            <br><br>
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12" style="text-align:justify">
+                    @(lang == "en" ? Html.Raw(modelData[0].EnEgyptVisionSmallDesc.Replace("<div>", "").Replace("</div>", "")) : Html.Raw(modelData[0].ArEgyptVisionSmallDesc.Replace("<div>", "").Replace("</div>", "")))
+                </div>
+            </div>
+        </div>
+
+        <div class="row" style="margin-left: 15px; margin-right: 15px;">
+            @for (var i = 1; i < modelData.Count(); i++)
+            {
+                @if (modelData[i].Id % 2 == 1)
+                {
+                    <div class="col-lg-12 col-md-12 col-sm-12" style="margin-top: 50px; border-radius: 20px; background-color: rgb(40, 165, 163); padding-top: 20px;  padding-bottom: 5px;">
+                        <h3 class="no-margin-top" style="border-bottom: 1px solid rgb(200, 150, 55); padding-bottom: 10px; color: rgb(255, 255, 255); opacity: 1;">
+                            @(lang == "en" ? modelData[i].EnEgyptVisionName : modelData[i].ArEgyptVisionName)
+                        </h3>
+                        <div class="col-lg-3 col-md-3 col-sm-12 leftimage">
+                            <img class="align-left tealbgicon" src="@(lang == "en" ? modelData[i].EnImagePath : modelData[i].ArImagePath)" alt="" style="opacity: 1;" />
+                        </div>
+                        <div class="col-lg-9 col-md-9 col-sm-12">
+                            <p class="EV2030" style="color: rgb(255, 255, 255); margin-top: -12px; opacity: 1;">
+                                @(lang == "en" ? Html.Raw(modelData[i].EnEgyptVisionSmallDesc.Replace("<div>", "").Replace("</div>", "")) : Html.Raw(modelData[i].ArEgyptVisionSmallDesc.Replace("<div>", "").Replace("</div>", "")))
+                            </p>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="col-lg-12 col-md-12 col-sm-12" style="background-color: rgba(200, 150, 55, 0.8509803921568627);padding-top: 20px;margin-top: 50px;border-radius: 20px;    padding-bottom: 5px;">
+                        <h3 class="no-margin-top" style="color: rgb(255, 255, 255); border-bottom: 1px solid rgb(40, 165, 163); padding-bottom: 10px; opacity: 1;">
+                            @(lang == "en" ? modelData[i].EnEgyptVisionName : modelData[i].ArEgyptVisionName)
+                        </h3>
+                        <div class="col-lg-3 col-md-3 col-sm-12">
+
+                            <img class="align-right goldbdicon" src="@(lang == "en" ? modelData[i].EnImagePath : modelData[i].ArImagePath)" alt="" style="opacity: 1;" />
+                        </div>
+                        <div class="col-lg-9 col-md-9 col-sm-12">
+
+                            <p class="EV2030" style="color: rgb(255, 255, 255); margin-top: -12px; opacity: 1;">
+                                @(lang == "en" ? Html.Raw(modelData[i].EnEgyptVisionSmallDesc.Replace("<div>", "").Replace("</div>", "")) : Html.Raw(modelData[i].ArEgyptVisionSmallDesc.Replace("<div>", "").Replace("</div>", "")))
+                            </p>
+                        </div>
+                    </div>
+                }
+
+            }
+
+        </div>
+    </div>
+
+</section>
+<!-- /Section -->

@@ -1,0 +1,126 @@
+﻿@model IEnumerable<MPMAR.Data.HomePageModels.HomePageAffiliates>
+@{
+    string lang = Context.Request.Query["lang"];
+    var modelData = Model.ToList();
+    var popupBox = lang == "en" ? "Are you sure to leave the website?" : "هل تريد مغادرة الموقع؟";
+}
+@if (lang != "en")
+{
+
+    <style>
+        @@media (max-width: 767px) {
+            .owl-carousel {
+                margin-top: 47px !important;
+            }
+        }
+    </style>
+}
+<div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12">
+        <!-- Owl Carousel -->
+        <div class="owl-carousel-container no-margin-bottom">
+            <div class="owl-header">
+                <h3 class="animate-onscroll" style="color: #28A5A3;">
+                    @if (lang == null || lang == "" || lang == "ar")
+                    {
+                        @Html.Raw(modelData[0].ArDescription.Replace("<p>", "").Replace("</p>", ""))
+                    }
+                    else
+                    {
+                        @Html.Raw(modelData[0].EnDescription.Replace("<p>", "").Replace("</p>", ""))
+                    }
+                </h3>
+
+                @if (modelData.Count() > 5)
+                {
+                    <div class="carousel-arrows animate-onscroll" style="">
+                        <span class="left-arrow"><i class="icons icon-left-dir"></i></span>
+                        <span class="right-arrow"><i class="icons icon-right-dir"></i></span>
+                    </div>
+                }
+                else
+                {
+
+                    <script>
+                        if ($(window).width() < 1000) {
+                            document.write('<div class="carousel-arrows animate-onscroll" style=""><span class="left-arrow"><i class="icons icon-left-dir"></i></span><span class="right-arrow"><i class="icons icon-right-dir"></i></span></div>');
+                        }
+                    </script>
+                }
+            </div>
+            <div class="owl-carousel" data-max-items="4">
+                @if (lang == null || lang == "" || lang == "ar")
+                {
+                    @for (int i = 1; i < modelData.Count(); i++)
+                    {
+                        <!-- Owl Item -->
+                        <div>
+                            <!-- Brand -->
+                            <div class="animate-onscroll">
+                                <div class="example">
+                                    <div class="post-image">
+                                        <a href="@modelData[i].Url" target="_blank">
+                                            <img src="@modelData[i].ImageUrl" alt="">
+                                        </a>
+                                        <div class="contentdown">
+                                            <div class="textdown">
+                                                <a href="@modelData[i].Url" target="_blank">
+                                                    @if (lang == null || lang == "" || lang == "ar")
+                                                    {
+                                                        @Html.Raw(modelData[i].ArDescription)
+                                                    }
+                                                    else
+                                                    {
+                                                        @Html.Raw(modelData[i].EnDescription)
+                                                    }
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /Blog Post -->
+                        </div>
+                        <!-- /Owl Item -->
+                    }
+                }
+                else
+                {
+                    @for (int i = modelData.Count() - 1; i >= 1; i--)
+                    {
+                        <!-- Owl Item -->
+                        <div>
+                            <!-- Brand -->
+                            <div class="animate-onscroll">
+                                <div class="example">
+                                    <div class="post-image">
+                                        <a href="@modelData[i].Url)" target="_blank">
+                                            <img src="@modelData[i].ImageUrl" alt="">
+                                        </a>
+                                        <div class="contentdown">
+                                            <div class="textdown">
+                                                <a href="@modelData[i].Url" target="_blank">
+                                                    @if (lang == null || lang == "" || lang == "ar")
+                                                    {
+                                                        @Html.Raw(modelData[i].ArDescription)
+                                                    }
+                                                    else
+                                                    {
+                                                        @Html.Raw(modelData[i].EnDescription)
+                                                    }
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /Blog Post -->
+                        </div>
+                        <!-- /Owl Item -->
+                    }
+                }
+            </div>
+        </div>
+        <!-- /Owl Carousel -->
+    </div>
+</div>

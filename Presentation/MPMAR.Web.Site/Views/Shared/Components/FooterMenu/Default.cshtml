@@ -1,0 +1,132 @@
+﻿@model List<MPMAR.Data.FooterMenuItem>
+@{
+    ViewData["Title"] = "NavigationMenu";
+}
+@{
+    string lang = Context.Request.Query["lang"];
+    string langVal = lang == "en" ? "en" : "ar";
+}
+<footer id="footer">
+
+
+    <!-- Main Footer -->
+    @if (lang == "en")
+    {
+        <div id="main-footer" style="padding-left: 5000px !important;padding-right: 4674px !important">
+
+
+            <div class="row">
+                @foreach (var item in Model.Select(i => new { i.FooterMenuTitle, i.FooterMenuTitleId }).Distinct())
+                {
+                    <div class="col-lg-2 col-md-2 col-sm-6 animate-onscroll">
+                        <h4>
+                            @(lang == "en" ? item.FooterMenuTitle.EnTitle : item.FooterMenuTitle.ArTitle)
+
+                        </h4>
+                        <ul class="menu">
+                            @foreach (var objFooter in Model.Where(i => i.FooterMenuTitleId == item.FooterMenuTitleId).ToList())
+                            {
+                                <li>
+                                    @{
+
+                                        var langChar = objFooter.Link != null ? objFooter.Link.Contains("?") ? "&" : "?" : "";
+
+                                    }
+                                    <a href="@(objFooter.Link == null ? "#" : objFooter.Link + langChar + "lang=" +langVal)">
+                                        @(lang == "en" ? objFooter.EnTitle : objFooter.ArTitle)
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                }
+
+
+                @await Component.InvokeAsync("ContectUsFooter")
+
+            </div>
+
+        </div>
+    }
+    else
+    {
+        <div id="main-footer">
+
+
+            <div class="row">
+                @foreach (var item in Model.Select(i => new { i.FooterMenuTitle, i.FooterMenuTitleId }).Distinct())
+                {
+                    <div class="col-lg-2 col-md-2 col-sm-6 animate-onscroll">
+                        <h4>
+                            @(lang == "en" ? item.FooterMenuTitle.EnTitle : item.FooterMenuTitle.ArTitle)
+
+                        </h4>
+                        <ul class="menu">
+                            @foreach (var objFooter in Model.Where(i => i.FooterMenuTitleId == item.FooterMenuTitleId).ToList())
+                            {
+                                <li>
+                                    <a href="@(objFooter.Link == null ? "#" : objFooter.Link)">
+                                        @(lang == "en" ? objFooter.EnTitle : objFooter.ArTitle)
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                }
+
+
+                @await Component.InvokeAsync("ContectUsFooter")
+
+            </div>
+
+        </div>
+    }
+    <!-- /Main Footer -->
+    <!-- Lower Footer -->
+    <div id="lower-footer">
+        <div class="row">
+
+            <div class="col-lg-7 col-md-7 col-sm-7 animate-onscroll">
+                <p class="copyright">
+                    @(lang == "en" ? "All copyrights reserved to Ministry of Planning and Economic Development © 2020" : "كل الحقوق محفوظة - وزارة التخطيط والتنمية الاقتصادية 2020")
+                </p>
+            </div>
+            <div class="col-lg-5 col-md-5 col-sm-5 animate-onscroll">
+                @if (langVal == "en")
+                {
+                    <div class="social-media social-media-footer" style="float:left;margin-left:51px">
+                        <ul class="social-icons">
+                            @await Component.InvokeAsync("SocialMedia")
+                        </ul>
+
+                    </div>
+                }
+                else
+                {
+                    <div class="social-media social-media-footer" style="float:right;margin-right:47px">
+                        <ul class="social-icons">
+                            @await Component.InvokeAsync("SocialMedia")
+                        </ul>
+
+                    </div>
+                }
+
+
+                <a class="sitemapmobile sitemapmobile-footer" href="~/sitemap?lang=@langVal" style="@(lang == "en" ? "float: right;margin-right: -4px;" : "float: left;" ) font-size: 18px; color: #fff;  margin-top: 10px; ">
+                    @(lang == "en" ? "Site Map" : "عن الموقع")
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+    <!-- /Lower Footer -->
+
+
+</footer>
+<style>
+    .en {
+        direction: ltr;
+    }
+</style>

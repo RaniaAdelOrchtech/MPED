@@ -1,0 +1,127 @@
+﻿@model HomePageBasicInfoViewModel
+@{
+    ViewData["Title"] = "Edit Home Page Basic Info";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+
+<form enctype="multipart/form-data" asp-action="" method="post" class="mt-3">
+    <input asp-for="Id" type="hidden" />
+    <input asp-for="CreatedById" type="hidden" />
+    <input asp-for="CreationDate" type="hidden" />
+    <input asp-for="LogoUrl" type="hidden" />
+    <input asp-for="FavIconUrl" type="hidden" />
+
+
+    <div class="form-group row">
+        <label asp-for="LogoFile" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <div class="custom-file">
+                <input asp-for="LogoFile" class="form-control custom-file-input" />
+                <label class="custom-file-label">Choose File...</label>
+                <span asp-validation-for="LogoFile" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group row">
+        <img asp-for="ImageUrl" src="@Model.LogoUrl" style="max-height:200px;max-width:200px" />
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="FavIconFile" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <div class="custom-file">
+                <input asp-for="FavIconFile" class="form-control custom-file-input" />
+                <label class="custom-file-label">Choose File...</label>
+                <span asp-validation-for="FavIconFile" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group row">
+        <img asp-for="ImageUrl" src="@Model.FavIconUrl" style="max-height:200px;max-width:200px" />
+    </div>
+
+    <hr />
+    <h3>Search Engine Optimization Data</h3>
+
+    <div class="form-group row">
+        <label asp-for="SeoTitleEN" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="SeoTitleEN" class="form-control" placeholder="English Page Title" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="SeoTitleAR" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="SeoTitleAR" class="form-control" placeholder="Arabic Page Title" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="SeoDescriptionEN" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="SeoDescriptionEN" class="form-control" placeholder="English Page Description" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="SeoDescriptionAR" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="SeoDescriptionAR" class="form-control" placeholder="Arabic Page Description" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="SeoOgTitleEN" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="SeoOgTitleEN" class="form-control" placeholder="English Facebook Og Title" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="SeoOgTitleAR" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="SeoOgTitleAR" class="form-control" placeholder="Arabic Facebook Og Title" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="SeoTwitterCardEN" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="SeoTwitterCardEN" class="form-control" placeholder="English Twitter Card" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="SeoTwitterCardAR" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="SeoTwitterCardAR" class="form-control" placeholder="Arabic Twitter Card" />
+        </div>
+    </div>
+
+    <div class="item form-group">
+        <div class="col-md-6 col-sm-6 offset-md-2">
+
+            <button type="submit" class="btn btn-success" formaction="Edit">Save</button>
+            <a asp-action="Index" type="button" class="btn btn-primary">Cancel</a>
+
+        </div>
+    </div>
+</form>
+
+
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $('.custom-file-input').on('change', function () {
+                var fileName = $(this).val().split('\\').pop();
+                $(this).next('.custom-file-label').html(fileName);
+            });
+        })
+
+
+    </script>
+}

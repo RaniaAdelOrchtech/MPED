@@ -1,0 +1,267 @@
+﻿@model MPMAR.Web.Site.ViewModels.PageNewsListViewModel
+@{
+    string lang = Context.Request.Query["lang"];
+    string langVal = lang == "en" ? "en" : "ar";
+    ViewData["Title"] = lang == "en" ? Model.SinglePageNews.EnTitle : Model.SinglePageNews.ArTitle;
+}
+<style>
+    @@media (max-width: 767px) {
+        .newsPagination {
+            text-align: center;
+            width: 165px
+        }
+
+        .newsPaginationDiv {
+            text-align: center !important;
+        }
+
+        .newsPaginationParentDiv {
+            margin-bottom: 0;
+        }
+    }
+
+    .swal2-container {
+        zoom: 1.5;
+    }
+
+    .swal2-popup {
+        margin-top: 135px !important;
+    }
+
+    .swal2-confirm {
+
+
+            width:65%;
+            border:0
+    }
+
+    .swal2-cancel {
+    
+            width:65%;
+               border:0
+    }
+
+</style>
+
+<div>
+
+
+    <!-- Header -->
+    <section id="content" class="@lang">
+
+        <!-- Page Heading -->
+        <section class="section page-heading animate-onscroll">
+
+            <h1>
+                @(lang == "en" ? Model.SinglePageNews.EnTitle : Model.SinglePageNews.ArTitle)
+            </h1>
+            <p class="breadcrumb">
+                <a href="/home?lang=@langVal">@(lang == "en" ? "Main" : "الرئيسية")</a> /
+                @(lang == "en" ? "Media" : "الإعلام") /
+                <a href="/News?lang=@langVal">@(lang == "en" ? "News" : "بيانات صحفية")</a> /
+                @(lang == "en" ? Model.SinglePageNews.EnTitle : Model.SinglePageNews.ArTitle)
+            </p>
+
+        </section>
+        <!-- Page Heading -->
+
+        @if (string.IsNullOrWhiteSpace(Model.SinglePageNews.EnDescription) && langVal == "en")
+        {
+
+            <h2>The English translation of this text is unavailable</h2>
+        }
+
+        else
+        {
+            <!-- Section -->
+            <section class="section full-width-bg gray-bg">
+
+                <div class="row">
+
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+
+                        <!-- Event Single -->
+                        <div class="event-single">
+
+                            <div class="row">
+
+                                <div class="col-lg-9 col-md-9 col-sm-8 animate-onscroll">
+                                    <div class="event-image">
+                                        <img src="@Model.SinglePageNews.Url" alt="">
+                                        <br class="clearfix"><br class="clearfix">
+                                        <span class="newsdate">
+                                            <i class="icons icon-clock"></i>@Model.Date
+                                        </span>
+
+                                    </div>
+
+                                    <br class="clearfix">
+
+
+                                    <p class="align-right animate-onscroll"
+                                       style="        width: 100%;
+        text-align: justify !important;
+        font-size: 18px;
+">
+                                        @(lang == "en" ? (Html.Raw(Model.SinglePageNews.EnDescription)) : (Html.Raw(Model.SinglePageNews.ArDescription)))
+                                    </p>
+
+
+                                    <div class="col-lg-12 col-md-12 col-sm-12 animate-onscroll">
+
+                                        <div class="row event-pagination newsPaginationParentDiv">
+
+                                            <div class="col-lg-4 col-md-4 col-sm-4 align-left animate-onscroll newsPaginationDiv" @(Model.LastId == Model.SinglePageNews.Id ? "style=pointer-events:none;cursor:default;" : "")>
+                                                <a href="/singlenews?id=@Model.SinglePageNews.Id&type=previous&lang=@langVal" class="button big button-arrow-before newsPagination">
+                                                    @(lang == "en" ? "Previous News" : "الخبر السابق")
+                                                </a>
+                                            </div>
+
+                                            <div class="col-lg-4 col-md-4 col-sm-4 align-center animate-onscroll newsPaginationDiv">
+                                                <a href="/News/index?lang=@langVal" class="button big newsPagination">
+                                                    @(lang == "en" ? "All News" : "كل الأخبار")
+                                                </a>
+                                            </div>
+
+                                            <div class="col-lg-4 col-md-4 col-sm-4 align-right animate-onscroll newsPaginationDiv" @(Model.FirstId == Model.SinglePageNews.Id ? "style=pointer-events:none;cursor:default;!impoetant" : "")>
+                                                <a href="/singlenews?id=@Model.SinglePageNews.Id&type=next&lang=@langVal" class="button big button-arrow newsPagination">
+                                                    @(lang == "en" ? "Next News" : "الخبر التالي")
+
+                                                </a>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <!-- Sidebar -->
+                                @await Component.InvokeAsync("Sidebar")
+
+                            </div>
+
+                        </div>
+                        <!-- /Event Single -->
+
+
+
+                    </div>
+
+
+
+
+                </div>
+
+            </section>
+            <!-- /Section -->
+            <!-- Related Events -->
+            <section class="section full-width-bg">
+
+                <div class="row related-events">
+
+                    <div class="col-lg-12 col-md-12 col-sm-12 animate-onscroll">
+                        <h3>  @(lang == "en" ? "Other News" : "مزيد من الأخبار")</h3>
+                    </div>
+                    @foreach (var PageNews in @Model.PageNews)
+                    {
+                        <div class="col-lg-4 col-md-4 col-sm-4 animate-onscroll">
+
+                            <!-- Event Item -->
+                            <div class="event-item">
+
+                                <div class="event-image">
+                                    <img src="@PageNews.Url" alt="" style=" height: 127px ">
+                                </div>
+
+                                <div class="event-info">
+
+                                    <div class="date">
+                                        <span style="background: #28a5a3;color: #fff;">
+                                            <span class="day">@PageNews.Date.Value.ToString("dd")</span>
+                                            <span class="month">@PageNews.Date.Value.ToString("MMM")</span>
+                                        </span>
+                                    </div>
+
+                                    <div class="event-content">
+                                        <h6 style="line-height: 30px;"><a href="/singlenews?id=@PageNews.Id&lang=@langVal">@(langVal == "en" ? @PageNews.EnTitle : @PageNews.ArTitle)</a></h6>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <!-- /Event Item -->
+
+                        </div>
+
+                    }
+                </div>
+
+            </section>
+            <!-- /Related Events -->
+        }
+
+    </section>
+
+
+
+    <!-- Back To Top -->
+    <a href="#" id="button-to-top"><i class="icons icon-up-dir"></i></a>
+
+
+
+    <style>
+        .en {
+            direction: ltr;
+        }
+    </style>
+    <!-- Chosen -->
+
+</div>
+
+
+@section Scripts{
+    <script>
+
+
+        $("#langId").on("click", function (e) {
+            e.preventDefault()
+            if ('@langVal' == 'ar' && ( '@(string.IsNullOrWhiteSpace(Model.SinglePageNews.EnDescription))' == "True"  || '@(string.IsNullOrWhiteSpace(Model.SinglePageNews.EnShortDescription))' == "True" || '@(string.IsNullOrWhiteSpace(Model.SinglePageNews.EnTitle))' == "True")) {
+
+
+
+                   Swal.fire({
+                        // title: 'Are you sure?',
+                        text: 'The English translation of this text is unavailable',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#28A5A3',
+                        cancelButtonColor: '#688C8B',
+                        confirmButtonText: 'Stay On Arabic Page',
+                        cancelButtonText: 'Read Other English News'
+                    }).then((result) => {
+                    if (result.isConfirmed) {
+
+                    } else if (
+                        /* Read more about handling dismissals below */
+                        result.dismiss === Swal.DismissReason.cancel
+                    ) {
+                        window.location.href = '/news/index?lang=en';
+                    }
+                })
+
+
+
+            }
+            else {
+                  window.location.href = '?id=@(Model.SinglePageNews.Id)&lang=@(langVal=="en"?"ar":"en")';
+            }
+
+
+        })
+
+
+
+
+    </script>
+
+}

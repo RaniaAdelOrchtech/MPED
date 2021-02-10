@@ -1,0 +1,118 @@
+﻿@model PageContact
+@{
+    ViewBag.Title = "Page Contact";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div>
+    <h4>Contact Us > Page Contact Details</h4>
+</div>
+<table id="data_table" class="table table-striped table-bordered" style="width:100%">
+    <thead>
+        <tr>
+            <th style="width: 20%">ArTitle</th>
+            <th style="width: 20%">EnTitle</th>
+            <th style="width: 20%">EnMapTitle</th>
+            <th style="width: 20%">ArMapTitle</th>
+            <th style="width: 20%">ArAddress</th>
+            <th style="width: 20%">EnAddress</th>
+            <th style="width: 20%">Emaill</th>
+            <th style="width: 20%">Fax</th>
+            <th style="width: 20%">Active</th>
+            <th style="width: 20%">PhoneNumber</th>
+            <th style="width: 4%"></th>
+            <th style="width: 4%"></th>
+            <th style="width: 4%"></th>
+        </tr>
+    </thead>
+</table>
+<table>
+    <tr>
+        <td class="btn-mais-info text-primary">
+            <br />
+            <p>
+                <strong><a asp-controller="StaticPageRoute" asp-action="Index">Back to previous page</a></strong>
+            </p>
+        </td>
+    </tr>
+</table>
+@section scripts {
+    <script type="text/javascript">
+    $(document).ready(function () {
+        $('#data_table')
+            .DataTable({
+            "ajax": { "url": '@Url.Action("GetPageContact", "PageContact", new { id = Model.PageRouteVersionId })', "dataSrc": "data" },
+                "columns": [
+                    { "data": "arParticipateTitle" },
+                    { "data": "enParticipateTitle" },
+                    { "data": "arMapTitle" },
+                    { "data": "enMapTitle" },
+                    { "data": "arAddress" },
+                    { "data": "enAddress" },
+                    { "data": "emailParticipateEmail" },
+                    { "data": "faxNumber" },
+                    { "data": "formParticipateActive" },
+
+                    { "data": "phoneNumber" },
+                    {
+                        "data": "id", "orderable": false, "render": function (data, type, row)
+                        {
+                            var details = '@Url.Action("Details", "PageContact")';
+                            return '<a href="' + details + '?id=' + data + '" title="Details" class="anchorActionLink"><i class="fa fa-eye"></i></a>';
+                        }
+                    },
+                {
+                    "data": "id", "orderable": false, "render": function (data, type, row) {
+                        var edit = '@Url.Action("Edit", "PageContact")';
+                        return '<a href="' + edit + '?id=' + data + '" title="Edit" class="anchorActionLink"><i class="fa fa-pencil"></i></a>';
+                    }
+                },
+                {
+                    "data": "id", "orderable": false, "render": function (data, type, row) {
+                        debugger;
+                        return '<a href="#" title="Delete" data-placement="right" id="deleteItem" class="deleteItem anchorActionLink" data-target="#basic" data-toggle="modal" data-id="' + data + '"><i class="fa fa-trash"></i></a>' +
+                            '<div class="modal fade" id="basic" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">' +
+                            '<div class="modal-dialog">' + '<div class="modal-content">' + '<div class="modal-header">' +
+                            '<h4 class="modal-title">Delete Confirmation</h4>' +
+                            '</div>' + '<div class="modal-body">Are you sure you want to delete?</div><div class="modal-footer"><button id="btnContinueDelete" type="button" class="btn btn-danger">Delete</button><button data-dismiss="modal" type="button" class="btn btn-primary">Cancel</button></div>' +
+                            '</div></div></div>';
+                    }
+                }
+                ]
+                ,"fnInitComplete": function (oSettings, json) {
+                    var table = $('#data_table').DataTable();
+                    if (table.data().count() <= 10) {
+                       document.getElementById("data_table_paginate").style.display = "none";
+                            document.getElementById("data_table_length").style.display = "none";
+                            document.getElementById("data_table_filter").style.display = "none";
+                    }
+                }
+        });
+    });
+
+    var item_to_delete;
+    $('#data_table').on('click', '.deleteItem', function () {
+        item_to_delete = $(this).data('id');
+    });
+
+        $('#data_table').on('click', '#btnContinueDelete', function () {
+            var currentItem = $(this);
+            if (currentItem.prop("disabled")) {
+                e.preventDefault();
+                return;
+            }
+            currentItem.prop("disabled", true)
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("Delete", "PageContact")',
+            data: { id: item_to_delete },
+            success: function () {
+                window.location.reload();
+            },
+                complete: function (data) {
+                $('#basic').modal('hide');
+            }
+        });
+    });
+    </script>
+}

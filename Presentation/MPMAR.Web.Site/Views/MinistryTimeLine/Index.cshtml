@@ -1,0 +1,623 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+<script src="~/js/jquery-1.11.0.min.js"></script>
+<script src="~/js/jquery-ui-1.10.4.min.js"></script>
+
+<!-- Preloader -->
+<script src="~/js/jquery.queryloader2.min.js"></script>
+
+<script type="text/javascript">
+    $('html').addClass('no-fouc');
+
+    $(document).ready(function () {
+
+        $('html').show();
+
+        var window_w = $(window).width();
+        var window_h = $(window).height();
+        var window_s = $(window).scrollTop();
+
+        $("body").queryLoader2({
+            backgroundColor: '#f2f4f9',
+            barColor: '#63b2f5',
+            barHeight: 4,
+            percentage: false,
+            deepSearch: true,
+            minimumTime: 1000,
+            onComplete: function () {
+
+                $('.animate-onscroll').filter(function (index) {
+
+                    return this.offsetTop < (window_s + window_h);
+
+                }).each(function (index, value) {
+
+                    var el = $(this);
+                    var el_y = $(this).offset().top;
+
+                    if ((window_s) > el_y) {
+                        $(el).addClass('animated fadeInDown').removeClass('animate-onscroll');
+                        setTimeout(function () {
+                            $(el).css('opacity', '1').removeClass('animated fadeInDown');
+                        }, 2000);
+                    }
+
+                });
+
+            }
+        });
+
+    });
+</script>
+
+<section id="content">
+    <!-- Page Heading -->
+    <section class="section page-heading animate-onscroll">
+
+        <h1>وزراء سابقون</h1>
+        <p class="breadcrumb"><a href="secondoptionhomepage.html">الرئيسية</a> / وزراء سابقون</p>
+
+    </section>
+    <!-- Page Heading -->
+    <section class="section full-width-bg gray-bg">
+
+        <div class="timeline-container" id="timeline-1" style="background-image: url(img/EgyptFlag.jpg) !important;">
+            <div class="timeline__content">
+                <div class="timeline-header"><h2 class="timeline-header__title">تاريخ الوزارة</h2></div>
+                <div class="timeline">
+
+                    <p class="timeline__content-desc paddingonmobile" style="margin-bottom: 50px;font-family: inherit;">تأسست وزارة التخطيط عام 1958 وذلك لترسيخ أسس العملية التخطيطية للبرامج الاقتصادية للدولة وخطط التنمية المزمع تنفيذها من قبل الحكومة بمختلف أنواعها؛ طويلة المدى، متوسطة المدى، قصيرة المدى. هذا وفي عام 1960 تم وضع أول خطة خمسية لمصر ثم توالت الخطط عبر العقود وصولاً إلى نهج التخطيط التشاركي الذي أثمر عن وضع رؤية مصر 2030 وتحديثها كونها النسخة الوطنية للأهداف الأممية للتنمية المستدامة.</p>
+                </div>
+            </div>
+
+            <div class="timeline-header">
+                <h2 class="timeline-header__title">الوزراء السابقون</h2>
+                <h3 class="timeline-header__subtitle">وزراء التخطيط</h3>
+            </div>
+            <!-- ------------------------------------------------------------------------------------- -->
+
+            <div class="timeline" style="display: none;">
+
+                <div class="timeline-item">
+                    <div class="timeline__content">
+                        <img class="timeline__img" src="img/EgyptFlag.jpg" />
+                    </div>
+                </div>
+            </div>
+            <!-- ------------------------------------------------------------------------------------- -->
+
+
+
+            <div class="timeline">
+
+                <div class="timeline-item">
+                    <div class="timeline__content">
+                        <img class="timeline__img" src="img/team/M11.jpg" />
+                        <h2 class="timeline__content-title">2013 - 2017</h2>
+                        <h3 class="timeline-header__subtitle">أشرف السيد العربي</h3>
+                        <h4 class="timeline-header__subsubtitle">وزير التخطيط</h4>
+                        <p class="timeline__content-desc">وزير التخطيط من 16-يوليو 2013 الي 28-فبراير 2014 ووزير التخطيط والتعاون الدولي من 1-مارس 2014 الي 10-يونيو 2014 ووزير التخطيط والمتابعة والإصلاح الإداري من 16-يونيو 2014 إلي 16-فبراير2017</p>
+                        <div class="social-media">
+                            <span class="small-caption">للمشاركة</span>
+                            <ul class="social-icons">
+                                <li class="facebook"><a href="http://www.facebook.com/sharer.php?u=https://simplesharebuttons.com" class="tooltip-ontop" title="" data-original-title="Facebook"><i class="icons icon-facebook"></i></a></li>
+                                <li class="twitter"><a href="https://twitter.com/share" class="tooltip-ontop" title="" data-original-title="Twitter"><i class="icons icon-twitter"></i></a></li>
+                                <li class="email"><a href="mailto:" class="tooltip-ontop" title="" data-original-title="Email"><i class="icons icon-mail"></i></a></li>
+                            </ul>
+                            <!-- <ul class="social-buttons">
+                            <li><iframe id="twitter-widget-0" scrolling="no" frameborder="0" allowtransparency="true" allowfullscreen="true" class="twitter-share-button twitter-share-button-rendered twitter-tweet-button" style="position: static; visibility: visible; width: 60px; height: 20px;" title="Twitter Tweet Button" src="https://platform.twitter.com/widgets/tweet_button.4f8aea4342a4ada72cba2bdffcff6b4d.en.html#dnt=false&amp;id=twitter-widget-0&amp;lang=en&amp;original_referer=http%3A%2F%2Fmped.swisssolution.com%2FMinisterbio.html&amp;size=m&amp;text=%D8%B9%D9%86%20%D8%A7%D9%84%D9%88%D8%B2%D9%8A%D8%B1%D8%A9&amp;time=1579508291162&amp;type=share&amp;url=http%3A%2F%2Fmped.swisssolution.com%2FMinisterbio.html"></iframe></li>												</ul> -->
+                        </div>
+                    </div>
+                </div>
+                <!-- ------------------------------------------------------------------------------------- -->
+
+
+                <div class="timeline-item">
+                    <div class="timeline__content">
+                        <img class="timeline__img" src="img/team/2.jpg" />
+                        <h2 class="timeline__content-title">2013</h2>
+                        <h3 class="timeline-header__subtitle">عمرو دراج</h3>
+                        <h4 class="timeline-header__subsubtitle">وزير التخطيط والمتابعة والإصلاح الإداري</h4>
+                        <p class="timeline__content-desc">وزير التخطيط والتعاون الدولي من 7-مايو 2013 الي 15-يوليو 2013</p>
+                        <div class="social-media">
+                            <span class="small-caption">للمشاركة</span>
+                            <ul class="social-icons">
+                                <li class="facebook"><a href="http://www.facebook.com/sharer.php?u=https://simplesharebuttons.com" class="tooltip-ontop" title="" data-original-title="Facebook"><i class="icons icon-facebook"></i></a></li>
+                                <li class="twitter"><a href="https://twitter.com/share" class="tooltip-ontop" title="" data-original-title="Twitter"><i class="icons icon-twitter"></i></a></li>
+                                <li class="email"><a href="mailto:" class="tooltip-ontop" title="" data-original-title="Email"><i class="icons icon-mail"></i></a></li>
+                            </ul>
+                            <!-- <ul class="social-buttons">
+                            <li><iframe id="twitter-widget-0" scrolling="no" frameborder="0" allowtransparency="true" allowfullscreen="true" class="twitter-share-button twitter-share-button-rendered twitter-tweet-button" style="position: static; visibility: visible; width: 60px; height: 20px;" title="Twitter Tweet Button" src="https://platform.twitter.com/widgets/tweet_button.4f8aea4342a4ada72cba2bdffcff6b4d.en.html#dnt=false&amp;id=twitter-widget-0&amp;lang=en&amp;original_referer=http%3A%2F%2Fmped.swisssolution.com%2FMinisterbio.html&amp;size=m&amp;text=%D8%B9%D9%86%20%D8%A7%D9%84%D9%88%D8%B2%D9%8A%D8%B1%D8%A9&amp;time=1579508291162&amp;type=share&amp;url=http%3A%2F%2Fmped.swisssolution.com%2FMinisterbio.html"></iframe></li>												</ul> -->
+                        </div>
+                    </div>
+                </div>
+                <!-- ------------------------------------------------------------------------------------------ -->
+
+
+                <div class="timeline-item">
+                    <div class="timeline__content">
+                        <img class="timeline__img" src="img/team/2.jpg" />
+                        <h2 class="timeline__content-title">2013 - 2014</h2>
+                        <h3 class="timeline-header__subtitle">أشرف السيد العربي</h3>
+                        <h4 class="timeline-header__subsubtitle">وزير التخطيط والمتابعة والإصلاح الإداري</h4>
+                        <p class="timeline__content-desc">وزير التخطيط من 16-يوليو 2013 الي 28-فبراير 2014 ووزير التخطيط والتعاون الدولي من 1-مارس 2014 الي 10-يونيو 2014 ووزير التخطيط والمتابعة والإصلاح الإداري من 16-يونيو 2014 إلي 16-فبراير 2017 2013</p>
+                        <div class="social-media">
+                            <span class="small-caption">للمشاركة</span>
+                            <ul class="social-icons">
+                                <li class="facebook"><a href="http://www.facebook.com/sharer.php?u=https://simplesharebuttons.com" class="tooltip-ontop" title="" data-original-title="Facebook"><i class="icons icon-facebook"></i></a></li>
+                                <li class="twitter"><a href="https://twitter.com/share" class="tooltip-ontop" title="" data-original-title="Twitter"><i class="icons icon-twitter"></i></a></li>
+                                <li class="email"><a href="mailto:" class="tooltip-ontop" title="" data-original-title="Email"><i class="icons icon-mail"></i></a></li>
+                            </ul>
+                            <!-- <ul class="social-buttons">
+                            <li><iframe id="twitter-widget-0" scrolling="no" frameborder="0" allowtransparency="true" allowfullscreen="true" class="twitter-share-button twitter-share-button-rendered twitter-tweet-button" style="position: static; visibility: visible; width: 60px; height: 20px;" title="Twitter Tweet Button" src="https://platform.twitter.com/widgets/tweet_button.4f8aea4342a4ada72cba2bdffcff6b4d.en.html#dnt=false&amp;id=twitter-widget-0&amp;lang=en&amp;original_referer=http%3A%2F%2Fmped.swisssolution.com%2FMinisterbio.html&amp;size=m&amp;text=%D8%B9%D9%86%20%D8%A7%D9%84%D9%88%D8%B2%D9%8A%D8%B1%D8%A9&amp;time=1579508291162&amp;type=share&amp;url=http%3A%2F%2Fmped.swisssolution.com%2FMinisterbio.html"></iframe></li>												</ul> -->
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- --------------------------------------------------------------------------------------------------------------------------- -->
+
+
+                <div class="timeline-item">
+                    <div class="timeline__content">
+                        <img class="timeline__img" src="img/team/2.jpg" />
+                        <h2 class="timeline__content-title">2011 - 2012</h2>
+                        <h3 class="timeline-header__subtitle">فايزة ابو النجا</h3>
+                        <h4 class="timeline-header__subsubtitle">وزير التخطيط والمتابعة والإصلاح الإداري</h4>
+                        <p class="timeline__content-desc">وزير التخطيط والتعاون الدولي من 13-ديسمبر 2011 الي 4-اغسطس 2012</p>
+                        <div class="social-media">
+                            <span class="small-caption">للمشاركة</span>
+                            <ul class="social-icons">
+                                <li class="facebook"><a href="http://www.facebook.com/sharer.php?u=https://simplesharebuttons.com" class="tooltip-ontop" title="" data-original-title="Facebook"><i class="icons icon-facebook"></i></a></li>
+                                <li class="twitter"><a href="https://twitter.com/share" class="tooltip-ontop" title="" data-original-title="Twitter"><i class="icons icon-twitter"></i></a></li>
+                                <li class="email"><a href="mailto:" class="tooltip-ontop" title="" data-original-title="Email"><i class="icons icon-mail"></i></a></li>
+                            </ul>
+                            <!-- <ul class="social-buttons">
+                            <li><iframe id="twitter-widget-0" scrolling="no" frameborder="0" allowtransparency="true" allowfullscreen="true" class="twitter-share-button twitter-share-button-rendered twitter-tweet-button" style="position: static; visibility: visible; width: 60px; height: 20px;" title="Twitter Tweet Button" src="https://platform.twitter.com/widgets/tweet_button.4f8aea4342a4ada72cba2bdffcff6b4d.en.html#dnt=false&amp;id=twitter-widget-0&amp;lang=en&amp;original_referer=http%3A%2F%2Fmped.swisssolution.com%2FMinisterbio.html&amp;size=m&amp;text=%D8%B9%D9%86%20%D8%A7%D9%84%D9%88%D8%B2%D9%8A%D8%B1%D8%A9&amp;time=1579508291162&amp;type=share&amp;url=http%3A%2F%2Fmped.swisssolution.com%2FMinisterbio.html"></iframe></li>												</ul> -->
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <!-- --------------------------------------------------------------------------------------------------------------------------- -->
+
+                <div class="timeline-item">
+                    <div class="timeline__content">
+                        <img class="timeline__img" src="img/team/M7.jpg" />
+                        <h2 class="timeline__content-title">2001 - 2011</h2>
+                        <h3 class="timeline-header__subtitle">عثمان محمد عثمان</h3>
+                        <h4 class="timeline-header__subsubtitle">وزير التخطيط</h4>
+                        <p class="timeline__content-desc">وزير التخطيط من 21-نوفمبر 2001 الي 26-اغسطس 2006 ووزير التنمية الاقتصادية من 27-اغسطس 2006 الي 12-فبراير 2011</p>
+                        <div class="social-media">
+                            <span class="small-caption">للمشاركة</span>
+                            <ul class="social-icons">
+                                <li class="facebook"><a href="http://www.facebook.com/sharer.php?u=https://simplesharebuttons.com" class="tooltip-ontop" title="" data-original-title="Facebook"><i class="icons icon-facebook"></i></a></li>
+                                <li class="twitter"><a href="https://twitter.com/share" class="tooltip-ontop" title="" data-original-title="Twitter"><i class="icons icon-twitter"></i></a></li>
+                                <li class="email"><a href="mailto:" class="tooltip-ontop" title="" data-original-title="Email"><i class="icons icon-mail"></i></a></li>
+                            </ul>
+                            <!-- <ul class="social-buttons">
+                            <li><iframe id="twitter-widget-0" scrolling="no" frameborder="0" allowtransparency="true" allowfullscreen="true" class="twitter-share-button twitter-share-button-rendered twitter-tweet-button" style="position: static; visibility: visible; width: 60px; height: 20px;" title="Twitter Tweet Button" src="https://platform.twitter.com/widgets/tweet_button.4f8aea4342a4ada72cba2bdffcff6b4d.en.html#dnt=false&amp;id=twitter-widget-0&amp;lang=en&amp;original_referer=http%3A%2F%2Fmped.swisssolution.com%2FMinisterbio.html&amp;size=m&amp;text=%D8%B9%D9%86%20%D8%A7%D9%84%D9%88%D8%B2%D9%8A%D8%B1%D8%A9&amp;time=1579508291162&amp;type=share&amp;url=http%3A%2F%2Fmped.swisssolution.com%2FMinisterbio.html"></iframe></li>												</ul> -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- --------------------------------------------------------------------------------------------------------------------------- -->
+
+
+
+                <div class="timeline-item">
+                    <div class="timeline__content">
+                        <img class="timeline__img" src="img/team/2.jpg" />
+                        <h2 class="timeline__content-title">1999 - 2001</h2>
+                        <h3 class="timeline-header__subtitle">احمد محروس الدرش</h3>
+                        <h4 class="timeline-header__subsubtitle">وزير التخطيط</h4>
+                        <p class="timeline__content-desc">وزير التخطيط والتعاون الدولي من 10-اكتوبر 1999 الي 20-نوفمبر 2001</p>
+                        <div class="social-media">
+                            <span class="small-caption">للمشاركة</span>
+                            <ul class="social-icons">
+                                <li class="facebook"><a href="http://www.facebook.com/sharer.php?u=https://simplesharebuttons.com" class="tooltip-ontop" title="" data-original-title="Facebook"><i class="icons icon-facebook"></i></a></li>
+                                <li class="twitter"><a href="https://twitter.com/share" class="tooltip-ontop" title="" data-original-title="Twitter"><i class="icons icon-twitter"></i></a></li>
+                                <li class="email"><a href="mailto:" class="tooltip-ontop" title="" data-original-title="Email"><i class="icons icon-mail"></i></a></li>
+                            </ul>
+                            <!-- <ul class="social-buttons">
+                            <li><iframe id="twitter-widget-0" scrolling="no" frameborder="0" allowtransparency="true" allowfullscreen="true" class="twitter-share-button twitter-share-button-rendered twitter-tweet-button" style="position: static; visibility: visible; width: 60px; height: 20px;" title="Twitter Tweet Button" src="https://platform.twitter.com/widgets/tweet_button.4f8aea4342a4ada72cba2bdffcff6b4d.en.html#dnt=false&amp;id=twitter-widget-0&amp;lang=en&amp;original_referer=http%3A%2F%2Fmped.swisssolution.com%2FMinisterbio.html&amp;size=m&amp;text=%D8%B9%D9%86%20%D8%A7%D9%84%D9%88%D8%B2%D9%8A%D8%B1%D8%A9&amp;time=1579508291162&amp;type=share&amp;url=http%3A%2F%2Fmped.swisssolution.com%2FMinisterbio.html"></iframe></li>												</ul> -->
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- --------------------------------------------------------------------------------------------------------------------------- -->
+
+
+
+                <div class="timeline-item">
+                    <div class="timeline__content">
+                        <img class="timeline__img" src="img/team/2.jpg" />
+                        <h2 class="timeline__content-title">1996 - 1999</h2>
+                        <h3 class="timeline-header__subtitle">ظافر سليم سليم</h3>
+                        <h4 class="timeline-header__subsubtitle">وزير التخطيط</h4>
+                        <p class="timeline__content-desc">وزير التخطيط من 4-يناير 1996 الي 7-يوليو 1997 ووزير التخطيط والتعاون الدولي من 8-يوليو 1997 الي 5-اكتوبر 1999</p>
+                        <div class="social-media">
+                            <span class="small-caption">للمشاركة</span>
+                            <ul class="social-icons">
+                                <li class="facebook"><a href="http://www.facebook.com/sharer.php?u=https://simplesharebuttons.com" class="tooltip-ontop" title="" data-original-title="Facebook"><i class="icons icon-facebook"></i></a></li>
+                                <li class="twitter"><a href="https://twitter.com/share" class="tooltip-ontop" title="" data-original-title="Twitter"><i class="icons icon-twitter"></i></a></li>
+                                <li class="email"><a href="mailto:" class="tooltip-ontop" title="" data-original-title="Email"><i class="icons icon-mail"></i></a></li>
+                            </ul>
+                            <!-- <ul class="social-buttons">
+                            <li><iframe id="twitter-widget-0" scrolling="no" frameborder="0" allowtransparency="true" allowfullscreen="true" class="twitter-share-button twitter-share-button-rendered twitter-tweet-button" style="position: static; visibility: visible; width: 60px; height: 20px;" title="Twitter Tweet Button" src="https://platform.twitter.com/widgets/tweet_button.4f8aea4342a4ada72cba2bdffcff6b4d.en.html#dnt=false&amp;id=twitter-widget-0&amp;lang=en&amp;original_referer=http%3A%2F%2Fmped.swisssolution.com%2FMinisterbio.html&amp;size=m&amp;text=%D8%B9%D9%86%20%D8%A7%D9%84%D9%88%D8%B2%D9%8A%D8%B1%D8%A9&amp;time=1579508291162&amp;type=share&amp;url=http%3A%2F%2Fmped.swisssolution.com%2FMinisterbio.html"></iframe></li>												</ul> -->
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <!-- --------------------------------------------------------------------------------------------------------------------------- -->
+
+                <div class="timeline-item">
+                    <div class="timeline__content">
+                        <img class="timeline__img" src="img/team/M10.jpg" />
+                        <h2 class="timeline__content-title">1985 - 1999</h2>
+                        <h3 class="timeline-header__subtitle">كمال احمد الجنزوري</h3>
+                        <h4 class="timeline-header__subsubtitle">وزير التخطيط</h4>
+                        <p class="timeline__content-desc">نائب رئيس الوزراء ووزير التخطيط والتعاون الدولي من 5-سبتمبر 1985 الي 12-اكتوبر 1987 ونائب رئيس الوزراء ووزير التخطيط من 13-اكتوبر 1987 الي 3-يناير 1996 ورئيس مجلس الوزراء ووزير التخطيط والتعاون الدولي من 4-يناير 1996 الي 5-اكتوبر 1999</p>
+                        <div class="social-media">
+                            <span class="small-caption">للمشاركة</span>
+                            <ul class="social-icons">
+                                <li class="facebook"><a href="http://www.facebook.com/sharer.php?u=https://simplesharebuttons.com" class="tooltip-ontop" title="" data-original-title="Facebook"><i class="icons icon-facebook"></i></a></li>
+                                <li class="twitter"><a href="https://twitter.com/share" class="tooltip-ontop" title="" data-original-title="Twitter"><i class="icons icon-twitter"></i></a></li>
+                                <li class="email"><a href="mailto:" class="tooltip-ontop" title="" data-original-title="Email"><i class="icons icon-mail"></i></a></li>
+                            </ul>
+                            <!-- <ul class="social-buttons">
+                            <li><iframe id="twitter-widget-0" scrolling="no" frameborder="0" allowtransparency="true" allowfullscreen="true" class="twitter-share-button twitter-share-button-rendered twitter-tweet-button" style="position: static; visibility: visible; width: 60px; height: 20px;" title="Twitter Tweet Button" src="https://platform.twitter.com/widgets/tweet_button.4f8aea4342a4ada72cba2bdffcff6b4d.en.html#dnt=false&amp;id=twitter-widget-0&amp;lang=en&amp;original_referer=http%3A%2F%2Fmped.swisssolution.com%2FMinisterbio.html&amp;size=m&amp;text=%D8%B9%D9%86%20%D8%A7%D9%84%D9%88%D8%B2%D9%8A%D8%B1%D8%A9&amp;time=1579508291162&amp;type=share&amp;url=http%3A%2F%2Fmped.swisssolution.com%2FMinisterbio.html"></iframe></li>												</ul> -->
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <!-- --------------------------------------------------------------------------------------------------------------------------- -->
+
+
+
+                <div class="timeline-item">
+                    <div class="timeline__content">
+                        <img class="timeline__img" src="img/team/2.jpg" />
+                        <h2 class="timeline__content-title">1978 - 1982</h2>
+                        <h3 class="timeline-header__subtitle">عبد الرازق عبد المجيد</h3>
+                        <h4 class="timeline-header__subsubtitle">وزير التخطيط</h4>
+                        <p class="timeline__content-desc">وزير التخطيط ونائب رئيس الوزراء للشئون الاقتصادية و المالية من 9-مايو 1978 الي 13-مايو 1980 ووزير التخطيط والمالية والاقتصاد من 14-مايو 1980 الي 12-يناير 1982</p>
+                        <div class="social-media">
+                            <span class="small-caption">للمشاركة</span>
+                            <ul class="social-icons">
+                                <li class="facebook"><a href="http://www.facebook.com/sharer.php?u=https://simplesharebuttons.com" class="tooltip-ontop" title="" data-original-title="Facebook"><i class="icons icon-facebook"></i></a></li>
+                                <li class="twitter"><a href="https://twitter.com/share" class="tooltip-ontop" title="" data-original-title="Twitter"><i class="icons icon-twitter"></i></a></li>
+                                <li class="email"><a href="mailto:" class="tooltip-ontop" title="" data-original-title="Email"><i class="icons icon-mail"></i></a></li>
+                            </ul>
+                            <!-- <ul class="social-buttons">
+                            <li><iframe id="twitter-widget-0" scrolling="no" frameborder="0" allowtransparency="true" allowfullscreen="true" class="twitter-share-button twitter-share-button-rendered twitter-tweet-button" style="position: static; visibility: visible; width: 60px; height: 20px;" title="Twitter Tweet Button" src="https://platform.twitter.com/widgets/tweet_button.4f8aea4342a4ada72cba2bdffcff6b4d.en.html#dnt=false&amp;id=twitter-widget-0&amp;lang=en&amp;original_referer=http%3A%2F%2Fmped.swisssolution.com%2FMinisterbio.html&amp;size=m&amp;text=%D8%B9%D9%86%20%D8%A7%D9%84%D9%88%D8%B2%D9%8A%D8%B1%D8%A9&amp;time=1579508291162&amp;type=share&amp;url=http%3A%2F%2Fmped.swisssolution.com%2FMinisterbio.html"></iframe></li>												</ul> -->
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- --------------------------------------------------------------------------------------------------------------------------- -->
+
+                <div class="timeline-item">
+                    <div class="timeline__content">
+                        <img class="timeline__img" src="img/team/2.jpg" />
+                        <h2 class="timeline__content-title">1976 - 1977</h2>
+                        <h3 class="timeline-header__subtitle">محمد محمود الامام</h3>
+                        <h4 class="timeline-header__subsubtitle">وزير التخطيط</h4>
+                        <p class="timeline__content-desc">وزير التخطيط من 19-مارس 1976 الي 20-ابريل 1977</p>
+                        <div class="social-media">
+                            <span class="small-caption">للمشاركة</span>
+                            <ul class="social-icons">
+                                <li class="facebook"><a href="http://www.facebook.com/sharer.php?u=https://simplesharebuttons.com" class="tooltip-ontop" title="" data-original-title="Facebook"><i class="icons icon-facebook"></i></a></li>
+                                <li class="twitter"><a href="https://twitter.com/share" class="tooltip-ontop" title="" data-original-title="Twitter"><i class="icons icon-twitter"></i></a></li>
+                                <li class="email"><a href="mailto:" class="tooltip-ontop" title="" data-original-title="Email"><i class="icons icon-mail"></i></a></li>
+                            </ul>
+                            <!-- <ul class="social-buttons">
+                            <li><iframe id="twitter-widget-0" scrolling="no" frameborder="0" allowtransparency="true" allowfullscreen="true" class="twitter-share-button twitter-share-button-rendered twitter-tweet-button" style="position: static; visibility: visible; width: 60px; height: 20px;" title="Twitter Tweet Button" src="https://platform.twitter.com/widgets/tweet_button.4f8aea4342a4ada72cba2bdffcff6b4d.en.html#dnt=false&amp;id=twitter-widget-0&amp;lang=en&amp;original_referer=http%3A%2F%2Fmped.swisssolution.com%2FMinisterbio.html&amp;size=m&amp;text=%D8%B9%D9%86%20%D8%A7%D9%84%D9%88%D8%B2%D9%8A%D8%B1%D8%A9&amp;time=1579508291162&amp;type=share&amp;url=http%3A%2F%2Fmped.swisssolution.com%2FMinisterbio.html"></iframe></li>												</ul> -->
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- --------------------------------------------------------------------------------------------------------------------------- -->
+
+                <div class="timeline-item">
+                    <div class="timeline__content">
+                        <img class="timeline__img" src="img/team/M4.jpg" />
+                        <h2 class="timeline__content-title">1974 - 1975</h2>
+                        <h3 class="timeline-header__subtitle">اسماعيل صبري عبد الله</h3>
+                        <h4 class="timeline-header__subsubtitle">وزير الدولة للتخطيط</h4>
+                        <p class="timeline__content-desc">وزير الدولة للتخطيط من 17-يناير 1972 الي 24-ابريل 1974 ووزير التخطيط من 25-ابريل 1974 الي 15-ابريل 1975</p>
+                        <div class="social-media">
+                            <span class="small-caption">للمشاركة</span>
+                            <ul class="social-icons">
+                                <li class="facebook"><a href="http://www.facebook.com/sharer.php?u=https://simplesharebuttons.com" class="tooltip-ontop" title="" data-original-title="Facebook"><i class="icons icon-facebook"></i></a></li>
+                                <li class="twitter"><a href="https://twitter.com/share" class="tooltip-ontop" title="" data-original-title="Twitter"><i class="icons icon-twitter"></i></a></li>
+                                <li class="email"><a href="mailto:" class="tooltip-ontop" title="" data-original-title="Email"><i class="icons icon-mail"></i></a></li>
+                            </ul>
+                            <!-- <ul class="social-buttons">
+                            <li><iframe id="twitter-widget-0" scrolling="no" frameborder="0" allowtransparency="true" allowfullscreen="true" class="twitter-share-button twitter-share-button-rendered twitter-tweet-button" style="position: static; visibility: visible; width: 60px; height: 20px;" title="Twitter Tweet Button" src="https://platform.twitter.com/widgets/tweet_button.4f8aea4342a4ada72cba2bdffcff6b4d.en.html#dnt=false&amp;id=twitter-widget-0&amp;lang=en&amp;original_referer=http%3A%2F%2Fmped.swisssolution.com%2FMinisterbio.html&amp;size=m&amp;text=%D8%B9%D9%86%20%D8%A7%D9%84%D9%88%D8%B2%D9%8A%D8%B1%D8%A9&amp;time=1579508291162&amp;type=share&amp;url=http%3A%2F%2Fmped.swisssolution.com%2FMinisterbio.html"></iframe></li>												</ul> -->
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <!-- --------------------------------------------------------------------------------------------------------------------------- -->
+
+
+
+                <div class="timeline-item">
+                    <div class="timeline__content">
+                        <img class="timeline__img" src="img/team/M5.jpg" />
+                        <h2 class="timeline__content-title">1975 - 1976</h2>
+                        <h3 class="timeline-header__subtitle">ابراهيم حلمي عبد الرحمن</h3>
+                        <h4 class="timeline-header__subsubtitle">وزير التخطيط</h4>
+                        <p class="timeline__content-desc">وزير التخطيط والتنمية الإدارية من 16-ابريل 1975 الي 18-مارس 1976</p>
+                        <div class="social-media">
+                            <span class="small-caption">للمشاركة</span>
+                            <ul class="social-icons">
+                                <li class="facebook"><a href="http://www.facebook.com/sharer.php?u=https://simplesharebuttons.com" class="tooltip-ontop" title="" data-original-title="Facebook"><i class="icons icon-facebook"></i></a></li>
+                                <li class="twitter"><a href="https://twitter.com/share" class="tooltip-ontop" title="" data-original-title="Twitter"><i class="icons icon-twitter"></i></a></li>
+                                <li class="email"><a href="mailto:" class="tooltip-ontop" title="" data-original-title="Email"><i class="icons icon-mail"></i></a></li>
+                            </ul>
+                            <!-- <ul class="social-buttons">
+                            <li><iframe id="twitter-widget-0" scrolling="no" frameborder="0" allowtransparency="true" allowfullscreen="true" class="twitter-share-button twitter-share-button-rendered twitter-tweet-button" style="position: static; visibility: visible; width: 60px; height: 20px;" title="Twitter Tweet Button" src="https://platform.twitter.com/widgets/tweet_button.4f8aea4342a4ada72cba2bdffcff6b4d.en.html#dnt=false&amp;id=twitter-widget-0&amp;lang=en&amp;original_referer=http%3A%2F%2Fmped.swisssolution.com%2FMinisterbio.html&amp;size=m&amp;text=%D8%B9%D9%86%20%D8%A7%D9%84%D9%88%D8%B2%D9%8A%D8%B1%D8%A9&amp;time=1579508291162&amp;type=share&amp;url=http%3A%2F%2Fmped.swisssolution.com%2FMinisterbio.html"></iframe></li>												</ul> -->
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+
+                <!-- --------------------------------------------------------------------------------------------------------------------------- -->
+
+
+
+                <div class="timeline-item">
+                    <div class="timeline__content">
+                        <img class="timeline__img" src="img/team/2.jpg" />
+                        <h2 class="timeline__content-title">1968 - 1974</h2>
+                        <h3 class="timeline-header__subtitle">السيد جاب الله السيد</h3>
+                        <h4 class="timeline-header__subsubtitle">وزير التخطيط</h4>
+                        <p class="timeline__content-desc">وزير التخطيط 20-مارس 1968 الي 24-ابريل 1974</p>
+                        <div class="social-media">
+                            <span class="small-caption">للمشاركة</span>
+                            <ul class="social-icons">
+                                <li class="facebook"><a href="http://www.facebook.com/sharer.php?u=https://simplesharebuttons.com" class="tooltip-ontop" title="" data-original-title="Facebook"><i class="icons icon-facebook"></i></a></li>
+                                <li class="twitter"><a href="https://twitter.com/share" class="tooltip-ontop" title="" data-original-title="Twitter"><i class="icons icon-twitter"></i></a></li>
+                                <li class="email"><a href="mailto:" class="tooltip-ontop" title="" data-original-title="Email"><i class="icons icon-mail"></i></a></li>
+                            </ul>
+                            <!-- <ul class="social-buttons">
+                            <li><iframe id="twitter-widget-0" scrolling="no" frameborder="0" allowtransparency="true" allowfullscreen="true" class="twitter-share-button twitter-share-button-rendered twitter-tweet-button" style="position: static; visibility: visible; width: 60px; height: 20px;" title="Twitter Tweet Button" src="https://platform.twitter.com/widgets/tweet_button.4f8aea4342a4ada72cba2bdffcff6b4d.en.html#dnt=false&amp;id=twitter-widget-0&amp;lang=en&amp;original_referer=http%3A%2F%2Fmped.swisssolution.com%2FMinisterbio.html&amp;size=m&amp;text=%D8%B9%D9%86%20%D8%A7%D9%84%D9%88%D8%B2%D9%8A%D8%B1%D8%A9&amp;time=1579508291162&amp;type=share&amp;url=http%3A%2F%2Fmped.swisssolution.com%2FMinisterbio.html"></iframe></li>												</ul> -->
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- --------------------------------------------------------------------------------------------------------------------------- -->
+
+
+
+
+                <div class="timeline-item">
+                    <div class="timeline__content">
+                        <img class="timeline__img" src="img/team/M9.jpg" />
+                        <h2 class="timeline__content-title">1964 - 1967</h2>
+                        <h3 class="timeline-header__subtitle">محمد لبيب شقير</h3>
+                        <h4 class="timeline-header__subsubtitle">وزير الدولة للتخطيط</h4>
+                        <p class="timeline__content-desc">وزير الدولة للتخطيط ووزير الاقتصاد والتجارة الخارجية من 19-اغسطس 1964 الي 30-سبتمبر 1965 ووزير الاقتصاد والتجارة الخارجية ووزير التخطيط من 1-اكتوبر 1965 الي 18-يونيو 1967</p>
+                        <div class="social-media">
+                            <span class="small-caption">للمشاركة</span>
+                            <ul class="social-icons">
+                                <li class="facebook"><a href="http://www.facebook.com/sharer.php?u=https://simplesharebuttons.com" class="tooltip-ontop" title="" data-original-title="Facebook"><i class="icons icon-facebook"></i></a></li>
+                                <li class="twitter"><a href="https://twitter.com/share" class="tooltip-ontop" title="" data-original-title="Twitter"><i class="icons icon-twitter"></i></a></li>
+                                <li class="email"><a href="mailto:" class="tooltip-ontop" title="" data-original-title="Email"><i class="icons icon-mail"></i></a></li>
+                            </ul>
+                            <!-- <ul class="social-buttons">
+                            <li><iframe id="twitter-widget-0" scrolling="no" frameborder="0" allowtransparency="true" allowfullscreen="true" class="twitter-share-button twitter-share-button-rendered twitter-tweet-button" style="position: static; visibility: visible; width: 60px; height: 20px;" title="Twitter Tweet Button" src="https://platform.twitter.com/widgets/tweet_button.4f8aea4342a4ada72cba2bdffcff6b4d.en.html#dnt=false&amp;id=twitter-widget-0&amp;lang=en&amp;original_referer=http%3A%2F%2Fmped.swisssolution.com%2FMinisterbio.html&amp;size=m&amp;text=%D8%B9%D9%86%20%D8%A7%D9%84%D9%88%D8%B2%D9%8A%D8%B1%D8%A9&amp;time=1579508291162&amp;type=share&amp;url=http%3A%2F%2Fmped.swisssolution.com%2FMinisterbio.html"></iframe></li>												</ul> -->
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <!-- --------------------------------------------------------------------------------------------------------------------------- -->
+
+
+
+
+                <div class="timeline-item">
+                    <div class="timeline__content">
+                        <img class="timeline__img" src="img/team/M8.jpg" />
+                        <h2 class="timeline__content-title">1964 - 1965</h2>
+                        <h3 class="timeline-header__subtitle">علي صبري</h3>
+                        <h4 class="timeline-header__subsubtitle">وزير التخطيط</h4>
+                        <p class="timeline__content-desc">رئيس الوزراء ووزير التخطيط 25-سبتمبر 1964 الي 30-سبتمبر 1965</p>
+                        <div class="social-media">
+                            <span class="small-caption">للمشاركة</span>
+                            <ul class="social-icons">
+                                <li class="facebook"><a href="http://www.facebook.com/sharer.php?u=https://simplesharebuttons.com" class="tooltip-ontop" title="" data-original-title="Facebook"><i class="icons icon-facebook"></i></a></li>
+                                <li class="twitter"><a href="https://twitter.com/share" class="tooltip-ontop" title="" data-original-title="Twitter"><i class="icons icon-twitter"></i></a></li>
+                                <li class="email"><a href="mailto:" class="tooltip-ontop" title="" data-original-title="Email"><i class="icons icon-mail"></i></a></li>
+                            </ul>
+                            <!-- <ul class="social-buttons">
+                            <li><iframe id="twitter-widget-0" scrolling="no" frameborder="0" allowtransparency="true" allowfullscreen="true" class="twitter-share-button twitter-share-button-rendered twitter-tweet-button" style="position: static; visibility: visible; width: 60px; height: 20px;" title="Twitter Tweet Button" src="https://platform.twitter.com/widgets/tweet_button.4f8aea4342a4ada72cba2bdffcff6b4d.en.html#dnt=false&amp;id=twitter-widget-0&amp;lang=en&amp;original_referer=http%3A%2F%2Fmped.swisssolution.com%2FMinisterbio.html&amp;size=m&amp;text=%D8%B9%D9%86%20%D8%A7%D9%84%D9%88%D8%B2%D9%8A%D8%B1%D8%A9&amp;time=1579508291162&amp;type=share&amp;url=http%3A%2F%2Fmped.swisssolution.com%2FMinisterbio.html"></iframe></li>												</ul> -->
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- --------------------------------------------------------------------------------------------------------------------------- -->
+
+
+
+                <div class="timeline-item">
+                    <div class="timeline__content">
+                        <img class="timeline__img" src="img/team/2.jpg" />
+                        <h2 class="timeline__content-title">1961 - 1962</h2>
+                        <h3 class="timeline-header__subtitle">علي فرج</h3>
+                        <h4 class="timeline-header__subsubtitle">وزير الدولة للتخطيط</h4>
+                        <p class="timeline__content-desc">وزير الدولة للتخطيط 16-اغسطس 1961 الي 28-سبتمبر 1962</p>
+                        <div class="social-media">
+                            <span class="small-caption">للمشاركة</span>
+                            <ul class="social-icons">
+                                <li class="facebook"><a href="http://www.facebook.com/sharer.php?u=https://simplesharebuttons.com" class="tooltip-ontop" title="" data-original-title="Facebook"><i class="icons icon-facebook"></i></a></li>
+                                <li class="twitter"><a href="https://twitter.com/share" class="tooltip-ontop" title="" data-original-title="Twitter"><i class="icons icon-twitter"></i></a></li>
+                                <li class="email"><a href="mailto:" class="tooltip-ontop" title="" data-original-title="Email"><i class="icons icon-mail"></i></a></li>
+                            </ul>
+                            <!-- <ul class="social-buttons">
+                            <li><iframe id="twitter-widget-0" scrolling="no" frameborder="0" allowtransparency="true" allowfullscreen="true" class="twitter-share-button twitter-share-button-rendered twitter-tweet-button" style="position: static; visibility: visible; width: 60px; height: 20px;" title="Twitter Tweet Button" src="https://platform.twitter.com/widgets/tweet_button.4f8aea4342a4ada72cba2bdffcff6b4d.en.html#dnt=false&amp;id=twitter-widget-0&amp;lang=en&amp;original_referer=http%3A%2F%2Fmped.swisssolution.com%2FMinisterbio.html&amp;size=m&amp;text=%D8%B9%D9%86%20%D8%A7%D9%84%D9%88%D8%B2%D9%8A%D8%B1%D8%A9&amp;time=1579508291162&amp;type=share&amp;url=http%3A%2F%2Fmped.swisssolution.com%2FMinisterbio.html"></iframe></li>												</ul> -->
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+                <!-- --------------------------------------------------------------------------------------------------------------------------- -->
+
+
+                <div class="timeline-item">
+                    <div class="timeline__content">
+                        <img class="timeline__img" src="img/team/M6.jpg" />
+                        <h2 class="timeline__content-title">1961 -1961</h2>
+                        <h3 class="timeline-header__subtitle">عبد الوهاب حومد</h3>
+                        <h4 class="timeline-header__subsubtitle">وزير الدولة للتخطيط</h4>
+                        <p class="timeline__content-desc">وزير الدولة للتخطيط 16-اغسطس 1961 الي 9-اكتوبر 1961</p>
+                        <div class="social-media">
+                            <span class="small-caption">للمشاركة</span>
+                            <ul class="social-icons">
+                                <li class="facebook"><a href="http://www.facebook.com/sharer.php?u=https://simplesharebuttons.com" class="tooltip-ontop" title="" data-original-title="Facebook"><i class="icons icon-facebook"></i></a></li>
+                                <li class="twitter"><a href="https://twitter.com/share" class="tooltip-ontop" title="" data-original-title="Twitter"><i class="icons icon-twitter"></i></a></li>
+                                <li class="email"><a href="mailto:" class="tooltip-ontop" title="" data-original-title="Email"><i class="icons icon-mail"></i></a></li>
+                            </ul>
+                            <!-- <ul class="social-buttons">
+                            <li><iframe id="twitter-widget-0" scrolling="no" frameborder="0" allowtransparency="true" allowfullscreen="true" class="twitter-share-button twitter-share-button-rendered twitter-tweet-button" style="position: static; visibility: visible; width: 60px; height: 20px;" title="Twitter Tweet Button" src="https://platform.twitter.com/widgets/tweet_button.4f8aea4342a4ada72cba2bdffcff6b4d.en.html#dnt=false&amp;id=twitter-widget-0&amp;lang=en&amp;original_referer=http%3A%2F%2Fmped.swisssolution.com%2FMinisterbio.html&amp;size=m&amp;text=%D8%B9%D9%86%20%D8%A7%D9%84%D9%88%D8%B2%D9%8A%D8%B1%D8%A9&amp;time=1579508291162&amp;type=share&amp;url=http%3A%2F%2Fmped.swisssolution.com%2FMinisterbio.html"></iframe></li>												</ul> -->
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+                <!-- --------------------------------------------------------------------------------------------------------------------------- -->
+
+                <div class="timeline-item">
+                    <div class="timeline__content">
+                        <img class="timeline__img" src="img/team/2.jpg" />
+                        <h2 class="timeline__content-title">1960 - 1961</h2>
+                        <h3 class="timeline-header__subtitle">نور الدين كحالة</h3>
+                        <h4 class="timeline-header__subsubtitle">وزير التخطيط المركزي</h4>
+                        <p class="timeline__content-desc">نائب رئيس الجمهورية ووزير الاشغال بالإقليم السوري ووزير التخطيط المركزي 20-سبتمبر 1960 الي 15-اغسطس-1961</p>
+                        <div class="social-media">
+                            <span class="small-caption">للمشاركة</span>
+                            <ul class="social-icons">
+                                <li class="facebook"><a href="http://www.facebook.com/sharer.php?u=https://simplesharebuttons.com" class="tooltip-ontop" title="" data-original-title="Facebook"><i class="icons icon-facebook"></i></a></li>
+                                <li class="twitter"><a href="https://twitter.com/share" class="tooltip-ontop" title="" data-original-title="Twitter"><i class="icons icon-twitter"></i></a></li>
+                                <li class="email"><a href="mailto:" class="tooltip-ontop" title="" data-original-title="Email"><i class="icons icon-mail"></i></a></li>
+                            </ul>
+                            <!-- <ul class="social-buttons">
+                            <li><iframe id="twitter-widget-0" scrolling="no" frameborder="0" allowtransparency="true" allowfullscreen="true" class="twitter-share-button twitter-share-button-rendered twitter-tweet-button" style="position: static; visibility: visible; width: 60px; height: 20px;" title="Twitter Tweet Button" src="https://platform.twitter.com/widgets/tweet_button.4f8aea4342a4ada72cba2bdffcff6b4d.en.html#dnt=false&amp;id=twitter-widget-0&amp;lang=en&amp;original_referer=http%3A%2F%2Fmped.swisssolution.com%2FMinisterbio.html&amp;size=m&amp;text=%D8%B9%D9%86%20%D8%A7%D9%84%D9%88%D8%B2%D9%8A%D8%B1%D8%A9&amp;time=1579508291162&amp;type=share&amp;url=http%3A%2F%2Fmped.swisssolution.com%2FMinisterbio.html"></iframe></li>												</ul> -->
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- --------------------------------------------------------------------------------------------------------------------------- -->
+
+                <div class="timeline-item">
+                    <div class="timeline__content">
+                        <img class="timeline__img" src="img/team/M3.jpg" />
+                        <h2 class="timeline__content-title">1957 -1958</h2>
+                        <h3 class="timeline-header__subtitle">حسين الشافعي</h3>
+                        <h4 class="timeline-header__subsubtitle">وزير التخطيط</h4>
+                        <p class="timeline__content-desc">وزير الشئون الاجتماعية و العمل ووزير التخطيط من3-نوفمبر 1957 إلى5-مارس 1958</p>
+                        <div class="social-media">
+                            <span class="small-caption">للمشاركة</span>
+                            <ul class="social-icons">
+                                <li class="facebook"><a href="http://www.facebook.com/sharer.php?u=https://simplesharebuttons.com" class="tooltip-ontop" title="" data-original-title="Facebook"><i class="icons icon-facebook"></i></a></li>
+                                <li class="twitter"><a href="https://twitter.com/share" class="tooltip-ontop" title="" data-original-title="Twitter"><i class="icons icon-twitter"></i></a></li>
+                                <li class="email"><a href="mailto:" class="tooltip-ontop" title="" data-original-title="Email"><i class="icons icon-mail"></i></a></li>
+                            </ul>
+                            <!-- <ul class="social-buttons">
+                            <li><iframe id="twitter-widget-0" scrolling="no" frameborder="0" allowtransparency="true" allowfullscreen="true" class="twitter-share-button twitter-share-button-rendered twitter-tweet-button" style="position: static; visibility: visible; width: 60px; height: 20px;" title="Twitter Tweet Button" src="https://platform.twitter.com/widgets/tweet_button.4f8aea4342a4ada72cba2bdffcff6b4d.en.html#dnt=false&amp;id=twitter-widget-0&amp;lang=en&amp;original_referer=http%3A%2F%2Fmped.swisssolution.com%2FMinisterbio.html&amp;size=m&amp;text=%D8%B9%D9%86%20%D8%A7%D9%84%D9%88%D8%B2%D9%8A%D8%B1%D8%A9&amp;time=1579508291162&amp;type=share&amp;url=http%3A%2F%2Fmped.swisssolution.com%2FMinisterbio.html"></iframe></li>												</ul> -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- -------------------------------------------------------------------------------  -->
+                <div class="timeline-item">
+                    <div class="timeline__content">
+                        <img class="timeline__img" src="img/team/M2.jpg" />
+                        <h2 class="timeline__content-title">1957-1975  & 1967 -1968</h2>
+                        <h3 class="timeline-header__subtitle">عبد المنعم القيسوني</h3>
+                        <h4 class="timeline-header__subsubtitle">وزير الدولة لشئون التخطيط</h4>
+                        <p class="timeline__content-desc">وزير الدولة لشئون التخطيط 20-اغسطس 1957 إلى 2-نوفمبر 1975 و نائب رئيس الوزراء للشئون المالية و الاقتصادية ووزير التخطيط من 19-يونيو 1967إلي 19-مارس 1968</p>
+                        <div class="social-media">
+                            <span class="small-caption">للمشاركة</span>
+                            <ul class="social-icons">
+                                <li class="facebook"><a href="http://www.facebook.com/sharer.php?u=https://simplesharebuttons.com" class="tooltip-ontop" title="" data-original-title="Facebook"><i class="icons icon-facebook"></i></a></li>
+                                <li class="twitter"><a href="https://twitter.com/share" class="tooltip-ontop" title="" data-original-title="Twitter"><i class="icons icon-twitter"></i></a></li>
+                                <li class="email"><a href="mailto:" class="tooltip-ontop" title="" data-original-title="Email"><i class="icons icon-mail"></i></a></li>
+                            </ul>
+                            <!-- <ul class="social-buttons">
+                            <li><iframe id="twitter-widget-0" scrolling="no" frameborder="0" allowtransparency="true" allowfullscreen="true" class="twitter-share-button twitter-share-button-rendered twitter-tweet-button" style="position: static; visibility: visible; width: 60px; height: 20px;" title="Twitter Tweet Button" src="https://platform.twitter.com/widgets/tweet_button.4f8aea4342a4ada72cba2bdffcff6b4d.en.html#dnt=false&amp;id=twitter-widget-0&amp;lang=en&amp;original_referer=http%3A%2F%2Fmped.swisssolution.com%2FMinisterbio.html&amp;size=m&amp;text=%D8%B9%D9%86%20%D8%A7%D9%84%D9%88%D8%B2%D9%8A%D8%B1%D8%A9&amp;time=1579508291162&amp;type=share&amp;url=http%3A%2F%2Fmped.swisssolution.com%2FMinisterbio.html"></iframe></li>												</ul> -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- --------------------------------------------------------------------------- -->
+                <div class="timeline-item">
+                    <div class="timeline__content">
+                        <img class="timeline__img" src="img/team/M1.jpg" />
+                        <h2 class="timeline__content-title">1958 - 1962</h2>
+                        <h3 class="timeline-header__subtitle">عبد اللطيف البغدادي</h3>
+                        <h4 class="timeline-header__subsubtitle">نائب رئيس الجمهورية ووزير التخطيط</h4>
+                        <p class="timeline__content-desc">نائب رئيس الجمهورية ووزير التخطيط من 7-اكتوبر 1958 إلى 19-سبتمبر 1960 ومن الفترة 16-اغسطس 1961 إالى 17-أكتوبر 1961 ونائب رئيس الجمهورية للإنتاج ووزير الخزانة 18-أكتوبر 1961إالى 28-سبتمبر</p>
+                        <div class="social-media">
+                            <span class="small-caption">للمشاركة</span>
+                            <ul class="social-icons">
+                                <li class="facebook"><a href="http://www.facebook.com/sharer.php?u=https://simplesharebuttons.com" class="tooltip-ontop" title="" data-original-title="Facebook"><i class="icons icon-facebook"></i></a></li>
+                                <li class="twitter"><a href="https://twitter.com/share" class="tooltip-ontop" title="" data-original-title="Twitter"><i class="icons icon-twitter"></i></a></li>
+                                <li class="email"><a href="mailto:" class="tooltip-ontop" title="" data-original-title="Email"><i class="icons icon-mail"></i></a></li>
+                            </ul>
+                            <!-- <ul class="social-buttons">
+                            <li><iframe id="twitter-widget-0" scrolling="no" frameborder="0" allowtransparency="true" allowfullscreen="true" class="twitter-share-button twitter-share-button-rendered twitter-tweet-button" style="position: static; visibility: visible; width: 60px; height: 20px;" title="Twitter Tweet Button" src="https://platform.twitter.com/widgets/tweet_button.4f8aea4342a4ada72cba2bdffcff6b4d.en.html#dnt=false&amp;id=twitter-widget-0&amp;lang=en&amp;original_referer=http%3A%2F%2Fmped.swisssolution.com%2FMinisterbio.html&amp;size=m&amp;text=%D8%B9%D9%86%20%D8%A7%D9%84%D9%88%D8%B2%D9%8A%D8%B1%D8%A9&amp;time=1579508291162&amp;type=share&amp;url=http%3A%2F%2Fmped.swisssolution.com%2FMinisterbio.html"></iframe></li>												</ul> -->
+                        </div>
+                    </div>
+                </div>
+                <!-- ------------------------------------------------------------------------------------- -->
+
+                <div class="timeline" style="display: none;">
+
+                    <div class="timeline-item">
+                        <div class="timeline__content">
+                            <img class="timeline__img" src="img/EgyptFlag.jpg" />
+                        </div>
+                    </div>
+                </div>
+                <!-- ------------------------------------------------------------------------------------- -->
+
+
+            </div>
+        </div>
+        <!-- <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js'></script> -->
+
+        <script src="~/js/index.js"></script>
+
+
+
+    </section>
+
+</section>

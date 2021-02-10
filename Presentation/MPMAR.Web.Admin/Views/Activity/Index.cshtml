@@ -1,0 +1,509 @@
+﻿@using MPMAR.Analytics.Data.Enums
+@using MPMAR.Common
+@{
+    ViewData["Title"] = "Activity";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+
+    int SheetType = 0;
+    if (ViewBag.Type == "Const")
+    {
+        SheetType = (int)SheetTypeEnum.ActivityConst;
+    }
+    if (ViewBag.Type == "Current")
+    {
+        SheetType = (int)SheetTypeEnum.ActivityCurrent;
+    }
+    if (ViewBag.Type == "Sector")
+    {
+        SheetType = (int)SheetTypeEnum.SectorGrowthRates;
+    }
+
+
+
+
+
+
+    string approvalId = Context.Request.Query["approvalId"];
+    string sheetTypeInt = Context.Request.Query["sheetType"];
+    int approvalIdInt = 0;
+    int.TryParse(approvalId, out approvalIdInt);
+
+    var sheetType = SheetType_PrivilegeType.SheetType_PrivilegeType_Map.GetValueOrDefault(int.Parse(sheetTypeInt));
+
+    var bEUsersPrivilegesViewModel = bEUsersPrivilegesService.ValidateIBEUsersPrivilegesViewService(sheetType, this.User.FindFirstValue(ClaimTypes.NameIdentifier), this.User.IsInRole(UserRolesConst.SuperAdmin), approvalId: approvalIdInt);
+
+}
+
+
+@if (ViewBag.Type == "Current")
+{
+    <partial name="_ActivityCurrentPartialView" />
+
+    @section scripts {
+        <script type="text/javascript">
+        $(document).ready(function () {
+            window.table = $('#data_table').DataTable({
+                "aaSorting": [],
+                "scrollX": true,
+                "serverSide": true,
+                "processing": true,
+                "ajax": {
+                    "url": '@Url.Action("GetAllActivityCurrents", "Activity")', "dataSrc": "data",
+                      "data":{approvalId:'@ViewBag.approvalId'},
+                    "type": "POST",
+                    "datatype": "json"
+                },
+                "columns": [
+                    {
+                        "data": "dfIndicator", "name": "DFIndicator", render:  $.fn.dataTable.render.ellipsis()  },
+                    {
+                        "data": "dfSource", "name": "DFSource",render:  $.fn.dataTable.render.ellipsis()  },
+                    {
+                        "data": "dfUnit", "name": "DFUnit",render:  $.fn.dataTable.render.ellipsis() },
+                    {
+                        "data": "dfQuarter", "name": "DFQuarter", render:  $.fn.dataTable.render.ellipsis() },
+                    {
+                        "data": "dfYear", "name": "DFYear",render:  $.fn.dataTable.render.ellipsis() },
+                    {
+                        "data": "dfSector", "name": "DFSector" , render:  $.fn.dataTable.render.ellipsis()  },
+                    {
+                        "data": "agricultureForestryFishing", "name": "AgricultureForestryFishing" ,render:  $.fn.dataTable.render.ellipsis()  },
+                    {
+                        "data": "miningQuarrying", "name": "MiningQuarrying", render:  $.fn.dataTable.render.ellipsis()  },
+                    {
+                        "data": "petroleum", "name": "Petroleum",render:  $.fn.dataTable.render.ellipsis()  },
+                    {
+                        "data": "gas", "name": "Gas",render:  $.fn.dataTable.render.ellipsis()  },
+                    {
+                        "data": "otherExtraction", "name": "OtherExtraction",render:  $.fn.dataTable.render.ellipsis() },
+                    {
+                        "data": "manufacturingIndustries", "name": "ManufacturingIndustries",render:  $.fn.dataTable.render.ellipsis() },
+                    {
+                        "data": "petroleumRefining", "name": "PetroleumRefining", render:  $.fn.dataTable.render.ellipsis()  },
+                    {
+                        "data": "otherManufacturing", "name": "OtherManufacturing", render:  $.fn.dataTable.render.ellipsis() },
+                    {
+                        "data": "electricity", "name": "Electricity", render:  $.fn.dataTable.render.ellipsis() },
+                    {
+                        "data": "waterSewerageRemediationActivitie", "name": "WaterSewerageRemediationActivitie",render:  $.fn.dataTable.render.ellipsis()  },
+                    {
+                        "data": "construction", "name": "Construction",render:  $.fn.dataTable.render.ellipsis()  },
+                    {
+                        "data": "transportationAndStorage", "name": "TransportationAndStorage", render:  $.fn.dataTable.render.ellipsis() },
+                    {
+                        "data": "communication", "name": "Communication", render:  $.fn.dataTable.render.ellipsis() },
+                    {
+                        "data": "information", "name": "Information",render:  $.fn.dataTable.render.ellipsis()  },
+                    {
+                        "data": "suezcCanal", "name": "SuezcCanal", render:  $.fn.dataTable.render.ellipsis() },
+                    {
+                        "data": "wholesaleAndRetailTrade", "name": "WholesaleAndRetailTrade",render:  $.fn.dataTable.render.ellipsis()  },
+                    {
+                        "data": "financialIntermediariesAuxiliaryServices", "name": "FinancialIntermediariesAuxiliaryServices",render:  $.fn.dataTable.render.ellipsis() },
+                    {
+                        "data": "socialSecurityAndInsurance", "name": "SocialSecurityAndInsurance",render:  $.fn.dataTable.render.ellipsis() },
+                    {
+                        "data": "accommodationAndFoodServiceActivities", "name": "AccommodationAndFoodServiceActivities",render:  $.fn.dataTable.render.ellipsis()  },
+                    {
+                        "data": "realEstateActivitie", "name": "RealEstateActivitie",render:  $.fn.dataTable.render.ellipsis() },
+                    {
+                        "data": "realEstateOwnership", "name": "RealEstateOwnership",render:  $.fn.dataTable.render.ellipsis()  },
+                    {
+                        "data": "businessServices", "name": "BusinessServices",render:  $.fn.dataTable.render.ellipsis() },
+                    {
+                        "data": "generalGovernment", "name": "GeneralGovernment",render:  $.fn.dataTable.render.ellipsis() },
+                    {
+                        "data": "socialServices", "name": "SocialServices", render:  $.fn.dataTable.render.ellipsis() },
+                    {
+                        "data": "education", "name": "Education", render:  $.fn.dataTable.render.ellipsis()
+                    },
+                    {
+                        "data": "health", "name": "Health",render:  $.fn.dataTable.render.ellipsis()
+                    }, {
+                        "data": "otherServices", "name": "OtherServices", render:  $.fn.dataTable.render.ellipsis()
+                    }, {
+                        "data": "totalGDPAtFactorCost", "name": "TotalGDPAtFactorCost",render:  $.fn.dataTable.render.ellipsis()
+                    },
+
+                 {
+                "data": "changeActionEnum", "orderable": false, "name": "ChangeActionEnum", "render": function (data, type, row) {
+
+                               return  data == 1 ? "New" : data == 2 ? "Update" : "Delete"
+                        }, "visible": ('@(!bEUsersPrivilegesViewModel.IsFromApprovalPage)' == "True")
+                    },
+            {
+                "data": "changeActionEnum", "orderable": false, "name": "ChangeActionEnum", "render": function (data, type, row) {
+                      var isContentManager = '@(!bEUsersPrivilegesViewModel.IsFromApprovalPage)';
+                               return isContentManager != "True" ? data == 1 ? "New" : data == 2 ? "Update" : "Delete" : row.versionStatusEnum == 1 ? "Draft" : row.versionStatusEnum == 2 ? "Submitted" : "Approved"
+                        }
+                    },
+                    {
+                        "data": "id", "orderable": false, "render": function (data, type, row) {
+                            var isContentManager = '@(bEUsersPrivilegesViewModel.CanEdit && !bEUsersPrivilegesViewModel.IsFromApprovalPage)';
+                        var edit = '@Url.Action("Edit", "Activity")';
+                            return isContentManager == "True" ? '<a href="' + edit + '?id=' + data + '&sheetType=' +'@SheetType'+ '&isVersion=' + row.isVersion +'" title="Edit" class="anchorActionLink"><i class="fa fa-pencil"></i></a>' : '';
+                        }, "visible": ('@(bEUsersPrivilegesViewModel.CanEdit && !bEUsersPrivilegesViewModel.IsFromApprovalPage)' == "True")
+                    },
+                    {
+                        "data": "id", "orderable": false, "render": function (data, type, row) {
+                            var isContentManager = '@(bEUsersPrivilegesViewModel.CanDelete && !bEUsersPrivilegesViewModel.IsFromApprovalPage)'
+                             var Approve = '@Url.Action("ApproveActivity", "Activity")';
+                            return isContentManager == "True" ? '<a href="#" title="Delete" data-placement="right"  class="delete anchorActionLink" data-target="#basic" data-toggle="modal" data-id="' + data + '" data-isversion="' + row.isVersion + '"><i class="fa fa-trash"></i></a>' : '<a href="' + Approve + '?approvalId=' + @ViewBag.approvalId + '&componentVersionId=' + data +'" title="Approve" class="anchorActionLink" onclick="DisableAfterClick(event,this)">Approve</a>'
+
+                        }, "visible": ('@(bEUsersPrivilegesViewModel.CanDelete || bEUsersPrivilegesViewModel.CanApprove)' == "True")
+                    },
+                    {
+
+                        "data": "id", "orderable": false, "render": function (data, type, row) {
+                               var isContentManager = '@((bEUsersPrivilegesViewModel.CanEdit || bEUsersPrivilegesViewModel.CanDelete)  && !bEUsersPrivilegesViewModel.IsFromApprovalPage)';
+                            var canAdd = '@bEUsersPrivilegesViewModel.CanAdd';
+                               console.log(canAdd)
+                            var Ignore = '@Url.Action("IgnoreActivity", "Activity")';
+
+                                if ((isContentManager == "True" || (canAdd == "True" && row.versionStatusEnum == 1 && row.changeActionEnum == 1 && row.createdById == '@this.User.FindFirstValue(ClaimTypes.NameIdentifier)'))) {
+                                return (row.versionStatusEnum == 1) ? '<a href="#" title="Apply Request" data-placement="right" id="applyItem" class="applyItem customActionLink" data-target="#applyModal" data-toggle="modal" data-id="' + data + '">Apply</a>' +
+                                    '<div class="modal fade" id="applyModal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">' +
+                                    '<div class="modal-dialog">' + '<div class="modal-content">' + '<div class="modal-header">' +
+                                    '<h4 class="modal-title">Apply Request Confirmation</h4>' +
+                                    '</div>' + '<div class="modal-body">Are you sure you want to apply this edit request?</div><div class="modal-footer"><button id="btnContinueApplyRequest" type="button" class="btn btn-danger">Apply Request</button><button data-dismiss="modal" type="button" class="btn btn-primary">Cancel</button></div>' +
+                                    '</div></div></div>' : '<a href="#" style="pointer-events: none;color: #ccc;">Apply</a>'
+                            } else if ('@(bEUsersPrivilegesViewModel.CanApprove && bEUsersPrivilegesViewModel.IsFromApprovalPage)' == "True") {
+
+                                    return '<a href="' + Ignore + '?approvalId=' + @ViewBag.approvalId + '&componentVersionId=' + data + '" title="Ignore" class="anchorActionLink" onclick="DisableAfterClick(event,this)">Ignore</a>'
+                            }
+                            else {
+                                return ''
+                            }
+
+                    }
+                }
+                ]
+                ,"fnInitComplete": function (oSettings, json) {
+
+                }
+            });
+        });
+
+             $('#data_table').on('click', '.more', function () {
+            $(this).hide().closest('td').find('p').show();
+            var readmore = $('<div class="less">less...</div>');
+            readmore.clone().appendTo($(this).hide().closest('td').find('p').last());
+        });
+        $('#data_table').on('click', '.less', function () {
+            $(this).closest('td').find('p:not(:first)').hide();
+            var readmore = $('<div class="more">more...</div>');
+            readmore.clone().appendTo($(this).closest('td').find('p').first());
+        });
+
+            var item_to_delete;
+            var isVersion;
+        $('#data_table').on('click', '.delete', function () {
+            item_to_delete = $(this).data('id');
+               isVersion = $(this).data('isversion');
+            var data = table.row($(this).parents('tr')).data();
+                                     Swal.fire({
+  title: 'Are you sure?',
+  text: "You want to delete this row",
+  icon: 'warning',
+  showCancelButton: true,
+  confirmButtonColor: '#3085d6',
+  cancelButtonColor: '#d33',
+  confirmButtonText: 'delete'
+}).then((result) => {
+  if (result.value) {
+
+
+      $.ajax({
+                            type: "POST",
+          url: '@Url.Action("Delete", "Activity")',
+          data: { id: item_to_delete,sheetType:'@SheetType',isVersion:isVersion },
+                        }).done(function (res) {
+                            if (res) {
+                                Swal.fire(
+                                   {
+                                   title:'Deleted!',
+                                   text: " has been Deleted.",
+                                   icon: 'success',
+                                    showConfirmButton:false
+                                }
+                                )
+                                    window.location.reload();
+                            } else {
+                                   Swal.fire(
+                                    'Failed',
+                                    "Failed to Delete this row",
+                                    'error'
+                                )
+                            }
+                        });
+  }
+})
+
+        });
+
+
+                    var item_to_apply;
+        $('#data_table').on('click', '.applyItem', function () {
+            item_to_apply = $(this).data('id');
+
+        });
+            $('#data_table').on('click', '#btnContinueApplyRequest', function () {
+                var currentItem = $(this);
+                if (currentItem.prop("disabled")) {
+                    e.preventDefault();
+                    return;
+                }
+                currentItem.prop("disabled", true)
+            $('#applyModal').modal('hide');
+            $.ajax({
+             type: "POST",
+                url: '@Url.Action("SubmitChangesActivity", "Activity")',
+                    data: { rgdpVersionId: item_to_apply },
+            success: function () {
+                window.location.reload();
+            },
+            complete: function (data) {
+                $('#applyModal').modal('hide');
+                 window.location.reload();
+            }
+        });
+    });
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9.10.9/dist/sweetalert2.all.min.js"></script>
+    }
+}
+@if (ViewBag.Type == "Sector")
+{
+    <partial name="_SectorGrowthPartialView" />
+
+    @section scripts {
+        <script type="text/javascript">
+        $(document).ready(function () {
+            window.table = $('#data_table').DataTable({
+                "aaSorting": [],
+                "scrollX": true,
+                "serverSide": true,
+                "processing": true,
+                "ajax": {
+                    "url": '@Url.Action("GetAllSectorGrowth", "Activity")', "dataSrc": "data",
+                    "type": "POST",
+                    "data":{approvalId:'@ViewBag.approvalId'},
+                    "datatype": "json"
+                },
+                "columns": [
+                    {
+                        "data": "dfIndicator", "name": "DFIndicator", render:  $.fn.dataTable.render.ellipsis()  },
+                    {
+                        "data": "dfSource", "name": "DFSource",render:  $.fn.dataTable.render.ellipsis()  },
+                    {
+                        "data": "dfUnit", "name": "DFUnit",render:  $.fn.dataTable.render.ellipsis() },
+                    {
+                        "data": "dfQuarter", "name": "DFQuarter",render:  $.fn.dataTable.render.ellipsis() },
+                    {
+                        "data": "dfYear", "name": "DFYear", render:  $.fn.dataTable.render.ellipsis()  },
+                    {
+                        "data": "dfSector", "name": "DFSector" , render:  $.fn.dataTable.render.ellipsis()  },
+                    {
+                        "data": "agricultureForestryFishing", "name": "AgricultureForestryFishing" ,render:  $.fn.dataTable.render.ellipsis() },
+                    {
+                        "data": "miningQuarrying", "name": "MiningQuarrying",render:  $.fn.dataTable.render.ellipsis()  },
+                    {
+                        "data": "petroleum", "name": "Petroleum",render:  $.fn.dataTable.render.ellipsis() },
+                    {
+                        "data": "gas", "name": "Gas",render:  $.fn.dataTable.render.ellipsis() },
+                    {
+                        "data": "otherExtraction", "name": "OtherExtraction",render:  $.fn.dataTable.render.ellipsis()  },
+                    {
+                        "data": "manufacturingIndustries", "name": "ManufacturingIndustries",render:  $.fn.dataTable.render.ellipsis()  },
+                    {
+                        "data": "petroleumRefining", "name": "PetroleumRefining", render:  $.fn.dataTable.render.ellipsis() },
+                    {
+                        "data": "otherManufacturing", "name": "OtherManufacturing", render:  $.fn.dataTable.render.ellipsis()  },
+                    {
+                        "data": "electricity", "name": "Electricity", render:  $.fn.dataTable.render.ellipsis() },
+                    {
+                        "data": "waterSewerageRemediationActivitie", "name": "WaterSewerageRemediationActivitie",render:  $.fn.dataTable.render.ellipsis() },
+                    {
+                        "data": "construction", "name": "Construction", render:  $.fn.dataTable.render.ellipsis()  },
+                    {
+                        "data": "transportationAndStorage", "name": "TransportationAndStorage",render:  $.fn.dataTable.render.ellipsis()  },
+                    {
+                        "data": "communication", "name": "Communication",render:  $.fn.dataTable.render.ellipsis() },
+                    {
+                        "data": "information", "name": "Information", render:  $.fn.dataTable.render.ellipsis()  },
+                    {
+                        "data": "suezcCanal", "name": "SuezcCanal",  render:  $.fn.dataTable.render.ellipsis() },
+                    {
+                        "data": "wholesaleAndRetailTrade", "name": "WholesaleAndRetailTrade",render:  $.fn.dataTable.render.ellipsis() },
+                    {
+                        "data": "financialIntermediariesAuxiliaryServices", "name": "FinancialIntermediariesAuxiliaryServices",render:  $.fn.dataTable.render.ellipsis()  },
+                    {
+                        "data": "socialSecurityAndInsurance", "name": "SocialSecurityAndInsurance", render:  $.fn.dataTable.render.ellipsis()  },
+                    {
+                        "data": "accommodationAndFoodServiceActivities", "name": "AccommodationAndFoodServiceActivities",render:  $.fn.dataTable.render.ellipsis() },
+                    {
+                        "data": "realEstateActivitie", "name": "RealEstateActivitie", render:  $.fn.dataTable.render.ellipsis()  },
+                    {
+                        "data": "realEstateOwnership", "name": "RealEstateOwnership",render:  $.fn.dataTable.render.ellipsis()  },
+                    {
+                        "data": "businessServices", "name": "BusinessServices",render:  $.fn.dataTable.render.ellipsis()  },
+                    {
+                        "data": "generalGovernment", "name": "GeneralGovernment",render:  $.fn.dataTable.render.ellipsis() },
+                    {
+                        "data": "socialServices", "name": "SocialServices",render:  $.fn.dataTable.render.ellipsis() },
+                    {
+                        "data": "education", "name": "Education", render:  $.fn.dataTable.render.ellipsis()
+                    },
+                    {
+                        "data": "health", "name": "Health", render:  $.fn.dataTable.render.ellipsis()
+                    }, {
+                        "data": "otherServices", "name": "OtherServices",render:  $.fn.dataTable.render.ellipsis()
+                    }, {
+                        "data": "totalGDPAtFactorCost", "name": "TotalGDPAtFactorCost", render:  $.fn.dataTable.render.ellipsis()
+                    },
+                    {
+                "data": "changeActionEnum", "orderable": false, "name": "ChangeActionEnum", "render": function (data, type, row) {
+
+                               return  data == 1 ? "New" : data == 2 ? "Update" : "Delete"
+                        }, "visible": ('@(!bEUsersPrivilegesViewModel.IsFromApprovalPage)' == "True")
+                    },
+            {
+                "data": "changeActionEnum", "orderable": false, "name": "ChangeActionEnum", "render": function (data, type, row) {
+                      var isContentManager = '@(!bEUsersPrivilegesViewModel.IsFromApprovalPage)';
+                               return isContentManager != "True" ? data == 1 ? "New" : data == 2 ? "Update" : "Delete" : row.versionStatusEnum == 1 ? "Draft" : row.versionStatusEnum == 2 ? "Submitted" : "Approved"
+                        }
+                    },
+                    {
+                        "data": "id", "orderable": false, "render": function (data, type, row) {
+                            var isContentManager = '@(bEUsersPrivilegesViewModel.CanEdit && !bEUsersPrivilegesViewModel.IsFromApprovalPage)';
+
+                        var edit = '@Url.Action("Edit", "Activity")';
+                            return isContentManager == "True" ? '<a href="' + edit + '?id=' + data + '&sheetType=' +'@SheetType'+ '&isVersion=' + row.isVersion +'" title="Edit" class="anchorActionLink"><i class="fa fa-pencil"></i></a>' : '';
+                        }, "visible": ('@(bEUsersPrivilegesViewModel.CanEdit && !bEUsersPrivilegesViewModel.IsFromApprovalPage)' == "True")
+                    },
+                    {
+                        "data": "id", "orderable": false, "render": function (data, type, row) {
+                            var isContentManager = '@(bEUsersPrivilegesViewModel.CanDelete && !bEUsersPrivilegesViewModel.IsFromApprovalPage)';
+                             var Approve = '@Url.Action("ApproveSector", "Activity")';
+                            return  isContentManager == "True" ?  '<a href="#" title="Delete" data-placement="right"  class="delete anchorActionLink" data-target="#basic" data-toggle="modal" data-id="' + data + '" data-isversion="' + row.isVersion + '"><i class="fa fa-trash"></i></a>':'<a href="' + Approve + '?approvalId=' + @ViewBag.approvalId + '&componentVersionId=' +data+'" title="Approve" class="anchorActionLink">Approve</a>'
+
+                        }, "visible": ('@(bEUsersPrivilegesViewModel.CanDelete || bEUsersPrivilegesViewModel.CanApprove)' == "True")
+                    },
+                    {
+
+                        "data": "id", "orderable": false, "render": function (data, type, row) {
+                                var isContentManager = '@((bEUsersPrivilegesViewModel.CanEdit || bEUsersPrivilegesViewModel.CanDelete)  && !bEUsersPrivilegesViewModel.IsFromApprovalPage)';
+                            var canAdd = '@bEUsersPrivilegesViewModel.CanAdd';
+
+                            var Ignore = '@Url.Action("IgnoreSector", "Activity")';
+                            console.log(isContentManager)
+                     if ((isContentManager == "True" || (canAdd == "True" && row.versionStatusEnum == 1 && row.changeActionEnum == 1 && row.createdById == '@this.User.FindFirstValue(ClaimTypes.NameIdentifier)'))) {
+                                return (row.versionStatusEnum == 1) ? '<a href="#" title="Apply Request" data-placement="right" id="applyItem" class="applyItem customActionLink" data-target="#applyModal" data-toggle="modal" data-id="' + data + '">Apply</a>' +
+                                    '<div class="modal fade" id="applyModal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">' +
+                                    '<div class="modal-dialog">' + '<div class="modal-content">' + '<div class="modal-header">' +
+                                    '<h4 class="modal-title">Apply Request Confirmation</h4>' +
+                                    '</div>' + '<div class="modal-body">Are you sure you want to apply this edit request?</div><div class="modal-footer"><button id="btnContinueApplyRequest" type="button" class="btn btn-danger">Apply Request</button><button data-dismiss="modal" type="button" class="btn btn-primary">Cancel</button></div>' +
+                                    '</div></div></div>' : '<a href="#" style="pointer-events: none;color: #ccc;">Apply</a>'
+                            } else if ('@(bEUsersPrivilegesViewModel.CanApprove && bEUsersPrivilegesViewModel.IsFromApprovalPage)' == "True") {
+
+                         return '<a href="' + Ignore + '?approvalId=' + @ViewBag.approvalId + '&componentVersionId=' + data + '" title="Ignore" class="anchorActionLink">Ignore</a>'
+                            }
+                            else {
+                                return ''
+                            }
+                    }
+                }
+                ]
+                ,"fnInitComplete": function (oSettings, json) {
+
+                }
+            });
+        });
+
+             $('#data_table').on('click', '.more', function () {
+            $(this).hide().closest('td').find('p').show();
+            var readmore = $('<div class="less">less...</div>');
+            readmore.clone().appendTo($(this).hide().closest('td').find('p').last());
+        });
+        $('#data_table').on('click', '.less', function () {
+            $(this).closest('td').find('p:not(:first)').hide();
+            var readmore = $('<div class="more">more...</div>');
+            readmore.clone().appendTo($(this).closest('td').find('p').first());
+        });
+
+            var item_to_delete;
+            var isVersion;
+        $('#data_table').on('click', '.delete', function () {
+            item_to_delete = $(this).data('id');
+            isVersion = $(this).data('isversion');
+            var data = table.row($(this).parents('tr')).data();
+                                     Swal.fire({
+  title: 'Are you sure?',
+  text: "You want to delete this row",
+  icon: 'warning',
+  showCancelButton: true,
+  confirmButtonColor: '#3085d6',
+  cancelButtonColor: '#d33',
+  confirmButtonText: 'delete'
+}).then((result) => {
+  if (result.value) {
+
+
+      $.ajax({
+                            type: "POST",
+          url: '@Url.Action("Delete", "Activity")',
+          data: { id: item_to_delete,sheetType:'@SheetType',isVersion:isVersion },
+                        }).done(function (res) {
+                            if (res) {
+                                Swal.fire({
+                                   title:'Deleted!',
+                                   text: " has been Deleted.",
+                                   icon: 'success',
+                                    showConfirmButton:false
+                                }
+                                )
+                         window.location.reload();
+                            } else {
+                                   Swal.fire(
+                                    'Failed',
+                                    "Failed to Delete this row",
+                                    'error'
+                                )
+                            }
+                        });
+  }
+})
+
+        });
+
+
+                        var item_to_apply;
+        $('#data_table').on('click', '.applyItem', function () {
+            item_to_apply = $(this).data('id');
+
+        });
+            $('#data_table').on('click', '#btnContinueApplyRequest', function () {
+                var currentItem = $(this);
+                if (currentItem.prop("disabled")) {
+                    e.preventDefault();
+                    return;
+                }
+                currentItem.prop("disabled", true)
+            $('#applyModal').modal('hide');
+            $.ajax({
+             type: "POST",
+                url: '@Url.Action("SubmitChangesSector", "Activity")',
+                    data: { rgdpVersionId: item_to_apply },
+            success: function () {
+                window.location.reload();
+            },
+            complete: function (data) {
+                $('#applyModal').modal('hide');
+                 window.location.reload();
+            }
+        });
+    });
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9.10.9/dist/sweetalert2.all.min.js"></script>
+    }
+}

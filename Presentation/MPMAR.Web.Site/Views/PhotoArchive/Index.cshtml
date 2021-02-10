@@ -1,0 +1,177 @@
+﻿@model MPMAR.Web.Site.ViewModels.PhotoArchiveViewModel
+@addTagHelper "*, Microsoft.AspNetCore.Mvc.TagHelpers"
+@{
+    ViewData["Title"] = ViewBag.Title;
+}
+@{
+    string lang = Context.Request.Query["lang"];
+    string langVal = lang == "en" ? "en" : "ar";
+}
+<style type="text/css">
+    .no-fouc {
+        display: none;
+    }
+
+    .media-items {
+        margin-bottom: 20px;
+    }
+
+    h2.gallerytag {
+        margin: 5px 16px 23px;
+        font-weight: 600;
+        color: #28a5a3;
+    }
+      @@media (max-width: 767px) {
+        .media-filters label {
+            display: block;
+            margin-top: 20px;
+            margin-bottom: 20px !important;
+            margin-left: 3px !important;
+        }
+    }
+</style>
+<section id="content">
+
+    <!-- Page Heading -->
+    <section class="section page-heading animate-onscroll">
+
+        <h1>@ViewBag.Title</h1>
+        <p class="breadcrumb"><a href="home">@(lang == "en" ? "Main" : "الرئيسية")</a> / @ViewBag.Nav / @ViewBag.Title</p>
+
+    </section>
+    <!-- Page Heading -->
+    <!-- Section -->
+    <section class="section full-width-bg gray-bg">
+
+        <div class="row">
+
+            <div class="col-lg-12 col-md-12 col-sm-12">
+
+                <!-- Media Filters -->
+                <div class="media-filters animate-onscroll">
+                    <form asp-controller="PhotoArchive" asp-action="SearchArchive" method="get">
+                        <input name="lang" value="@langVal" hidden />
+                        <div class="filter-filtering" style="margin-bottom:5px">
+
+
+                            <ul class="filter-dropdown">
+                                <li>
+
+                                    <span>@ViewBag.typeTextValue</span>
+
+                                    <ul id="typeMenue">
+                                        @if (lang == "en")
+                                        {
+                                            <li value="All" onclick="updateTypeVal('كل','typeDiv')">All</li>
+                                        }
+                                        else
+                                        {
+
+                                            <li value="All" onclick="updateTypeVal('كل','typeDiv')">كل</li>
+                                        }
+                                        @foreach (var item in Model.PhotoArchiveTypes)
+                                        {
+                                            if (lang == "en")
+                                            {
+
+                                                <li value="@item.EnName" onclick="updateTypeVal('@item.ArName','@item.EnName.Replace(" ", "_")')">@item.EnName</li>
+                                            }
+                                            else
+                                            {
+                                                <li value="@item.ArName" onclick="updateTypeVal('@item.ArName','@item.EnName.Replace(" ", "_")')">@item.ArName</li>
+                                            }
+                                        }
+                                        <input name="type" type="hidden" id="type" value="@ViewBag.typeValue" />
+
+                                    </ul>
+                                </li>
+                            </ul>
+
+                        </div>
+
+
+                        @if (langVal == "en")
+                        {
+                            <label style="
+							margin-left: 30px;
+						"> Search </label>
+                        }
+                        else
+                        {
+                            <label style="
+							margin-right: 30px;
+						"> ابحث </label>
+                        }
+
+
+                        <div style="display: inline-block;margin-bottom: -12px;">
+
+                            <div class="newsletter-form formnewssearch ">
+
+                                <div class="newsletter-email">
+                                    <input name="searchText" class="searchonmoile" type="text" style="background: #fff;color:black" value="@ViewBag.PhotoArchiveSearchText">
+                                </div>
+
+                                <div class="newsletter-submit">
+                                    <input type="submit" value="">
+                                    <i class="icons icon-search search-icon"></i>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </form>
+
+
+                </div>
+                <!-- /Media Filters -->
+
+
+                @foreach (var item in Model.PhotoArchives.Where(x => !string.IsNullOrWhiteSpace(x.EnPhotoArchiveType) && !string.IsNullOrWhiteSpace(x.ArPhotoArchiveType)).Select(i => new { i.EnPhotoArchiveType, i.ArPhotoArchiveType }).Distinct())
+                {
+                    <div class="media-items row typeDiv @item.EnPhotoArchiveType.Replace(" ","_")">
+                        <h2 class="gallerytag">@(lang == "en" ? item.EnPhotoArchiveType : item.ArPhotoArchiveType)</h2>
+                        @foreach (var photo in Model.PhotoArchives.Where(i => i.EnPhotoArchiveType == item.EnPhotoArchiveType && i.ArPhotoArchiveType == item.ArPhotoArchiveType))
+                        {
+                            <div class="col-lg-4 col-md-4 col-sm-4 mix category-photos" data-nameorder="1" data-dateorder="3">
+                                <div class="media-item animate-onscroll gallery-media">
+                                    <div class="media-image">
+                                        <img src="@photo.ImageUrl" alt="">
+                                        <div class="text-block  overlayspace" style="width:360px">
+                                            <h4 class="overlaytextcolorbottom">
+                                                @(lang == "en" ? photo.EnPhotoArchiveName : photo.ArPhotoArchiveName)
+                                            </h4>
+                                        </div>
+                                        <div class="media-hover">
+                                            <div class="media-icons">
+                                                <a href="/PhotosAlbum?PAId=@photo.Id&lang=@langVal" class="media-icon"><i class="icons icon-link"><p style="font-size: 12px;text-align: center;">@(lang == "en" ? "Read" : "اقرأ")</p></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+
+            </div>
+            @if (!Model.PhotoArchives.Select(i => new { i.EnPhotoArchiveType, i.ArPhotoArchiveType }).Distinct().Any())
+            {
+                <p>@(langVal == "en" ? "No Search Results" : "لا يوجد نتائج للبحث")</p>
+            }
+        </div>
+
+    </section>
+    <!-- /Section -->
+
+</section>
+@section Scripts{
+    <script>
+        function updateTypeVal(id, typeName) {
+            $("#type").val(id)
+            debugger
+             $(".typeDiv").hide()
+            $("." + typeName).show()
+        }
+    </script>
+}

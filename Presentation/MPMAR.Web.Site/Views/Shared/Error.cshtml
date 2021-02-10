@@ -1,0 +1,17 @@
+﻿@model ErrorViewModel
+@{
+    string lang = Context.Request.Query["lang"];
+    ViewData["Title"] = (lang == "en") ? "Error" : "خطأ";
+    string langVal = lang == "en" ? "en" : "ar";
+
+}
+<link href="~/css/404page.css" rel="stylesheet" />
+<div id="notfound" style="margin-top:-100px;margin-bottom:-100px;direction:ltr">
+    <div class="notfound">
+        <div class="notfound-404" style="margin-bottom:70px">
+            <h1>Oops!</h1>
+            <h2 style="margin-bottom:-45px">@(lang == "en" ? "404 - The Page can't be found" : "404 - لم يتم التمكن من ايجاد الصفحة")</h2>
+        </div>
+        <a href="/?lang=@langVal" style="color:white">@(lang=="en"?"Go TO Homepage":"الذهاب للصفحة الرئيسة")</a>
+    </div>
+</div>

@@ -1,0 +1,283 @@
+﻿@model MPMAR.Data.HomePageModels.ViewModels.HP_EconomicDevViewModel;
+@using MPMAR.Common
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+
+        string approvalId = Context.Request.Query["approvalId"];
+    int approvalIdInt = 0;
+    int.TryParse(approvalId, out approvalIdInt);
+
+    var bEUsersPrivilegesViewModel = bEUsersPrivilegesService.ValidateIBEUsersPrivilegesViewService(PrivilegesPageType.HPEconomicDevelopment, this.User.FindFirstValue(ClaimTypes.NameIdentifier), this.User.IsInRole(UserRolesConst.SuperAdmin), approvalId: approvalIdInt);
+}
+
+@*<h1>Edit</h1>*@
+
+
+<div>
+    <h4>Home Page > <a asp-controller="HP_EconomicDevelopment" asp-action="Index">Economic Development</a> > Edit</h4>
+</div>
+
+@if (ViewBag.DisableEditFlage == true && bEUsersPrivilegesViewModel.CanEdit && !bEUsersPrivilegesViewModel.IsFromApprovalPage)
+{
+<div class="alert alert-warning">
+    <strong>NOTE!</strong> Your old changes haven't been approved yet, and your new changes will be auto-submitted.
+</div>
+}
+
+<form enctype="multipart/form-data" asp-controller="HP_EconomicDevelopment" asp-action="Edit" method="post" class="mt-3">
+    <input asp-for="Id" type="hidden" />
+    <input asp-for="order" type="hidden" />
+    <input asp-for="ChangeActionEnum" type="hidden" />
+    <input asp-for="BackGroundImage" type="hidden" />
+    <input asp-for="EconomicDevelopmentId" type="hidden" />
+    <input asp-for="VersionStatusEnum" type="hidden" />
+    <input asp-for="CreationDate" type="hidden" />
+    <input asp-for="CreatedById" type="hidden" />
+    <input asp-for="ApprovedById" type="hidden" />
+    <input asp-for="ApprovalDate" type="hidden" />
+    <input asp-for="ModifiedById" type="hidden" />
+    <input asp-for="ModificationDate" type="hidden" />
+
+    @if (ViewBag.order == 0)
+    {
+        <input asp-for="IsActive" type="hidden" />
+        <input asp-for="IsDeleted" type="hidden" />
+        <input asp-for="@Model.ArDescription1" type="hidden" />
+        <input asp-for="@Model.ArDescription2" type="hidden" />
+        <input asp-for="@Model.ArDescription3" type="hidden" />
+        <input asp-for="@Model.EnDescription1" type="hidden" />
+        <input asp-for="@Model.EnDescription2" type="hidden" />
+        <input asp-for="@Model.EnDescription3" type="hidden" />
+        <input asp-for="@Model.ArTitle1" type="hidden" />
+        <input asp-for="@Model.ArTitle2" type="hidden" />
+        <input asp-for="@Model.ArTitle3" type="hidden" />
+        <input asp-for="@Model.EnTitle1" type="hidden" />
+        <input asp-for="@Model.EnTitle2" type="hidden" />
+        <input asp-for="@Model.EnTitle3" type="hidden" />
+        <input asp-for="@Model.Url1" type="hidden" />
+        <input asp-for="@Model.Url2" type="hidden" />
+        <input asp-for="@Model.Url3" type="hidden" />
+        <input asp-for="@Model.Id" type="hidden" />
+
+        <div class="form-group row">
+            <label asp-for="ArMainTitle" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="@Model.ArMainTitle" class="form-control" />
+                <span asp-validation-for="ArMainTitle" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="EnMainTitle" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="@Model.EnMainTitle" class="form-control" />
+                <span asp-validation-for="EnMainTitle" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="BackGroundImageFile" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <div class="custom-file">
+                    <input asp-for="BackGroundImageFile" class="form-control custom-file-input" />
+                    <label class="custom-file-label">Choose File...</label>
+                    <span asp-validation-for="BackGroundImageFile" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <img asp-for="BackGroundImage" src="@Model.BackGroundImage" style="height:200px;" />
+        </div>
+    }
+
+    @if (ViewBag.order == 1)
+    {
+        <input asp-for="IsActive" type="hidden" />
+        <input asp-for="IsDeleted" type="hidden" />
+        <input asp-for="@Model.ArMainTitle" type="hidden" />
+        <input asp-for="@Model.EnMainTitle" type="hidden" />
+        <input asp-for="@Model.ArDescription2" type="hidden" />
+        <input asp-for="@Model.ArDescription3" type="hidden" />
+        <input asp-for="@Model.EnDescription2" type="hidden" />
+        <input asp-for="@Model.EnDescription3" type="hidden" />
+        <input asp-for="@Model.ArTitle2" type="hidden" />
+        <input asp-for="@Model.ArTitle3" type="hidden" />
+        <input asp-for="@Model.EnTitle2" type="hidden" />
+        <input asp-for="@Model.EnTitle3" type="hidden" />
+        <input asp-for="@Model.Url2" type="hidden" />
+        <input asp-for="@Model.Url3" type="hidden" />
+
+        <div class="form-group row">
+            <label asp-for="@Model.ArTitle1" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="@Model.ArTitle1" class="form-control" />
+                <span asp-validation-for="ArTitle1" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="@Model.EnTitle1" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="@Model.EnTitle1" class="form-control" />
+                <span asp-validation-for="EnTitle1" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="@Model.ArDescription1" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="@Model.ArDescription1" class="form-control" />
+                <span asp-validation-for="ArDescription1" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="@Model.EnDescription1" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="@Model.EnDescription1" class="form-control" />
+                <span asp-validation-for="EnDescription1" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="@Model.Url1" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="@Model.Url1" class="form-control" />
+                <span asp-validation-for="Url1" class="text-danger"></span>
+            </div>
+        </div>
+    }
+
+    @if (ViewBag.order == 2)
+    {
+        <input asp-for="IsActive" type="hidden" />
+        <input asp-for="IsDeleted" type="hidden" />
+        <input asp-for="@Model.ArMainTitle" type="hidden" />
+        <input asp-for="@Model.EnMainTitle" type="hidden" />
+        <input asp-for="@Model.ArDescription1" type="hidden" />
+        <input asp-for="@Model.ArDescription3" type="hidden" />
+        <input asp-for="@Model.EnDescription1" type="hidden" />
+        <input asp-for="@Model.EnDescription3" type="hidden" />
+        <input asp-for="@Model.ArTitle1" type="hidden" />
+        <input asp-for="@Model.ArTitle3" type="hidden" />
+        <input asp-for="@Model.EnTitle1" type="hidden" />
+        <input asp-for="@Model.EnTitle3" type="hidden" />
+        <input asp-for="@Model.Url1" type="hidden" />
+        <input asp-for="@Model.Url3" type="hidden" />
+
+        <div class="form-group row">
+            <label asp-for="@Model.ArTitle2" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="@Model.ArTitle2" class="form-control" />
+                <span asp-validation-for="ArTitle2" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="@Model.EnTitle2" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="@Model.EnTitle2" class="form-control" />
+                <span asp-validation-for="EnTitle2" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="@Model.ArDescription2" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="@Model.ArDescription2" class="form-control" />
+                <span asp-validation-for="ArDescription2" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="@Model.EnDescription2" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="@Model.EnDescription2" class="form-control" />
+                <span asp-validation-for="EnDescription2" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="@Model.Url2" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="@Model.Url2" class="form-control" />
+                <span asp-validation-for="Url2" class="text-danger"></span>
+            </div>
+        </div>
+    }
+
+    @if (ViewBag.order == 3)
+    {
+        <input asp-for="IsActive" type="hidden" />
+        <input asp-for="IsDeleted" type="hidden" />
+        <input asp-for="@Model.ArMainTitle" type="hidden" />
+        <input asp-for="@Model.EnMainTitle" type="hidden" />
+        <input asp-for="@Model.ArDescription2" type="hidden" />
+        <input asp-for="@Model.ArDescription1" type="hidden" />
+        <input asp-for="@Model.EnDescription2" type="hidden" />
+        <input asp-for="@Model.EnDescription1" type="hidden" />
+        <input asp-for="@Model.ArTitle2" type="hidden" />
+        <input asp-for="@Model.ArTitle1" type="hidden" />
+        <input asp-for="@Model.EnTitle2" type="hidden" />
+        <input asp-for="@Model.EnTitle1" type="hidden" />
+        <input asp-for="@Model.Url2" type="hidden" />
+        <input asp-for="@Model.Url1" type="hidden" />
+
+        <div class="form-group row">
+            <label asp-for="@Model.ArTitle2" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="@Model.ArTitle3" class="form-control" />
+                <span asp-validation-for="ArTitle3" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="@Model.EnTitle3" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="@Model.EnTitle3" class="form-control" />
+                <span asp-validation-for="EnTitle3" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="@Model.ArDescription3" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="@Model.ArDescription3" class="form-control" />
+                <span asp-validation-for="ArDescription3" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="@Model.EnDescription3" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="@Model.EnDescription3" class="form-control" />
+                <span asp-validation-for="EnDescription3" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="@Model.Url3" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="@Model.Url3" class="form-control" />
+                <span asp-validation-for="Url3" class="text-danger"></span>
+            </div>
+        </div>
+    }
+
+    <div class="item form-group">
+        <div class="col-md-6 col-sm-6 offset-md-2">
+            <button type="submit" class="btn btn-success">Save</button>
+            <a asp-controller="HP_EconomicDevelopment" asp-action="Index" type="button" class="btn btn-primary">Cancel</a>
+        </div>
+    </div>
+</form>
+
+@section Scripts{
+    <script>
+        $('.custom-file-input').on('change', function () {
+            var fileName = $(this).val().split('\\').pop();
+            $(this).next('.custom-file-label').html(fileName);
+        });
+    </script>
+}

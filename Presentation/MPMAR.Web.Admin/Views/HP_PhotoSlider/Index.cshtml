@@ -1,0 +1,206 @@
+﻿@using MPMAR.Common
+@{
+    ViewData["Title"] = "Photo Slider";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+
+    string approvalId = Context.Request.Query["approvalId"];
+    int approvalIdInt = 0;
+    int.TryParse(approvalId, out approvalIdInt);
+
+    var bEUsersPrivilegesViewModel = bEUsersPrivilegesService.ValidateIBEUsersPrivilegesViewService(PrivilegesPageType.HpPhotoSlider, this.User.FindFirstValue(ClaimTypes.NameIdentifier), this.User.IsInRole(UserRolesConst.SuperAdmin), approvalId: approvalIdInt);
+}
+
+<div>
+    <h4>Home Page > Photos Slider</h4>
+</div>
+
+@if (bEUsersPrivilegesViewModel.CanApprove && bEUsersPrivilegesViewModel.IsFromApprovalPage)
+{
+    <a asp-action="Approve" asp-route-approvalId="@ViewBag.approvalId" type="button" class="btn btn-primary" onclick="DisableAfterClick(event,this)">Approve</a>
+    <a asp-action="Ignore" asp-route-approvalId="@ViewBag.approvalId" type="button" class="btn btn-primary" onclick="DisableAfterClick(event,this)">Ignore</a>
+}
+else if (!bEUsersPrivilegesViewModel.IsFromApprovalPage)
+{
+    if (bEUsersPrivilegesViewModel.CanSubmit)
+    {
+
+        <a type="button" class="btn btn-success" asp-route-pageRouteId="@ViewBag.pageRouteId" asp-controller="HP_PhotoSlider" asp-action="SubmitChanges">Submit</a>
+    }
+    if (bEUsersPrivilegesViewModel.CanAdd)
+    {
+        <a asp-controller="HP_PhotoSlider" asp-action="Create" type="button" class="btn btn-primary index-create-button">Add</a>
+
+    }
+
+}
+<table id="data_table" class="table table-striped table-bordered" style="width:100%">
+    <thead>
+        <tr>
+            <th style="width: 10%">Image</th>
+            <th style="width: 20%">Arabic Title</th>
+            <th style="width: 20%">English Title</th>
+            <th style="width: 20%">Arabic Description</th>
+            <th style="width: 20%">English Description</th>
+            <th style="width: 20%">Url</th>
+            <th style="width: 20%"></th>
+            <th style="width: 20%"></th>
+        </tr>
+    </thead>
+</table>
+
+
+<!--model dialog-->
+<div class="modal1">
+    <div class="modalWrap">
+        <span id="close"> X </span>
+
+        <div id="yourDiv"></div>
+    </div>
+</div>
+
+
+@section scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            window.table = $('#data_table').DataTable({
+                "aaSorting": [],
+                "paging":false,
+                "ordering": false,
+                "info": false,
+                "searching": false,
+                "scrollX": true,
+                "ajax": {"url": '@Url.Action("GetAllPhotoSlider", "HP_PhotoSlider")', "dataSrc": "data"},
+                "columns": [
+                    {
+                        "data": "imageUrl", "name": "ImageUrl", "render": function (data, type, row) {
+                            return '<a href="#" title="View Image" data-placement="right" id="imageItem" class="imageItem anchorActionLink" data-id="' + row.imageUrl + '">Image</a>';
+                        }
+                    },
+                    {
+                        "data": "arTitle", "name": "ArTitle",render:  $.fn.dataTable.render.ellipsis()
+                    },
+                    {
+                        "data": "enTitle", "name": "EnTitle", render:  $.fn.dataTable.render.ellipsis()
+                    },
+                    {
+                        "data": "arDescription", "name": "ArDescription",render:  $.fn.dataTable.render.ellipsis()
+                    },
+                    {
+                        "data": "enDescription", "name": "EnDescription",render:  $.fn.dataTable.render.ellipsis()
+                    },
+                    {
+                        "data": "url", "name": "Url", render:  $.fn.dataTable.render.ellipsis()
+                    },
+                    {
+                    "data": "id", "orderable": false, "render": function (data, type, row) {
+                            var edit = '@Url.Action("Edit", "HP_PhotoSlider")';
+                            var isContentManager = '@(bEUsersPrivilegesViewModel.CanEdit && !bEUsersPrivilegesViewModel.IsFromApprovalPage)';
+                            return isContentManager == "True" ? '<a href="' + edit + '?id=' + data  +'&homePagePhotoSliderId=' + row.homePagePhotoSliderId+'" title="Edit" class="anchorActionLink"><i class="fa fa-pencil"></i></a>': '';
+                    }
+                    },
+                    {
+                        "data": "id", "orderable": false, "render": function (data, type, row) {
+                            var isContentManager = '@(bEUsersPrivilegesViewModel.CanDelete && !bEUsersPrivilegesViewModel.IsFromApprovalPage)';
+                            return isContentManager == "True" ? '<a href="#" title="Delete" data-placement="right"  class="delete anchorActionLink" data-target="#basic" data-toggle="modal" data-id="' + data + '" data-sliderId="' + row.homePagePhotoSliderId + '"><i class="fa fa-trash"></i></a>' : '';
+
+                        }
+                    }
+                ]
+                ,"fnInitComplete": function (oSettings, json) {
+                    //var table = $('#data_table').DataTable();
+                    //if (table.data().count() <= 10) {
+                    //   document.getElementById("data_table_paginate").style.display = "none";
+                    //        document.getElementById("data_table_length").style.display = "none";
+                    //        document.getElementById("data_table_filter").style.display = "none";
+                    //}
+                }
+            });
+        });
+
+          $("#close").click(function () {
+        $(".modal1").fadeOut("fast");
+        $("#yourDiv").css({
+            "overflow": "hidden",
+            "height": "auto"
+        });
+    });
+
+    $(".modalWrap").on("click", function (e) {
+        e.stopPropagation();
+    });
+        $('#data_table').on('click', '.imageItem', function () {
+
+                var img = $('<img id="dynamic">');
+                img.attr('src', $(this).data('id'));
+        $(".modal1").fadeIn("fast");
+        $("#yourDiv img").remove();
+        img.clone().appendTo("#yourDiv");
+        var hyt = $("#yourDiv").height();
+        if (hyt > 400) {
+            $("#yourDiv").css({
+                "overflow": "hidden",
+                "height": "400px"
+            });
+            $("#yourDiv img").css({
+                "max-height": "98%"
+            });
+        } else if (hyt <= 400) {
+            $("#yourDiv").css({
+                "overflow": "hidden",
+                "height": "auto"
+            });
+        }
+        });
+
+        var item_to_delete;
+        var item_to_deleteSliderId;
+        $('#data_table').on('click', '.delete', function () {
+            item_to_delete = $(this).data('id');
+            console.log("id: "+ item_to_delete)
+            var data = table.row($(this).parents('tr')).data();
+            item_to_deleteSliderId = data.homePagePhotoSliderId
+                                     Swal.fire({
+  title: 'Are you sure?',
+  text: 'You want to delete this row'+('@ViewBag.DisableEditFlage' == 'True'?' NOTE! your old changes do not approved yet, and your new changes will be auto submitted.':''),
+  icon: 'warning',
+  showCancelButton: true,
+  confirmButtonColor: '#3085d6',
+  cancelButtonColor: '#d33',
+  confirmButtonText: 'delete'
+}).then((result) => {
+  if (result.value) {
+
+
+      $.ajax({
+                            type: "POST",
+          url: '@Url.Action("Delete", "HP_PhotoSlider")',
+          data: {
+              id: item_to_delete
+              ,
+              sliderId: item_to_deleteSliderId
+          },
+                        }).done(function (res) {
+                            if (res) {
+                                Swal.fire(
+                                    'Deleted!',
+                                    " has been Deleted.",
+                                    'success'
+                                )
+                                table.ajax.reload();
+                            } else {
+                                   Swal.fire(
+                                    'Failed',
+                                    "Failed to Delete this row",
+                                    'error'
+                                )
+                            }
+                        });
+  }
+})
+
+        });
+
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9.10.9/dist/sweetalert2.all.min.js"></script>
+}
+

@@ -1,0 +1,178 @@
+﻿@model List<MPMAR.Data.LeftMenuItem>
+@{
+    ViewData["Title"] = "NavigationMenu";
+}
+@{
+    string lang = Context.Request.Query["lang"];
+    string langVal = lang == "en" ? "en" : "ar";
+    var value = lang == "en" ? Model[4].EnTitle : Model[4].ArTitle;
+}
+<style>
+    @@media (max-width: 767px) {
+        .sidebarForm {
+            padding-right: 0 !important;
+            padding-left: 0 !important;
+            text-align: center
+        }
+    }
+</style>
+@if (langVal == "en")
+{
+    <style>
+        .leftparagside {
+             text-align: left;
+        }
+    </style>
+}
+else
+{
+    <style>
+        .rightparagside {
+             text-align: right;
+        }
+    </style>
+}
+<div class="col-lg-3 col-md-3 col-sm-4 sidebar">
+    <div class="banner-wrapper">
+        @{
+
+            var langChar0 = @Model[0].Link.Contains("?") ? "&" : "?";
+        }
+        <a class="banner" href="@Model[0].Link@(langChar0)lang=@langVal" style="opacity: 1;">
+            <i class="icons icon-chart-bar icons-fadeout"></i>
+            <i class="icons icon-chart-bar"></i>
+            @if (lang == "ar" || lang == "" || lang == null)
+            {
+                <h4>@Model[0].ArTitle</h4>
+                <p class="rightparagside">@Model[0].ArTitle</p>
+            }
+            else
+            {
+                <h4>@Model[0].EnTitle</h4>
+                <p class="leftparagside">@Model[0].EnTitle</p>
+            }
+        </a>
+    </div>
+
+    <div class="banner-wrapper">
+        @{
+
+            var langChar1 = @Model[1].Link.Contains("?") ? "&" : "?";
+        }
+        <a class="banner" href="@Model[1].Link@(langChar1)lang=@langVal" style="opacity: 1;">
+            <i class="icons icon-phone icons-fadeout"></i>
+            <i class="icons icon-phone"></i>
+            @if (lang == "ar" || lang == "" || lang == null)
+            {
+                <h4>@Model[1].ArTitle</h4>
+                <p class="rightparagside">@Model[1].ArTitle</p>
+            }
+            else
+            {
+                <h4>@Model[1].EnTitle</h4>
+                <p class="leftparagside">@Model[1].EnTitle</p>
+            }
+        </a>
+    </div>
+
+    <div class="banner-wrapper">
+        @{
+
+            var langChar2 = @Model[2].Link.Contains("?") ? "&" : "?";
+        }
+        <a class="banner" href="@Model[2].Link@(langChar2)lang=@langVal" style="opacity: 1;">
+
+            @if (lang == "ar" || lang == "" || lang == null)
+            {
+                <img src="@Model[2].ImagePath" alt="logo" style="width: 20%;text-align: right;float: right;margin-right: -45px;">
+                <h4>@Model[2].ArTitle</h4>
+                <p class="rightparagside">@Model[2].ArTitle</p>
+            }
+            else
+            {
+                <img src="@Model[2].ImagePath" alt="logo" style="width: 20%;text-align: left;float: left;margin-left: -45px;">
+                <h4>@Model[2].EnTitle</h4>
+                <p class="leftparagside">@Model[2].EnTitle</p>
+            }
+        </a>
+    </div>
+
+    <div class="banner-wrapper">
+
+        <div class="banner donate-banner" style="opacity: 1;">
+            <a href="@Model[4].Link" target="_blank">
+                <img src="@Model[4].ImagePath" alt="app" style="
+		float: right;
+		text-align: right;
+		width: 100%;
+	">
+            </a>
+            @if (lang == "ar" || lang == "" || lang == null)
+            {
+                <form class="formonmobile sidebarForm" action="@Model[4].Link" method="get" target="_blank" style="margin-top: 125px;padding-right: 60px;">
+
+                    <a href="@Model[4].Link" target="_blank"><input type="button" value="@value"></a>
+
+                </form>
+            }
+            else
+            {
+                <form class="formonmobile sidebarForm" action="@Model[4].Link" method="get" target="_blank" style="margin-top: 125px;padding-left: 60px;">
+
+                    <a href="@Model[4].Link" target="_blank"><input type="button" value="@value"></a>
+
+                </form>
+            }
+        </div>
+    </div>
+    <!-- Featured Video -->
+    <div class="sidebar-box white featured-video" style="opacity: 1;margin-top:20px">
+        @if (lang == "ar" || lang == "" || lang == null)
+        {
+            <h3>@Model[3].ArTitle</h3>
+        }
+        else
+        {
+            <h3>@Model[3].EnTitle</h3>
+        }
+
+        <iframe width="560" height="315" src="@Model[3].Link" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
+
+        <a href="news.html" class="button transparent button-arrow" style="display: none;">
+            @if (lang == "ar" || lang == "" || lang == null)
+            {
+                <h3>المزيد من الفيديوهات</h3>
+            }
+            else
+            {
+                <h3>More Videos</h3>
+            }
+        </a>
+    </div>
+    <!-- /Featured Video -->
+    <!-- Upcoming Events -->
+    @await Component.InvokeAsync("PageEventVersions")
+    <!-- /Upcoming Events -->
+    <!-- Image Banner -->
+    <!-- Image Banner -->
+    <div class="sidebar-box image-banner" style="opacity: 1;">
+        <a href="~/News?lang=@langVal">
+            <img src="/img/MPED-Egypt-pressreleases.jpg" alt="">
+            @if (lang == "ar" || lang == "" || lang == null)
+            {
+                <h3>بيانات صحفية</h3>
+                <span class="button transparent button-arrow">اقرأ المزيد</span> }
+            else
+            {
+                <h3>News</h3>
+                <span class="button transparent button-arrow">Read More</span>}
+        </a>
+    </div>
+    <!-- /Image Banner -->
+</div>
+
+<style>
+    .en {
+        direction: ltr;
+    }
+</style>

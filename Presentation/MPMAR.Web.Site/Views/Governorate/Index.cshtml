@@ -1,0 +1,1250 @@
+﻿
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+
+@{
+    ViewData["Title"] = ViewBag.RepoOpt;
+
+    var lang = Context.Request.Query["lang"];
+    ViewBag.lang = lang;
+    string langVal = ViewBag.lang == "en" ? "en" : "ar";
+    Layout = ViewBag.Layout;
+
+
+}
+<style>
+    .charts {
+        width: 100%;
+        min-height: 450px;
+    }
+
+    @@media (max-width: 767px) {
+        div#PieFigure {
+            overflow-x: auto;
+            margin-right: -50px;
+        }
+
+        table, tbody, tr, td, th {
+            display: revert;
+        }
+    }
+</style>
+<link href="~/css/Charts.css" rel="stylesheet" />
+@*<partial name="~/Views/Shared/Analytics/_AnalyticsBar.cshtml" />*@
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+<section class="section page-heading animate-onscroll">
+
+    <h1>
+        @ViewBag.Title
+    </h1>
+    <p class="breadcrumb"><a href="~/home?lang=@langVal">@(ViewBag.lang == "en" ? "Main" : "الرئيسية")</a> / @ViewBag.AnalyticsNav / <a href="~/analytics?lang=@langVal">@ViewBag.Analytics</a> / @ViewBag.RepoOpt</p>
+</section>
+@if ("" + lang == "" || lang == "ar")
+{
+    <partial name="~/Views/Shared/Analytics/_AnalyticsBarAr.cshtml" model="@langVal" />
+}
+else
+{
+    <partial name="~/Views/Shared/Analytics/_AnalyticsBarEn.cshtml" model="@langVal" />
+}
+<div style="margin-bottom:5px;margin-top:5px">
+    <ul class="nav nav-tabs" id="myTab">
+        <li class="active"><a data-toggle="tab" id="home-tab" onclick="MoveToReport()" href="">@ViewBag.ReportSpan</a></li>
+        <li><a data-toggle="tab" id="profile-tab" href="" onclick="MoveToCharts()">@ViewBag.ChartsSpan</a></li>
+    </ul>
+
+    <div class="tab-content">
+        <div id="home" class="tab-pane fade in active">
+            <div class="row row-without-margin" style="margin-bottom: 10px;
+">
+                <div class="col-lg-3 col-md-3 RTL_select_header">
+                    <div class="col">
+                        <h6 style="padding-left: 2px;">@ViewBag.selectFiscalYear</h6>
+                    </div>
+                    <div class="col">
+                        <input type="text" id="Years" placeholder="Select" autocomplete="off" style="direction:ltr" />
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 RTL_select_header">
+                    <div class="col">
+                        <h6 style="padding-left:2px;">@ViewBag.Region_gov</h6>
+                    </div>
+                    <div class="col">
+                        <input type="text" id="RegionandGov" placeholder="Select" autocomplete="off" style="direction:ltr" />
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-md-6 RTL_select_header">
+                    <div class="col">
+                        <h6>@ViewBag.selectSector</h6>
+                    </div>
+                    <div class="col">
+                        <input type="text" id="Sectors" placeholder="Select" autocomplete="off" style="direction:ltr" />
+                    </div>
+                </div>
+            </div>
+            <div class="row row-without-margin-button-reverse RTL_btns" style="flex-flow:row-reverse;">
+                <div class="col-md-1">
+                    <button type="submit" id="btnGridSearchGovernorateClear" class="btn" style="background-color:#688C8B; color:white;min-width:65px">@ViewBag.clearBtn</button>
+                </div>
+                <div class="col-md-1">
+                    <button id="btnGridSearchGovernorate" type="submit" class="btn" style="background-color:#28A5A3; color:white;min-width:65px">@ViewBag.submitBtn</button>
+                </div>
+
+            </div>
+            @*  <div class="row">
+                <div class="col-md-3 karimdiv" id="selectedlistgridregionandgov">
+                </div>
+                <div class="col-md-3 karimdiv" id="selectedlistgridyear">
+                </div>
+                <div class="col-md-6 karimdiv" id="selectedlistgridsector">
+                </div>
+            </div>*@
+
+            <div id="div_table" style="overflow: auto;overflow-y: hidden;">
+
+                @*@if (langVal == "en")
+            {
+                @:<div id="div_table" style="overflow: auto;overflow-y: hidden;margin-left:-10%;width:120%">
+                }
+                else
+                {
+                    @:<div id="div_table" style="overflow: auto;overflow-y: hidden;margin-right:-10%;width:120%">
+                    }*@
+
+                <table id="csvData-table" style="margin-top:70px;" class="table table-striped table-bordered dt-responsive nowrap">
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+        <div id="profile" class="tab-pane fade">
+            <div>
+                <ul class="nav nav-tabs" id="pills-tab">
+                    <li class="active"><a data-toggle="tab" id="pills-home-tab" onclick="clearPie()" href="#pills-home" style="color: #28A5A3">@ViewBag.Pie</a></li>
+                    <li><a data-toggle="tab" id="pills-profile-tab" onclick="clearBar()" href="#pills-profile" style="color: #28A5A3">@ViewBag.Bar</a></li>
+                    <li><a data-toggle="tab" id="pills-contact-tab" onclick="clearLine()" href="#pills-contact" style="color: #28A5A3">@ViewBag.Line</a></li>
+                </ul>
+                <div class="tab-content" id="pills-tabContent">
+                    <div class="tab-pane fade in active" id="pills-home">
+                        <div class="row row-without-margin" style="margin-bottom:10px;">
+
+                            <div class="col-md-3 RTL_select_header">
+                                <div class="col">
+                                    <h6 style="padding-left:2px;">@ViewBag.selectFiscalYear</h6>
+                                </div>
+                                <div class="col">
+                                    <input type="text" id="PieChartYear" placeholder="Select" style="direction:ltr" />
+                                </div>
+                            </div>
+                            <div class="col-md-3 RTL_select_header">
+                                <div class="col">
+                                    <h6 style="padding-left:2px;">@ViewBag.Region</h6>
+                                </div>
+                                <div class="col">
+                                    <input type="text" id="PieChartRegion" placeholder="Select" style="direction:ltr" />
+                                </div>
+                            </div>
+                            <div class="col-md-3 RTL_select_header">
+                                <div class="col">
+                                    <h6 style="padding-left:2px;">@ViewBag.Gov</h6>
+                                </div>
+                                <div class="col">
+                                    <input type="text" id="PieChartGovernorate" placeholder="Select" style="direction:ltr" />
+                                </div>
+                            </div>
+
+                            <div class="col-lg-3 col-md-3 RTL_select_header">
+                                <div class="col">
+                                    <h6>@ViewBag.selectSector</h6>
+                                </div>
+                                <div class="col">
+                                    <input type="text" id="PieSectors" placeholder="Select" autocomplete="off" style="direction:ltr" />
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row row-without-margin-button-reverse RTL_btns" style="margin-bottom:5px; flex-flow:row-reverse;">
+                            <div class="col-md-1">
+                                <button type="submit" id="btnPieChartClear" class="btn" style="background-color:#688C8B; color:white;min-width:65px">@ViewBag.clearBtn</button>
+                            </div>
+                            <div class="col-md-1">
+                                <button type="submit" id="btnSearchGovernorateForPieChart" class="btn" style="background-color:#28A5A3; color:white;min-width:65px">@ViewBag.submitBtn</button>
+                            </div>
+
+                        </div>
+                     @*   <div class="row">
+                            <div class="col karimdiv" id="selectedlistpieregion">
+                            </div>
+                            <div class="col karimdiv" id="selectedlistpiegovernorate">
+                            </div>
+                            <div class="col karimdiv" id="selectedlistpieyear">
+                            </div>
+                        </div>*@
+                        <div id="PieFigure" style="display:none">
+                            <figure class="highcharts-figure" style="margin-top:70px;background-color:#F2F4F9">
+                                <div id="pie-container"></div>
+
+                            </figure>
+                        </div>
+
+                    </div>
+                    <div class="tab-pane fade" id="pills-profile">
+                        <div class="row row-without-margin" style="margin-bottom:10px;">
+                            <div class="col-md-3 RTL_select_header">
+                                <div class="col">
+                                    <h6 style="padding-left:2px;">@ViewBag.selectFiscalYear</h6>
+                                </div>
+                                <div class="col">
+                                    <input type="text" id="BarYears" placeholder="Select" style="direction:ltr" />
+                                </div>
+                            </div>
+                            <div class="col-md-3 RTL_select_header">
+                                <div class="col">
+                                    <h6 style="padding-left:2px;">@ViewBag.Region</h6>
+                                </div>
+                                <div class="col">
+                                    <input type="text" id="BarRegion" placeholder="Select" style="direction:ltr" />
+                                </div>
+                            </div>
+                            <div class="col-md-3 RTL_select_header">
+                                <div class="col">
+                                    <h6 style="padding-left:2px;">@ViewBag.Gov</h6>
+                                </div>
+                                <div class="col">
+                                    <input type="text" id="BarGovernorate" placeholder="Select" style="direction:ltr" />
+                                </div>
+                            </div>
+
+                            <div class="col-lg-3 col-md-3 RTL_select_header">
+                                <div class="col">
+                                    <h6>@ViewBag.selectSector</h6>
+                                </div>
+                                <div class="col">
+                                    <input type="text" id="BarSectors" placeholder="Select" autocomplete="off" style="direction:ltr" />
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row row-without-margin-button-reverse RTL_btns" style="margin-bottom:5px; flex-flow:row-reverse;">
+                            <div class="col-md-1">
+                                <button type="submit" id="btnBarChartClear" class="btn" style="background-color:#688C8B; color:white;min-width:65px">@ViewBag.clearBtn</button>
+                            </div>
+                            <div class="col-md-1">
+                                <button id="btnSearchGovernorateForBarChart" type="submit" class="btn" style="background-color:#28A5A3; color:white;min-width:65px">@ViewBag.submitBtn</button>
+                            </div>
+
+                        </div>
+                      @*  <div class="row">
+                            <div class="col karimdiv" id="selectedlistbarregion">
+                            </div>
+                            <div class="col karimdiv" id="selectedlistbargovernorate">
+                            </div>
+                            <div class="col karimdiv" id="selectedlistbaryear">
+                            </div>
+                        </div>*@
+                        <div id="BarFigure" style="display:none;direction:ltr">
+
+                            <div id="bar-container" class="charts"></div>
+
+                        </div>
+
+                    </div>
+                    <div class="tab-pane fade" id="pills-contact">
+                        <div class="row row-without-margin" style="margin-bottom:10px;">
+                            <div class="col-md-3 RTL_select_header">
+                                <div class="col">
+                                    <h6 style="padding-left:2px;">@ViewBag.selectFiscalYear</h6>
+                                </div>
+                                <div class="col">
+                                    <input type="text" id="LineChartYears" placeholder="Select" autocomplete="off" style="direction:ltr" />
+                                </div>
+                            </div>
+                            <div class="col-md-3 RTL_select_header">
+                                <div class="col">
+                                    <h6 style="padding-left:2px;">@ViewBag.Region</h6>
+                                </div>
+                                <div class="col">
+                                    <input type="text" id="LineChartRegion" placeholder="Select" autocomplete="off" style="direction:ltr">
+                                </div>
+                            </div>
+                            <div class="col-md-3 RTL_select_header">
+                                <div class="col">
+                                    <h6 style="padding-left:2px;">@ViewBag.Gov</h6>
+                                </div>
+                                <div class="col">
+                                    <input type="text" id="LineChartGovernorate" placeholder="Select" autocomplete="off" style="direction:ltr" />
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3 RTL_select_header">
+                                <div class="col">
+                                    <h6>@ViewBag.selectSector</h6>
+                                </div>
+                                <div class="col">
+                                    <input type="text" id="LineSectors" placeholder="Select" autocomplete="off" style="direction:ltr" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row row-without-margin-button-reverse RTL_btns" style="margin-bottom:5px; flex-flow:row-reverse;">
+                            <div class="col-md-1">
+                                <button type="submit" id="btnLineChartClear" class="btn" style="background-color:#688C8B; color:white;min-width:65px">@ViewBag.clearBtn</button>
+                            </div>
+                            <div class="col-md-1">
+                                <button id="btnSearchGovernorateForLineChart" type="submit" class="btn" style="background-color:#28A5A3; color:white;min-width:65px">@ViewBag.submitBtn</button>
+                            </div>
+
+                        </div>
+                     @*   <div class="row">
+                            <div class="col karimdiv" id="selectedlistlineregion">
+                            </div>
+                            <div class="col karimdiv" id="selectedlistlinegovernorate">
+                            </div>
+                            <div class="col karimdiv" id="selectedlistlineyear">
+                            </div>
+                        </div>*@
+                        <div id="LineFigure" style="display:none;direction:ltr">
+
+                            <div id="line-container" class="charts"></div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+@{
+    @using Newtonsoft.Json;
+    ViewBag.AvailableYears = JsonConvert.SerializeObject(ViewBag.YearView);
+    ViewBag.AvailableRegions = JsonConvert.SerializeObject(ViewBag.RegionView);
+    ViewBag.AvailableGovernate = JsonConvert.SerializeObject(ViewBag.GovernateView);
+    ViewBag.AvailableRegionandGov = JsonConvert.SerializeObject(ViewBag.RegionandGov);
+    ViewBag.AvailableSectorsView = JsonConvert.SerializeObject(ViewBag.SectorsView);
+
+    ViewBag.ChooseAllFiltersMsg = JsonConvert.SerializeObject(ViewBag.ChooseAllFilters);
+    ViewBag.ConfirmBtnMsg = JsonConvert.SerializeObject(ViewBag.ConfirmBtn);
+    ViewBag.GovReportPieSelectionMsg = JsonConvert.SerializeObject(ViewBag.GovReportPieSelection);
+    ViewBag.SwitchTabsMsg = JsonConvert.SerializeObject(ViewBag.SwitchTabs);
+    ViewBag.SwitchTabsYesMsg = JsonConvert.SerializeObject(ViewBag.SwitchTabsYes);
+    ViewBag.SwitchTabsNoMsg = JsonConvert.SerializeObject(ViewBag.SwitchTabsNo);
+    ViewBag.sectorPieMsg = JsonConvert.SerializeObject(ViewBag.sectorPie);
+
+}
+@section Scripts{
+
+    <script>
+        debugger;
+        var dropdownyear = JSON.parse('@Html.Raw(ViewBag.AvailableYears)');
+        var dropdownregion = JSON.parse('@Html.Raw(ViewBag.AvailableRegions)');
+        var dropdowngovernate = JSON.parse('@Html.Raw(ViewBag.AvailableGovernate)');
+        var dropdownregionandgov = JSON.parse('@Html.Raw(ViewBag.AvailableRegionandGov)');
+        var dropdownsectors = JSON.parse('@Html.Raw(ViewBag.AvailableSectorsView)');
+
+
+         var chooseAllFiltersMsg = JSON.parse('@Html.Raw(ViewBag.ChooseAllFiltersMsg)');
+        var confirmBtnMsg=JSON.parse('@Html.Raw(ViewBag.ConfirmBtnMsg)');
+        var GovReportPieSelectionMsg = JSON.parse('@Html.Raw(ViewBag.GovReportPieSelectionMsg)');
+        var pieSectorsErrMsg = JSON.parse('@Html.Raw(ViewBag.sectorPieMsg)');
+        var SwitchTabsMsg=JSON.parse('@Html.Raw(ViewBag.SwitchTabsMsg)');
+        var SwitchTabsYesMsg=JSON.parse('@Html.Raw(ViewBag.SwitchTabsYesMsg)');
+        var SwitchTabsNoMsg=JSON.parse('@Html.Raw(ViewBag.SwitchTabsNoMsg)');
+
+        var url_string = window.location.href; //window.location.href
+        var url = new URL(url_string);
+        var langParam = url.searchParams.get("lang");
+
+
+         function allGovRegIds () {
+            allIds = []
+           Array.prototype.forEach.call(dropdownregionandgov,e => {
+                allIds.push(e.id)
+               if (e.subs != undefined) {
+                   Array.prototype.forEach.call(e.subs, e2 => {
+                    allIds.push(e2.id)
+                   })
+                }
+            })
+            return allIds;
+        }
+
+        $(document).ready(function () {
+
+          var dataTableFilLang=""
+
+       if ('@ViewBag.lang' == '' || '@ViewBag.lang' == "ar") {
+
+           $("#div_table").css("direction", "rtl")
+          $("#myTab").css("direction", "rtl").css("padding","0")
+          $("#pills-tab").css("direction", "rtl").css("padding","0")
+           $("#home").css("direction", "rtl")
+           $("#pills-home").css("direction", "rtl")
+           $("#pills-profile").css("direction", "rtl")
+           $("#pills-contact").css("direction", "rtl")
+          $(".RTL_btns").children().css("float", "left")
+           dataTableFilLang = "/dataTableArabicLang.json"
+           $(".RTL_select_header").addClass("text-right")
+       }
+       else {
+           dataTableFilLang = "/dataTableEnglishLang.json"
+           $(".RTL_btns").children().css("float", "right")
+       }
+
+              var piedropdownyear = dropdownyear.slice();
+            piedropdownyear.shift()
+
+
+             var piedropdownRegion = dropdownregion.slice();
+            piedropdownRegion.pop()
+
+             var piedropdowngovernate = dropdowngovernate.slice();
+            piedropdowngovernate.pop()
+
+
+            comboTree1 =  $('#RegionandGov').comboTree({
+                source : dropdownregionandgov,
+                cascadeSelect: true,
+                isMultiple: true,
+                collapse: true,
+	            selected: ['0']
+            });
+            comboTree2 = $('#Years').comboTree({
+                source: dropdownyear,
+                isMultiple: true,
+            });
+            comboTree3 = $('#Sectors').comboTree({
+                source: dropdownsectors,
+                isMultiple: true,
+            });
+              comboTreePieSectors = $('#PieSectors').comboTree({
+                source: dropdownsectors,
+                isMultiple: true,
+              });
+                comboTreeBarSectors = $('#BarSectors').comboTree({
+                source: dropdownsectors,
+                isMultiple: true,
+              });
+                     comboTreeLineSectors = $('#LineSectors').comboTree({
+                source: dropdownsectors,
+                isMultiple: true,
+            });
+            comboTreeLineChartRegion = $('#LineChartRegion').comboTree({
+                source: dropdownregion,
+                isMultiple: true,
+            });
+            comboTreeLineChartGovernorate = $('#LineChartGovernorate').comboTree({
+                source: dropdowngovernate,
+                isMultiple: true,
+            });
+            comboTreeLineChartYears = $('#LineChartYears').comboTree({
+                source: dropdownyear,
+                isMultiple: true,
+             });
+            comboTreeBarChartRegion = $('#BarRegion').comboTree({
+                source: dropdownregion,
+                isMultiple: true,
+            });
+            comboTreeBarChartGovernorate = $('#BarGovernorate').comboTree({
+                source: dropdowngovernate,
+                isMultiple: true,
+            });
+            comboTreeBarChartYears = $('#BarYears').comboTree({
+                source: dropdownyear,
+                isMultiple: true,
+             });
+            comboTreePieChartRegion = $('#PieChartRegion').comboTree({
+                source: piedropdownRegion,
+                isMultiple: true,
+            });
+            comboTreePieChartGovernorate = $('#PieChartGovernorate').comboTree({
+                source: piedropdowngovernate,
+                isMultiple: true,
+            });
+            comboTreePieChartYears = $('#PieChartYear').comboTree({
+                 source: piedropdownyear,
+                 isMultiple: false,
+            });
+
+                   var csvTable,
+                 domTable,
+                htmlTable = ' <table id="csvData-table" style="margin-top:70px;" class="table table-striped table-bordered dt-responsive nowrap"><tbody></tbody></table>'
+
+            $("#btnGridSearchGovernorate").click(function () {
+
+                $('#GovernorateeTable').show();
+                var selectedRegionandGovIds = comboTree1.getSelectedIds();
+                var selectedYearsIds = comboTree2.getSelectedIds();
+                var selectedSectorsIds = comboTree3.getSelectedIds();
+                 var selectedRegionandGov = comboTree1.getSelectedNames();
+                var selectedYears = comboTree2.getSelectedNames();
+                var selectedSectors = comboTree3.getSelectedNames();
+                 $("#selectedlistgridregionandgov").html("");
+                 $("#selectedlistgridyear").html("");
+                 $("#selectedlistgridsector").html("");
+                if (selectedRegionandGov != null && selectedYears != null && selectedSectors != null) {
+                    $("#selectedlistgrid").show();
+
+                    $.ajax({
+                        data: { regionsandgov: selectedRegionandGovIds, years: selectedYearsIds, activities: selectedSectorsIds ,lang:langParam},
+                        url: '@Url.Action("GetFilterdGovernoratesForGrid")',
+                        dataType: 'json',
+                        type: 'POST',
+                        success: function (data) {
+
+                            $('#div_table').show()
+                            if ('@ViewBag.isBlank' == "") {
+                                $('html, body').animate({
+                                    scrollTop: $("#div_table").offset().top - $("#header").offset().top
+                                }, 2000);
+                            }
+                               if ($.fn.DataTable.fnIsDataTable(domTable)) {
+                                 csvTable.destroy(true);
+                                     $('#div_table').append(htmlTable);
+                                }
+
+                            $("#csvData-table").empty();
+
+                            var formattedHeaders = [];
+                            $.each(data.headerColumns, function (e, f) {
+                                formattedHeaders.push({ "title": data.headerColumns[e] });
+                                console.log(data);
+                                //  RenderData(data);
+                            });
+                            csvTable = $("#csvData-table").DataTable({
+                                  "aaSorting": [],
+                                 dom: 'Bfrtip',
+                                  "language": { "url": dataTableFilLang },
+                                 buttons: [
+        {
+           extend: 'csv',
+           charset: 'UTF-8',
+           fieldSeparator: ',',
+                                         bom: true,
+                                         text: '<img src="/img/excel.png" style="width: 40px;" />',
+             titleAttr: 'Excel'
+        }
+    ],
+                                "destroy": true,
+                                "columns": formattedHeaders
+                            });
+                            var csvData = data;
+
+                           domTable = document.getElementById('csvData-table');
+
+                            for (var i = 0; i < csvData.result.length; i++) {
+
+                                csvTable.row.add(
+                                    csvData.result[i]
+                                );
+                            }
+                            csvTable.draw();
+                            result = data;
+                               setTimeout(function () {
+
+                           $(".buttons-csv").css("margin-bottom", "10px")
+                           }, 200)
+
+                        },
+                        error: function (err) {
+                            alert("Error has occured");
+                        }
+                    });
+                } else {
+
+                           Swal.fire({
+                        icon: 'error',
+                        text: chooseAllFiltersMsg,
+                        confirmButtonText: confirmBtnMsg,
+                        confirmButtonColor: '#28A5A3',
+                     })
+                }
+            });
+            $('#btnSearchGovernorateForLineChart').click(function () {
+
+                var selectedChartRegion = comboTreeLineChartRegion.getSelectedNames();
+                var selectedChartGovernorate = comboTreeLineChartGovernorate.getSelectedNames();
+                var selectedChartYears = comboTreeLineChartYears.getSelectedNames();
+                 var selectedChartRegionIds = comboTreeLineChartRegion.getSelectedIds();
+                var selectedChartGovernorateIds = comboTreeLineChartGovernorate.getSelectedIds();
+                var selectedChartYearsIds = comboTreeLineChartYears.getSelectedIds();
+                var selectedSectorsIds = comboTreeLineSectors.getSelectedIds();
+                 if (selectedChartRegion != null && selectedChartGovernorate != null)
+                {
+                              Swal.fire({
+                        icon: 'error',
+                        text: GovReportPieSelectionMsg,
+                        confirmButtonText: confirmBtnMsg,
+                        confirmButtonColor: '#28A5A3',
+                     })
+                }
+                else if ((selectedChartRegion != null || selectedChartGovernorate != null) && selectedChartYears != null) {
+                    $("#selectedlistlineregion").html("");
+                    $("#selectedlistlinegovernorate").html("");
+                    $("#selectedlistlineyear").html("");
+                    if (selectedChartRegion != null) {
+                        selectedChartRegion.forEach(function (entry) {
+                            if (entry != null) {
+                              //  $("#selectedlistlineregion").append('<span class="karimtest">' + entry + '</span');
+                            }
+                        });
+                    }
+                    if (selectedChartGovernorate != null) {
+                        selectedChartGovernorate.forEach(function (entry) {
+                            if (entry != null) {
+                           //     $("#selectedlistlinegovernorate").append('<span class="karimtest">' + entry + '</span');
+                            }
+                        });
+                    }
+                    if (selectedChartYears != null) {
+                        selectedChartYears.forEach(function (entry) {
+                            if (entry != null) {
+                           //     $("#selectedlistlineyear").append('<span class="karimtest">' + entry + '</span');
+                            }
+                        });
+                    }
+                    $.ajax({
+                        data: { regions: selectedChartRegionIds, governates: selectedChartGovernorateIds, years: selectedChartYearsIds,activities:selectedSectorsIds, lang:langParam },
+                        url: '@Url.Action("GetFilterForLineChart")',
+                        dataType: 'json',
+                        type: 'POST',
+                        success: function (data) {
+
+                            LineChart(data.data, data.unit);
+                            $('#LineFigure').show()
+                            if ('@ViewBag.isBlank' == "") {
+                                $('html, body').animate({
+                                    scrollTop: $("#LineFigure").offset().top - $("#header").offset().top
+                                }, 2000);
+                            }
+                        },
+                        error: function (err) {
+                            alert("Error has occured");
+                        }
+                    });
+                } else {
+                          Swal.fire({
+                        icon: 'error',
+                        text: GovReportPieSelectionMsg,
+                        confirmButtonText: confirmBtnMsg,
+                        confirmButtonColor: '#28A5A3',
+                     })
+                }
+            });
+            $("#btnSearchGovernorateForBarChart").click(function () {
+
+                var selectedChartRegion = comboTreeBarChartRegion.getSelectedNames();
+                var selectedChartGovernorate = comboTreeBarChartGovernorate.getSelectedNames();
+                var selectedChartYears = comboTreeBarChartYears.getSelectedNames();
+                 var selectedChartRegionIds = comboTreeBarChartRegion.getSelectedIds();
+                var selectedChartGovernorateIds = comboTreeBarChartGovernorate.getSelectedIds();
+                var selectedChartYearsIds = comboTreeBarChartYears.getSelectedIds();
+                var selectedChartSectorsIds = comboTreeBarSectors.getSelectedIds();
+                if (selectedChartRegion != null && selectedChartGovernorate != null)
+                {
+                              Swal.fire({
+                        icon: 'error',
+                        text: GovReportPieSelectionMsg,
+                        confirmButtonText: confirmBtnMsg,
+                        confirmButtonColor: '#28A5A3',
+                     })
+                }
+                else if((selectedChartRegion != null || selectedChartGovernorate != null) && selectedChartYears != null) {
+
+                $("#selectedlistbarregion").html("");
+                $("#selectedlistbargovernorate").html("");
+                    $("#selectedlistbaryear").html("");
+                    if (selectedChartRegion != null) {
+                    selectedChartRegion.forEach(function (entry) {
+                        if (entry != null) {
+                           //  $("#selectedlistbarregion").append('<span class="karimtest">' + entry + '</span');
+                        }
+                    });
+                    }
+                    if (selectedChartGovernorate != null) {
+                    selectedChartGovernorate.forEach(function (entry) {
+                        if (entry != null) {
+                         //   $("#selectedlistbargovernorate").append('<span class="karimtest">' + entry + '</span');
+                        }
+                    });
+                    }
+                    if (selectedChartYears != null) {
+                    selectedChartYears.forEach(function (entry) {
+                        if (entry != null) {
+                         //   $("#selectedlistbaryear").append('<span class="karimtest">' + entry + '</span');
+                        }
+                    });
+                }
+                    $.ajax({
+                        data: { regions: selectedChartRegionIds, governates: selectedChartGovernorateIds, years: selectedChartYearsIds,activities:selectedChartSectorsIds, lang:langParam },
+                    url: '@Url.Action("GetFilterForBarChart")',
+                    dataType: 'json',
+                    type: 'POST',
+                    success: function (data) {
+
+                        console.log(data);
+                        BarChart(data.data, data.unit);
+                        $('#BarFigure').show()
+                        if ('@ViewBag.isBlank' == "") {
+                            $('html, body').animate({
+                                scrollTop: $("#BarFigure").offset().top - $("#header").offset().top
+                            }, 2000);
+                        }
+                    },
+                        error: function (err) {
+                         alert("Error has occured");
+                        }
+                 });
+                    } else {
+
+                        Swal.fire({
+                        icon: 'error',
+                        text: GovReportPieSelectionMsg,
+                        confirmButtonText: confirmBtnMsg,
+                        confirmButtonColor: '#28A5A3',
+                     })
+                }
+            });
+            $("#btnSearchGovernorateForPieChart").click(function () {
+
+                var selectedChartRegion = comboTreePieChartRegion.getSelectedNames();
+                var selectedChartGovernorate = comboTreePieChartGovernorate.getSelectedNames();
+                var selectedChartYears = comboTreePieChartYears.getSelectedNames();
+                var selectedChartRegionIds = comboTreePieChartRegion.getSelectedIds();
+                var selectedChartGovernorateIds = comboTreePieChartGovernorate.getSelectedIds();
+                var selectedChartYearsIds = comboTreePieChartYears.getSelectedIds();
+                var selectedChartSectorsIds = comboTreePieSectors.getSelectedIds();
+                if (selectedChartRegion != null && selectedChartGovernorate != null) {
+                        Swal.fire({
+                        icon: 'error',
+                        text: GovReportPieSelectionMsg,
+                        confirmButtonText: confirmBtnMsg,
+                        confirmButtonColor: '#28A5A3',
+                     })
+
+                }
+                else if (selectedChartSectorsIds != null && ((selectedChartRegion != null && selectedChartRegion.length > 1) || (selectedChartGovernorateIds != null&& selectedChartGovernorateIds.length > 1))) {
+                          Swal.fire({
+                        icon: 'error',
+                        text: pieSectorsErrMsg,
+                        confirmButtonText: confirmBtnMsg,
+                        confirmButtonColor: '#28A5A3',
+                     })
+                }
+                else if ((selectedChartRegion != null || selectedChartGovernorate != null) && selectedChartYears != null) {
+
+                       $("#selectedlistpieregion").html("");
+                       $("#selectedlistpiegovernorate").html("");
+                       $("#selectedlistpieyear").html("");
+                       if (selectedChartRegion != null) {
+                       selectedChartRegion.forEach(function (entry) {
+                              if (entry != null) {
+                               //   $("#selectedlistpieregion").append('<span class="karimtest">' + entry + '</span');
+                              }
+                           });
+                       }
+                       if (selectedChartGovernorate != null) {
+                            selectedChartGovernorate.forEach(function (entry) {
+                            if (entry != null) {
+                            //   $("#selectedlistpiegovernorate").append('<span class="karimtest">' + entry + '</span');
+                            }
+                       });
+                       }
+                       if (selectedChartYears != null) {
+                        //   $("#selectedlistpieyear").append('<span class="karimtest">' + selectedChartYears + '</span');
+                       }
+                           $.ajax({
+                               data: { regions: selectedChartRegionIds, governates: selectedChartGovernorateIds, year: selectedChartYearsIds,activities:selectedChartSectorsIds, lang:langParam },
+                           url: '@Url.Action("GetFilterForPieChart")',
+                           dataType: 'json',
+                           type: 'POST',
+                           success: function (data) {
+                               PieChart(data.data,data.unit);
+                               $('#PieFigure').show()
+                               if ('@ViewBag.isBlank' == "") {
+                                   $('html, body').animate({
+                                       scrollTop: $("#PieFigure").offset().top - $("#header").offset().top
+                                   }, 2000);
+                               }
+
+                           },
+                               error: function (err) {
+                                alert("Error has occured");
+                               }
+                        });
+                 } else {
+
+                     Swal.fire({
+                        icon: 'error',
+                        text: GovReportPieSelectionMsg,
+                        confirmButtonText: confirmBtnMsg,
+                        confirmButtonColor: '#28A5A3',
+                     })
+              }
+            })
+            $("#btnPieChartClear").click(function () {
+                clearPie()
+            });
+            $("#btnBarChartClear").click(function () {
+                clearBar()
+             });
+            $("#btnLineChartClear").click(function () {
+                clearLine()
+            });
+            $("#btnGridSearchGovernorateClear").click(function () {
+                clearReport()
+            })
+
+            setTimeout(function () {
+                  $("#Years").parent().next().children("ul").children("li").children("span").on("click", function () {
+                if ($(this)[0].attributes[0].value == -1) {
+                     if (comboTree2.getSelectedIds().includes("-1")) {
+                    comboTree2.setSelection(comboTree2.options.source.map(x => x.id))
+                }
+                     else {
+                         comboTree2.clearSelection()
+                }
+                }
+
+            })
+            $("#BarYears").parent().next().children("ul").children("li").children("span").on("click", function () {
+                if ($(this)[0].attributes[0].value == -1) {
+                     if (comboTreeBarChartYears.getSelectedIds().includes("-1")) {
+                    comboTreeBarChartYears.setSelection(comboTreeBarChartYears.options.source.map(x => x.id))
+                }
+                     else {
+                         comboTreeBarChartYears.clearSelection()
+                }
+                }
+
+            })
+             $("#LineChartYears").parent().next().children("ul").children("li").children("span").on("click", function () {
+                if ($(this)[0].attributes[0].value == -1) {
+                     if (comboTreeLineChartYears.getSelectedIds().includes("-1")) {
+                    comboTreeLineChartYears.setSelection(comboTreeLineChartYears.options.source.map(x => x.id))
+                }
+                     else {
+                         comboTreeLineChartYears.clearSelection()
+                }
+                }
+
+             })
+
+                  $("#RegionandGov").parent().next().children("ul").children("li").children("span").on("click", function () {
+                if ($(this)[0].attributes[0].value == -1) {
+                     if (comboTree1.getSelectedIds().includes("-1")) {
+                    comboTree1.setSelection(allGovRegIds() )
+                }
+                     else {
+                         comboTree1.clearSelection()
+                }
+                }
+
+            })
+            $("#Sectors").parent().next().children("ul").children("li").children("span").on("click", function () {
+                if ($(this)[0].attributes[0].value == -1) {
+                     if (comboTree3.getSelectedIds().includes("-1")) {
+                    comboTree3.setSelection(comboTree3.options.source.map(x => x.id))
+                }
+                     else {
+                         comboTree3.clearSelection()
+                }
+                }
+
+            })
+
+                      $("#PieSectors").parent().next().children("ul").children("li").children("span").on("click", function () {
+                if ($(this)[0].attributes[0].value == -1) {
+                     if (comboTreePieSectors.getSelectedIds().includes("-1")) {
+                    comboTreePieSectors.setSelection(comboTreePieSectors.options.source.map(x => x.id))
+                }
+                     else {
+                         comboTreePieSectors.clearSelection()
+                }
+                }
+
+                      })
+
+                  $("#BarSectors").parent().next().children("ul").children("li").children("span").on("click", function () {
+                if ($(this)[0].attributes[0].value == -1) {
+                     if (comboTreeBarSectors.getSelectedIds().includes("-1")) {
+                    comboTreeBarSectors.setSelection(comboTreeBarSectors.options.source.map(x => x.id))
+                }
+                     else {
+                         comboTreeBarSectors.clearSelection()
+                }
+                }
+
+                      })
+
+                   $("#LineSectors").parent().next().children("ul").children("li").children("span").on("click", function () {
+                if ($(this)[0].attributes[0].value == -1) {
+                     if (comboTreeLineSectors.getSelectedIds().includes("-1")) {
+                    comboTreeLineSectors.setSelection(comboTreeLineSectors.options.source.map(x => x.id))
+                }
+                     else {
+                         comboTreeLineSectors.clearSelection()
+                }
+                }
+
+                   })
+
+             $("#BarRegion").parent().next().children("ul").children("li").children("span").on("click", function () {
+                if ($(this)[0].attributes[0].value == -1) {
+                     if (comboTreeBarChartRegion.getSelectedIds().includes("-1")) {
+                    comboTreeBarChartRegion.setSelection(comboTreeBarChartRegion.options.source.map(x => x.id))
+                }
+                     else {
+                         comboTreeBarChartRegion.clearSelection()
+                }
+                }
+
+             })
+
+                  $("#BarGovernorate").parent().next().children("ul").children("li").children("span").on("click", function () {
+                if ($(this)[0].attributes[0].value == -1) {
+                     if (comboTreeBarChartGovernorate.getSelectedIds().includes("-1")) {
+                    comboTreeBarChartGovernorate.setSelection(comboTreeBarChartGovernorate.options.source.map(x => x.id))
+                }
+                     else {
+                         comboTreeBarChartGovernorate.clearSelection()
+                }
+                }
+
+                  })
+
+
+                    $("#PieChartRegion").parent().next().children("ul").children("li").children("span").on("click", function () {
+                if ($(this)[0].attributes[0].value == -1) {
+                     if (comboTreePieChartRegion.getSelectedIds().includes("-1")) {
+                    comboTreePieChartRegion.setSelection(comboTreePieChartRegion.options.source.map(x => x.id))
+                }
+                     else {
+                         comboTreePieChartRegion.clearSelection()
+                }
+                }
+
+                    })
+                    $("#PieChartGovernorate").parent().next().children("ul").children("li").children("span").on("click", function () {
+                if ($(this)[0].attributes[0].value == -1) {
+                     if (comboTreePieChartGovernorate.getSelectedIds().includes("-1")) {
+                    comboTreePieChartGovernorate.setSelection(comboTreePieChartGovernorate.options.source.map(x => x.id))
+                }
+                     else {
+                         comboTreePieChartGovernorate.clearSelection()
+                }
+                }
+
+                    })
+
+                  $("#LineChartRegion").parent().next().children("ul").children("li").children("span").on("click", function () {
+                if ($(this)[0].attributes[0].value == -1) {
+                     if (comboTreeLineChartRegion.getSelectedIds().includes("-1")) {
+                    comboTreeLineChartRegion.setSelection(comboTreeLineChartRegion.options.source.map(x => x.id))
+                }
+                     else {
+                         comboTreeLineChartRegion.clearSelection()
+                }
+                }
+
+                    })
+                    $("#LineChartGovernorate").parent().next().children("ul").children("li").children("span").on("click", function () {
+                if ($(this)[0].attributes[0].value == -1) {
+                     if (comboTreeLineChartGovernorate.getSelectedIds().includes("-1")) {
+                    comboTreeLineChartGovernorate.setSelection(comboTreeLineChartGovernorate.options.source.map(x => x.id))
+                }
+                     else {
+                         comboTreeLineChartGovernorate.clearSelection()
+                }
+                }
+
+             })
+
+
+                   if ('@ViewBag.lang' == '' || '@ViewBag.lang' == "ar") {
+                         runTimeRTL()
+            }
+
+            }, 200)
+                  if ('@ViewBag.lang' == '' || '@ViewBag.lang' == "ar") {
+                        comboTree1.onChange(function () {
+                            var length = comboTree1.getSelectedIds() != null ? comboTree1.getSelectedIds().length : 0
+                            renameComboboxToArabic("RegionandGov", length)
+                        })
+
+                        comboTree2.onChange(function () {
+                            var length = comboTree2.getSelectedIds() != null ? comboTree2.getSelectedIds().length : 0
+                            renameComboboxToArabic("Years", length)
+                        })
+
+                        comboTree3.onChange(function () {
+                            var length = comboTree3.getSelectedIds() != null ? comboTree3.getSelectedIds().length : 0
+                            renameComboboxToArabic("Sectors", length)
+                        })
+
+                          comboTreeBarSectors.onChange(function () {
+                            var length = comboTreeBarSectors.getSelectedIds() != null ? comboTreeBarSectors.getSelectedIds().length : 0
+                            renameComboboxToArabic("BarSectors", length)
+                          })
+
+                      comboTreePieSectors.onChange(function () {
+                            var length = comboTreePieSectors.getSelectedIds() != null ? comboTreePieSectors.getSelectedIds().length : 0
+                            renameComboboxToArabic("PieSectors", length)
+                        })
+
+
+                         comboTreeLineSectors.onChange(function () {
+                            var length = comboTreeLineSectors.getSelectedIds() != null ? comboTreeLineSectors.getSelectedIds().length : 0
+                            renameComboboxToArabic("LineSectors", length)
+                        })
+
+                      comboTreePieChartRegion.onChange(function () {
+                          var length = comboTreePieChartRegion.getSelectedIds() != null ? comboTreePieChartRegion.getSelectedIds().length : 0
+                          renameComboboxToArabic("PieChartRegion", length)
+                      })
+
+                      comboTreePieChartGovernorate.onChange(function () {
+                          var length = comboTreePieChartGovernorate.getSelectedIds() != null ? comboTreePieChartGovernorate.getSelectedIds().length : 0
+                          renameComboboxToArabic("PieChartGovernorate", length)
+                      })
+
+
+
+
+                      comboTreeBarChartGovernorate.onChange(function () {
+                          var length = comboTreeBarChartGovernorate.getSelectedIds() != null ? comboTreeBarChartGovernorate.getSelectedIds().length : 0
+                          renameComboboxToArabic("BarGovernorate", length)
+                      })
+
+
+                      comboTreeBarChartYears.onChange(function () {
+                          var length = comboTreeBarChartYears.getSelectedIds() != null ? comboTreeBarChartYears.getSelectedIds().length : 0
+                          renameComboboxToArabic("BarYears", length)
+                      })
+
+                      comboTreeBarChartRegion.onChange(function () {
+                          var length = comboTreeBarChartRegion.getSelectedIds() != null ? comboTreeBarChartRegion.getSelectedIds().length : 0
+                          renameComboboxToArabic("BarRegion", length)
+                      })
+
+
+                      comboTreeLineChartRegion.onChange(function () {
+                          var length = comboTreeLineChartRegion.getSelectedIds() != null ? comboTreeLineChartRegion.getSelectedIds().length : 0
+                          renameComboboxToArabic("LineChartRegion", length)
+                      })
+
+
+                      comboTreeLineChartGovernorate.onChange(function () {
+                          var length = comboTreeLineChartGovernorate.getSelectedIds() != null ? comboTreeLineChartGovernorate.getSelectedIds().length : 0
+                          renameComboboxToArabic("LineChartGovernorate", length)
+                      })
+
+                      comboTreeLineChartYears.onChange(function () {
+                          var length = comboTreeLineChartYears.getSelectedIds() != null ? comboTreeLineChartYears.getSelectedIds().length : 0
+                          renameComboboxToArabic("LineChartYears", length)
+                      })
+
+
+                    }
+        });
+
+               $(window).resize(function () {
+               $(".comboTreeInputBox").each(function () {
+                var offWidth = $(this)[0].offsetWidth - 37.5
+                $(this).next().css("margin-right", +offWidth + "px")
+               })
+
+                      drawBarChart();
+            drawLineChart();
+
+});
+         function clearReport() {
+             comboTree1.clearSelection();
+                comboTree2.clearSelection();
+                comboTree3.clearSelection();
+                $("#selectedlistgridregionandgov").html("");
+                $("#selectedlistgridyear").html("");
+             $("#selectedlistgridsector").html("");
+              $('#div_table').hide()
+        }
+        function clearPie() {
+                comboTreePieChartGovernorate.clearSelection();
+                comboTreePieChartRegion.clearSelection();
+                comboTreePieChartYears.clearSelection();
+                comboTreePieSectors.clearSelection();
+                 $("#selectedlistpieregion").html("");
+                $("#selectedlistpiegovernorate").html("");
+               // $("#PieChartYear").val("")
+                $("#selectedlistpieyear").html("");
+            $('#PieFigure').hide()
+                 if ('@ViewBag.lang' == '' || '@ViewBag.lang' == "ar") {
+                moveBtnToRight()
+            }
+        }
+        function clearBar() {
+
+                comboTreeBarChartGovernorate.clearSelection();
+                comboTreeBarChartRegion.clearSelection();
+            comboTreeBarChartYears.clearSelection();
+            comboTreeBarSectors.clearSelection();
+
+                $("#selectedlistbarregion").html("");
+                $("#selectedlistbargovernorate").html("");
+                $("#selectedlistbaryear").html("");
+            $('#BarFigure').hide()
+                 if ('@ViewBag.lang' == '' || '@ViewBag.lang' == "ar") {
+                moveBtnToRight()
+            }
+        }
+
+        function clearLine() {
+             comboTreeLineChartGovernorate.clearSelection();
+                comboTreeLineChartRegion.clearSelection();
+                comboTreeLineChartYears.clearSelection();
+                comboTreeLineSectors.clearSelection();
+                $("#selectedlistlineregion").html("");
+                $("#selectedlistlinegovernorate").html("");
+                $("#selectedlistlineyear").html("");
+            $('#LineFigure').hide()
+                 if ('@ViewBag.lang' == '' || '@ViewBag.lang' == "ar") {
+                moveBtnToRight()
+            }
+        }
+
+        function MoveToCharts() {
+            if (!$("#profile-tab").parent()[0].classList.contains("active")) {
+
+                 var selectedRegionandGovIds = comboTree1.getSelectedIds();
+                var selectedYearsIds = comboTree2.getSelectedIds();
+                var selectedSectorsIds = comboTree3.getSelectedIds();
+                var flag = (selectedRegionandGovIds != null || selectedYearsIds != null || selectedSectorsIds != null )
+                if (($("#profile-tab").attr("href") == ""|| $("#profile-tab").attr("href").includes("lang")) && flag) {
+                    Swal.fire({
+                        // title: 'Are you sure?',
+                        text: SwitchTabsMsg,
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#28A5A3',
+                        cancelButtonColor: '#688C8B',
+                        confirmButtonText: SwitchTabsYesMsg,
+                        cancelButtonText: SwitchTabsNoMsg
+                    }).then((result) => {
+                        if (result.value) {
+                            clearPie()
+                            clearBar()
+                            clearLine()
+                            $("#profile-tab").attr("href", "#profile")
+                            $("#home-tab").attr("href", "x")
+                            $("#home-tab").click()
+                            $("#home-tab").attr("href", "")
+                            $("#profile-tab").click()
+                            $("#profile-tab").attr("href", "")
+
+                                   if ('@ViewBag.lang' == '' || '@ViewBag.lang' == "ar") {
+                moveBtnToRight()
+            }
+                        } else {
+                            $("#home-tab").parent().addClass("active")
+                            $("#profile-tab").parent().removeClass("active")
+                        }
+                    })
+                } else if (($("#profile-tab").attr("href") == ""|| $("#profile-tab").attr("href").includes("lang")) && !flag) {
+                     clearPie()
+                            clearBar()
+                            clearLine()
+                            $("#profile-tab").attr("href", "#profile")
+                            $("#home-tab").attr("href", "x")
+                            $("#home-tab").click()
+                            $("#home-tab").attr("href", "")
+                            $("#profile-tab").click()
+                    $("#profile-tab").attr("href", "")
+                                              if ('@ViewBag.lang' == '' || '@ViewBag.lang' == "ar") {
+                moveBtnToRight()
+            }
+                }
+
+            }
+
+        }
+        function MoveToReport() {
+            if (!$("#home-tab").parent()[0].classList.contains("active")) {
+                var flag=false;
+               if ( $("#pills-home-tab").parent()[0].classList.contains("active")) {
+                 var selectedChartRegionIds = comboTreePieChartRegion.getSelectedIds();
+                var selectedChartGovernorateIds = comboTreePieChartGovernorate.getSelectedIds();
+                   var selectedChartYearsIds = comboTreePieChartYears.getSelectedIds();
+
+                   flag = (selectedChartRegionIds != null || selectedChartGovernorateIds != null ||
+                       selectedChartYearsIds != null)
+               }
+               else if ($("#pills-profile-tab").parent()[0].classList.contains("active")) {
+                 var selectedChartRegionIds = comboTreeBarChartRegion.getSelectedIds();
+                var selectedChartGovernorateIds = comboTreeBarChartGovernorate.getSelectedIds();
+                   var selectedChartYearsIds = comboTreeBarChartYears.getSelectedIds();
+
+                      flag = (selectedChartRegionIds != null || selectedChartGovernorateIds != null ||
+                       selectedChartYearsIds != null)
+
+               }
+                  else if ($("#pills-contact-tab").parent()[0].classList.contains("active")) {
+
+                var selectedChartRegionIds = comboTreeLineChartRegion.getSelectedIds();
+                var selectedChartGovernorateIds = comboTreeLineChartGovernorate.getSelectedIds();
+                   var selectedChartYearsIds = comboTreeLineChartYears.getSelectedIds();
+
+                    flag = (selectedChartRegionIds != null || selectedChartGovernorateIds != null ||
+                       selectedChartYearsIds != null)
+               }
+
+                if (($("#home-tab").attr("href") == "" || $("#home-tab").attr("href").includes("lang"))&& flag) {
+                    Swal.fire({
+                        // title: 'Are you sure?',
+                        text: SwitchTabsMsg,
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#28A5A3',
+                        cancelButtonColor: '#688C8B',
+                        confirmButtonText: SwitchTabsYesMsg,
+                        cancelButtonText: SwitchTabsNoMsg
+                    }).then((result) => {
+                        if (result.value) {
+                            clearReport()
+                            $("#home-tab").attr("href", "#home")
+                            $("#profile-tab").attr("href", "x")
+                            $("#profile-tab").click()
+                            $("#profile-tab").attr("href", "")
+                            $("#home-tab").click()
+                            $("#home-tab").attr("href", "")
+
+                                    if ('@ViewBag.lang' == '' || '@ViewBag.lang' == "ar") {
+                moveBtnToRight()
+            }
+                        } else {
+                            $("#profile-tab").parent().addClass("active")
+                            $("#home-tab").parent().removeClass("active")
+                        }
+                    })
+                }
+                else if (($("#home-tab").attr("href") == ""|| $("#home-tab").attr("href").includes("lang")) && !flag) {
+                     clearReport()
+                     $("#home-tab").attr("href", "#home")
+                     $("#profile-tab").attr("href", "x")
+                     $("#profile-tab").click()
+                     $("#profile-tab").attr("href", "")
+                     $("#home-tab").click()
+                    $("#home-tab").attr("href", "")
+                                              if ('@ViewBag.lang' == '' || '@ViewBag.lang' == "ar") {
+                moveBtnToRight()
+            }
+                }
+
+            }
+
+        }
+    </script>
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="~/js/NewCharts.js"></script>
+}

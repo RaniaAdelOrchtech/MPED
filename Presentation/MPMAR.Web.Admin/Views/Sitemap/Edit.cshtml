@@ -1,0 +1,131 @@
+﻿@model SiteMap
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h1>Update SiteMap Content</h1>
+
+<form enctype="multipart/form-data" asp-controller="SiteMap" asp-action="Edit" method="post" class="mt-3">
+    <input asp-for="Id" type="hidden" />
+
+    <div class="form-group row">
+        <label asp-for="EnContent" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+
+            @Html.TextAreaFor(model => model.EnContent, new { @class = "form-control summernote" })
+            <span asp-validation-for="EnContent" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="ArContent" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            @Html.TextAreaFor(model => model.ArContent, new { @class = "form-control summernote" })
+            <span asp-validation-for="ArContent" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="IsActive" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="IsActive" class="flat" />
+            <span asp-validation-for="IsActive" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="ln_solid"></div>
+    <h3>Search Engine Optimization Data</h3>
+
+    <div class="form-group row">
+        <label asp-for="SeoTitleEN" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="SeoTitleEN" class="form-control" placeholder="English Page Title" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="SeoTitleAR" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="SeoTitleAR" class="form-control" placeholder="Arabic Page Title" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="SeoDescriptionEN" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="SeoDescriptionEN" class="form-control" placeholder="English Page Description" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="SeoDescriptionAR" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="SeoDescriptionAR" class="form-control" placeholder="Arabic Page Description" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="SeoOgTitleEN" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="SeoOgTitleEN" class="form-control" placeholder="English Facebook Og Title" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="SeoOgTitleAR" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="SeoOgTitleAR" class="form-control" placeholder="Arabic Facebook Og Title" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="SeoTwitterCardEN" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="SeoTwitterCardEN" class="form-control" placeholder="English Twitter Card" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="SeoTwitterCardAR" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="SeoTwitterCardAR" class="form-control" placeholder="Arabic Twitter Card" />
+        </div>
+    </div>
+
+    <div class="item form-group">
+        <div class="col-md-6 col-sm-6 offset-md-2">
+            <button type="submit" class="btn btn-success">Submit</button>
+            <button type="submit" class="btn btn-success">Submit And Apply</button>
+            <a asp-controller="SiteMap" asp-action="Index" asp-route-id="@Model.Id" type="button" class="btn btn-primary">Cancel</a>
+        </div>
+    </div>
+</form>
+
+@section Scripts{
+    <script>
+        /* Enable html editor */
+        $(document).ready(function () {
+            $('.summernote').summernote({
+                height: 200,
+                toolbar: [['style', ['style']], ['font', ['bold', 'underline', 'clear']], ['fontname', ['fontname']], ['color', ['color']], ['para', ['ul', 'ol', 'paragraph']], ['table', ['table']], ['insert', ['link']], ['view', ['fullscreen', 'codeview', 'help']]]
+            });
+        });
+
+        $(document).ready(function () {
+            //$('.custom-file-input').on('change', function () {
+            //    var fileName = $(this).val().split('\\').pop();
+            //    $(this).next('.custom-file-label').html(fileName);
+            //});
+            $('.custom-file-input').on('change', function () {
+                var fileName = $(this).val().split('\\').pop();
+                // $(this).next('.custom-file-label').html(fileName);
+                var ext = $(this).val().split('.').pop().toLowerCase();
+                if (ext == 'png' || ext == 'jpg' || ext == 'jpeg' || ext == 'gif' || ext == 'icon' || ext == 'bmp') {
+                    $(this).next('.custom-file-label').html(fileName);
+                }
+                else {
+                    alert('Please upload image file only.');
+                    return false;
+                }
+            });
+        });</script>
+}

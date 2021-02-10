@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20200831112713_addComponentConstantVersion.cs" />
+    <Compile Remove="Migrations\20200831112713_addComponentConstantVersion.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Scripts\GrossDomesticActivityFun2Edit1.sql" />
+    <None Remove="Scripts\GrossDomesticComponentFun2Edit1.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\GrossDomesticActivityFun2Edit1.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Scripts\GrossDomesticComponentFun2Edit1.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.0" />
+  </ItemGroup>
+
+</Project>

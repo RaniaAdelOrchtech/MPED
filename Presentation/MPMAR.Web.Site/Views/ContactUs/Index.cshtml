@@ -1,0 +1,432 @@
+﻿@model MPMAR.Web.Site.ViewModels.ViewContactUs
+@{
+    string lang = Context.Request.Query["lang"];
+
+    ViewData["Title"] = ViewBag.Title;
+
+}
+
+
+
+<div>
+    <style type="text/css">
+        .no-fouc {
+            display: none;
+        }
+
+        @@media (max-width: 767px) {
+            #content > section.section.full-width-bg.gray-bg > div > div.col-lg-9.col-md-9.col-sm-8 > div:nth-child(4) > form {
+                margin-bottom: 100px !important;
+            }
+        }
+    </style>
+    @if (lang == "en")
+    {
+        <style type="text/css">
+            .no-fouc {
+                display: none;
+            }
+
+            body {
+                direction: ltr;
+            }
+
+            #header.sticky-header {
+                direction: ltr;
+            }
+
+            .page-heading {
+                direction: ltr;
+            }
+
+            h4 {
+                direction: ltr;
+            }
+
+            h3 {
+                direction: ltr;
+            }
+
+            h6 {
+                direction: ltr;
+            }
+
+            p {
+                direction: ltr;
+            }
+
+            col-lg-3 {
+                direction: ltr;
+            }
+
+            label {
+                float: left;
+            }
+
+            input[type="submit"] {
+                float: right;
+            }
+
+            .banner {
+                direction: ltr;
+            }
+
+            .banner-wrapper + .social-media, .sidebar-box + .social-media, .social-media + .banner-wrapper, .social-media + .sidebar-box {
+                direction: ltr;
+            }
+
+            .sidebar-box.white {
+                direction: ltr;
+            }
+
+            #main-footer {
+                direction: ltr;
+            }
+
+            .image-banner .button.transparent {
+                direction: ltr;
+            }
+
+            .chosen-container .chosen-results {
+                direction: ltr;
+            }
+
+            .chosen-container-single .chosen-single, .form-select + .chosen-container-single .chosen-single, .checkout .chosen-container-single .chosen-single, .woocommerce-account .chosen-container-single .chosen-single {
+                direction: ltr;
+            }
+
+            footer .social-icons li > a {
+                text-align: left !important;
+            }
+
+            .newsletter-form .newsletter-submit .icons {
+                margin-top: 35px;
+            }
+
+            #lower-footer .social-media ul {
+                direction: ltr;
+            }
+        </style>
+    }
+    else
+    {
+        <style type="text/css">
+            @@media (max-width: 991px) {
+                #menu-button {
+                    direction: rtl;
+                }
+            }
+
+            @@media (max-width: 767px) {
+                .socialheadernew {
+                    direction: rtl;
+                }
+            }
+
+            .no-fouc {
+                display: none;
+            }
+
+            body {
+                direction: ltr;
+            }
+
+            #header.sticky-header {
+                direction: rtl;
+            }
+
+            .page-heading {
+                direction: rtl;
+            }
+
+            h4 {
+                direction: rtl;
+            }
+
+            h3 {
+                direction: rtl;
+            }
+
+            h6 {
+                direction: rtl;
+            }
+
+            p {
+                direction: rtl;
+            }
+
+            col-lg-3 {
+                direction: rtl;
+            }
+
+            label {
+                float: right;
+            }
+
+            input[type="submit"] {
+                float: right;
+            }
+
+            .banner {
+                direction: rtl;
+            }
+
+            .banner-wrapper + .social-media, .sidebar-box + .social-media, .social-media + .banner-wrapper, .social-media + .sidebar-box {
+                direction: rtl;
+            }
+
+            .sidebar-box.white {
+                direction: rtl;
+            }
+
+            #main-footer {
+                direction: rtl;
+            }
+
+            .image-banner .button.transparent {
+                direction: rtl;
+            }
+
+            .chosen-container .chosen-results {
+                direction: rtl;
+            }
+
+            .chosen-container-single .chosen-single, .form-select + .chosen-container-single .chosen-single, .checkout .chosen-container-single .chosen-single, .woocommerce-account .chosen-container-single .chosen-single {
+                direction: rtl;
+            }
+
+            footer .social-icons li > a {
+                text-align: left !important;
+            }
+
+            .newsletter-form .newsletter-submit .icons {
+                margin-top: 35px;
+            }
+
+            #lower-footer .social-media ul {
+                direction: rtl;
+            }
+        </style>
+
+    }
+
+    <!-- Header -->
+    <section id="content" class="@lang">
+
+        <!-- Page Heading -->
+        <section class="section page-heading animate-onscroll">
+            @if (lang == null || lang == "" || lang == "ar")
+            {<h1>
+                    @ViewBag.Title
+                </h1>
+                <p class="breadcrumb"><a href="secondoptionhomepage.html">الرئيسية</a> / @ViewBag.Title</p>
+            }
+            else
+            {
+                <h1>
+                    @ViewBag.Title
+                </h1>
+                <p class="breadcrumb"><a href="secondoptionhomepage.html">Home</a> / @ViewBag.Title</p>
+            }
+
+
+        </section>
+        <!-- Page Heading -->
+        <!-- Section -->
+        <section class="section full-width-bg gray-bg">
+            <div class="row">
+
+                <div class="col-lg-9 col-md-9 col-sm-8">
+                    <h3 style="color: #28a5a3;margin-top: -2px;">
+                        @(lang == "en" ? Model.EnMapTitle : Model.ArMapTitle)
+                    </h3>
+                    <div class="contact-map">
+                        <iframe src="@Model.MapUrl" width="900" height="400" frameborder="0" style="border:0;" allowfullscreen=""></iframe>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4 col-md-4 col-sm-6 animate-onscroll">
+                            <h6>
+                                @(lang == "en" ? "Title" : "العنوان")
+                            </h6>
+                            <p>
+                                @(lang == "en" ? Model.EnAddress : Model.ArAddress)
+                            </p>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-6 animate-onscroll">
+                            <h6>
+                                @(lang == "en" ? "Phone" : "الهاتف")
+                            </h6>
+                            <p>
+                                @Model.PhoneNumber
+                            </p>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-6 animate-onscroll">
+                            <h6>
+                                @(lang == "en" ? "Fax" : "فاكس")
+                            </h6>
+                            <p>
+                                @Model.FaxNumber
+                            </p>
+                        </div>
+                    </div>
+                    <div style="display:@(Model.FormParticipateActive==true?"block;":"none;")">
+                        <h3 style="color: #28a5a3;">
+                            @(lang == "en" ? Model.EnParticipateTitle : Model.ArParticipateTitle)
+                        </h3>
+                        <br>
+                        <form asp-controller="ContactUs" asp-action="Index" method="post" class="mt-3">
+
+                            <div class="inline-inputs">
+
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <label>
+                                        @(lang == "en" ? "Forename*" : "الاسم الأول*")
+
+                                    </label>
+                                    <input asp-for="FirstName" type="text" name="FirstName" required />
+                                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <label>
+                                        @(lang == "en" ? "Second Name*" : "الاسم الثاني*")
+
+                                    </label>
+                                    <input asp-for="SecondName" type="text" name="SecondName" required />
+                                    <span asp-validation-for="SecondName" class="text-danger"></span>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <label>
+                                        @(lang == "en" ? "E-mail*" : " البريد الإلكتروني*")
+
+                                    </label>
+                                    <input asp-for="Email" type="text" name="Email" required />
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <label>
+                                        @(lang == "en" ? "Phone Number*" : "رقم الهاتف*")
+
+                                    </label>
+                                    <input asp-for="PhoneNumber" type="text" name="PhoneNumber" required />
+                                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                    <label>
+                                        @(lang == "en" ? "Address" : "العنوان")
+                                    </label>
+                                    <input asp-for="Address" type="text" name="Address" />
+                                    <span asp-validation-for="Address" class="text-danger"></span>
+                                </div>
+                                <div class="col-lg-5 col-md-5 col-sm-12">
+                                    <label>
+                                        @(lang == "en" ? "City" : "المحافظة")
+                                    </label>
+                                    <select asp-for="City" name="City" class="chosen-select" style="direction:@(lang!="en"?"rtl":"ltr")">
+                                        <option value="Cairo">@(lang == "en" ? "Cairo" : "القاهرة")</option>
+                                        <option value="Giza">@(lang == "en" ? "Giza" : "الجيزة")</option>
+                                        <option value="Qalyubia">@(lang == "en" ? "Qalyubia" : "القليوبية")</option>
+                                        <option value="Asyut">@(lang == "en" ? "Asyut" : "أسيوط")</option>
+                                        <option value="New Valley">@(lang == "en" ? "New Valley" : "الوادي الجديد")</option>
+                                        <option value="Suez">@(lang == "en" ? "Suez" : "السويس")</option>
+                                        <option value="Ismailia">@(lang == "en" ? "Ismailia" : "الاسماعيلية")</option>
+                                        <option value="Sharqia">@(lang == "en" ? "Sharqia" : "الشرقية")</option>
+                                        <option value="Port Said">@(lang == "en" ? "Port Said" : "بورسعيد")</option>
+                                        <option value="North Sinai">@(lang == "en" ? "North Sinai" : "شمال سيناء")</option>
+                                        <option value="South Sinai">@(lang == "en" ? "South Sinai" : "جنوب سيناء")</option>
+                                        <option value="Beheira">@(lang == "en" ? "Beheira" : "البحيرة")</option>
+                                        <option value="Alexandria">@(lang == "en" ? "Alexandria" : "الأسكندرية")</option>
+                                        <option value="Matruh">@(lang == "en" ? "Matruh" : "مطروح")</option>
+                                        <option value="Fayoum">@(lang == "en" ? "Fayoum" : "الفيوم")</option>
+                                        <option value="Beni Suef">@(lang == "en" ? "Beni Suef" : "بني سويف")</option>
+                                        <option value="Minya">@(lang == "en" ? "Minya" : "المنيا")</option>
+                                        <option value="Aswan">@(lang == "en" ? "Aswan" : "أسوان")</option>
+                                        <option value="Luxor">@(lang == "en" ? "Luxor" : "الأقصر")</option>
+                                        <option value="Sohag">@(lang == "en" ? "Sohag" : "سوهاج")</option>
+                                        <option value="Qena">@(lang == "en" ? "Qena" : "قنا")</option>
+                                        <option value="Red Sea">@(lang == "en" ? "Red Sea" : "البحر الأحمر")</option>
+                                        <option value="Gharbia">@(lang == "en" ? "Gharbia" : "الغربية")</option>
+                                        <option value="Menoufia">@(lang == "en" ? "Menoufia" : "المنوفية")</option>
+                                        <option value="Kafr ElSheikh">@(lang == "en" ? "Kafr ElSheikh" : "كفر الشيخ")</option>
+                                        <option value="Dakahlia">@(lang == "en" ? "Dakahlia" : "الدقهلية")</option>
+                                        <option value="Damietta">@(lang == "en" ? "Damietta" : "دمياط")</option>
+                                        @*<option value="giza">
+                                                @(lang == "en" ? "giza" : "الجيزة")
+                                            </option>
+                                            <option value="cairo">
+                                                @(lang == "en" ? "cairo" : "القاهرة")
+                                            </option>
+                                            <option value="qena">
+                                                @(lang == "en" ? "qena" : "قنا")
+                                            </option>
+                                            <option value="aswan">
+                                                @(lang == "en" ? "aswan" : "أسوان")
+                                            </option>*@
+                                    </select>
+                                </div>
+                                <div class="col-lg-5 col-md-5 col-sm-12">
+                                    <label>
+                                        @(lang == "en" ? "Region" : "الحي / القرية")
+                                    </label>
+                                    <input asp-for="Region" type="text" name="Region" />
+                                    <span asp-validation-for="Region" class="text-danger"></span>
+
+                                </div>
+                                <div class="col-lg-2 col-md-2 col-sm-5">
+                                    <label>
+                                        @(lang == "en" ? "Postal code*" : "الرمز البريدي*")
+                                    </label>
+                                    <input asp-for="PostalNumber" type="text" name="PostalNumber" required />
+                                    <span asp-validation-for="PostalNumber" class="text-danger"></span>
+                                </div>
+
+                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                    <label>
+                                        @(lang == "en" ? "Topic" : "الموضوع")
+
+
+                                    </label>
+                                    <input asp-for="Topic" type="text" name="Topic" />
+                                    <span asp-validation-for="Topic" class="text-danger"></span>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                    <label>
+                                        @(lang == "en" ? "Message" : "الرسالة")
+
+                                    </label>
+                                    <div>
+                                        @Html.TextAreaFor(model => model.Message, new { @name = "Message", @type = "text", rows = 10 })
+                                        <span asp-validation-for="Message" class="text-danger"></span>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                            <input type="submit" value=" @(lang == "en" ? "Send" : "إرسال")">
+                        </form>
+                    </div>
+                </div>
+
+                @await Component.InvokeAsync("Sidebar")
+            </div>
+
+        </section>
+        <!-- /Section -->
+
+    </section>
+
+
+
+
+    <!-- Back To Top -->
+    <a href="#" id="button-to-top"><i class="icons icon-up-dir"></i></a>
+
+
+
+    <style>
+        .en {
+            direction: ltr;
+        }
+    </style>
+    <!-- Chosen -->
+
+</div>
+@await Component.InvokeAsync("NToastNotify");

@@ -1,0 +1,40 @@
+﻿@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+<div>
+    <h4>Super Admin > Logs Data</h4>
+</div>
+<table id="table_id" class="table table-striped table-bordered" style="width:100%">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Application</th>
+            <th>Logged</th>
+            <th>Level</th>
+            <th>Message</th>
+
+        </tr>
+    </thead>
+</table>
+@section scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#table_id').DataTable({
+                "processing": true,
+                "serverSide": true,
+                "ajax": { "url": '@Url.Action("GetLogData", "Logs")', "dataSrc": "data","type": "POST",
+                    "datatype":"json" },
+                "columns": [
+                    { "data": "id" },
+                    { "data": "application" },
+                    { "data": "logged" },
+                    { "data": "level" },
+                    { "data": "message",render:  $.fn.dataTable.render.ellipsis() }
+                ]
+                //,"deferLoading": 37
+            });
+        });
+    </script>
+}
+

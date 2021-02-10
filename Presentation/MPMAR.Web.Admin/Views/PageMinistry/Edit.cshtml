@@ -1,0 +1,305 @@
+﻿@model PageMinistryEditViewModel
+@using MPMAR.Common;
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+
+    string approvalId = Context.Request.Query["approvalId"];
+    string pageRouteId = Context.Request.Query["pageRouteId"];
+    int pageRouteIdInt = 0;
+    var pageRouteIdIsFromRoute = int.TryParse(pageRouteId, out pageRouteIdInt);
+    if (!pageRouteIdIsFromRoute)
+    {
+        pageRouteIdInt = Model.PageRouteId ?? 0;
+    }
+
+    int approvalIdInt = 0;
+    int.TryParse(approvalId, out approvalIdInt);
+
+    var bEUsersPrivilegesViewModel = bEUsersPrivilegesService.ValidateIBEUsersPrivilegesViewService(PrivilegesPageType.StaticPage, this.User.FindFirstValue(ClaimTypes.NameIdentifier), this.User.IsInRole(UserRolesConst.SuperAdmin), pageRouteIdInt, approvalId: approvalIdInt);
+}
+
+<div>
+    <h4><a asp-controller="StaticPageRoute" asp-action="Index">Static Page</a> > <a asp-controller="PageMinistry" asp-action="Index" asp-route-pageRouteId="@Model.PageRouteId">Page Ministry</a> > Edit</h4>
+</div>
+@if (ViewBag.DisableEditFlage == true && bEUsersPrivilegesViewModel.CanEdit && !bEUsersPrivilegesViewModel.IsFromApprovalPage)
+{
+    <div class="alert alert-warning">
+        <strong>NOTE!</strong> Your old changes haven't been approved yet, and your new changes will be auto-submitted.
+    </div>
+}
+<form enctype="multipart/form-data" asp-controller="PageMinistry" asp-action="Edit" method="post" class="mt-3">
+    <input asp-for="PageRouteId" type="hidden" />
+    <input asp-for="Id" type="hidden" />
+    <input asp-for="IsActive" type="hidden" />
+    <input asp-for="IsDeleted" type="hidden" />
+    <input asp-for="CreatedById" type="hidden" />
+    <input asp-for="ApprovalDate" type="hidden" />
+    <input asp-for="ApprovedById" type="hidden" />
+    <input asp-for="ImageUrl" type="hidden" />
+    <input asp-for="EnImageUrl" type="hidden" />
+    <input asp-for="VersionStatusEnum" type="hidden" />
+    <input asp-for="PageMinistryId" type="hidden" />
+    <input asp-for="ChangeActionEnum" type="hidden" />
+    <input asp-for="CreationDate" type="hidden" />
+    <input asp-for="CreatedById" type="hidden" />
+
+
+    <div class="form-group row">
+        <label asp-for="EnName" class="col-sm-2 col-form-label"> </label>
+        <div class="col-sm-10">
+            <input asp-for="EnName" class="form-control" placeholder="English Name" />
+            <span asp-validation-for="EnName" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="ArName" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="ArName" class="form-control" placeholder="Arabic Name" />
+            <span asp-validation-for="ArName" class="text-danger"></span>
+        </div>
+    </div>
+    @if (Model.Id == (int)PageMinistryEnum.MinistrySocialId || Model.PageMinistryId == (int)PageMinistryEnum.MinistrySocialId)
+    {
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Twitter </label>
+            <div class="col-sm-10">
+                <input asp-for="Twitter" class="form-control" placeholder="Twitter Ministry Link" />
+                <span asp-validation-for="Twitter" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Instagram </label>
+            <div class="col-sm-10">
+                <input asp-for="Instagram" class="form-control" placeholder="Instagram Ministry Link" />
+                <span asp-validation-for="Instagram" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Globe</label>
+            <div class="col-sm-10">
+                <input asp-for="Globe" class="form-control" placeholder="Globe Ministry Link" />
+                <span asp-validation-for="Globe" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label asp-for="IsActive" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="IsActive" class="flat" />
+                <span asp-validation-for="IsActive" class="text-danger"></span>
+            </div>
+        </div>
+    }
+    else
+    {
+
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label"> English Description</label>
+            <div class="col-sm-10">
+                @Html.TextAreaFor(model => model.EnContent, new { @class = "form-control summernote" })
+                <span asp-validation-for="EnContent" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Arabic Description</label>
+            <div class="col-sm-10">
+                @Html.TextAreaFor(model => model.ArContent, new { @class = "form-control summernote" })
+                <span asp-validation-for="ArContent" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="Order" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="Order" class="form-control" placeholder="Order from left to right" />
+                <span asp-validation-for="Order" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label asp-for="IsActive" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="IsActive" class="flat" />
+                <span asp-validation-for="IsActive" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="IsDobulQuote" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="IsDobulQuote" class="flat" />
+                <span asp-validation-for="IsDobulQuote" class="text-danger"></span>
+            </div>
+        </div>
+        @if (Model.ImageUrl != null && Model.ImageUrl != "")
+        {
+            <div class="form-group row">
+                <label asp-for="ImageUrl" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <img asp-for="ImageUrl" src="@Model.ImageUrl" style="height:200px;" />
+                    <i id="removeImage" class="fa fa-close" style="float: left;margin-right: 5px;font-size: 35px;" title="Remove Image"></i>
+                </div>
+
+            </div>
+        }
+
+        <div class="form-group row" style="display:none;">
+            <label asp-for="ImageUrl" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <div class="custom-file">
+                    <input id="ImageUrlInput" asp-for="ImageUrl" class="form-control" />
+                    <span asp-validation-for="ImageUrl" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="form-group row">
+            <label asp-for="ImageFile" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <div class="custom-file">
+                    <input asp-for="ImageFile" class="form-control custom-file-input" accept="image/png, image/jpeg, image/jpg, image/gif, image/bmp, image/icon" />
+                    <label class="custom-file-label">Choose File...</label>
+                    <span asp-validation-for="ImageFile" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        @if (Model.EnImageUrl != null && Model.EnImageUrl != "")
+        {
+            <div class="form-group row">
+                <label asp-for="EnImageUrl" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <img asp-for="ImageUrl" src="@Model.EnImageUrl" style="height:200px;" />
+                    <i id="removeImage" class="fa fa-close" style="float: left;margin-right: 5px;font-size: 35px;" title="Remove Image"></i>
+                </div>
+
+            </div>
+        }
+
+        <div class="form-group row" style="display:none;">
+            <label asp-for="EnImageUrl" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <div class="custom-file">
+                    <input id="ImageUrlInput" asp-for="EnImageUrl" class="form-control" />
+                    <span asp-validation-for="EnImageUrl" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="EnImageFile" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <div class="custom-file">
+                    <input asp-for="EnImageFile" class="form-control custom-file-input" accept="image/png, image/jpeg, image/jpg, image/gif, image/bmp, image/icon" />
+                    <label class="custom-file-label">Choose File...</label>
+                    <span asp-validation-for="EnImageFile" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="ln_solid"></div>
+        <h3>Search Engine Optimization Data</h3>
+
+        <div class="form-group row">
+            <label asp-for="SeoTitleEN" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="SeoTitleEN" class="form-control" placeholder="English Page Title" />
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="SeoTitleAR" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="SeoTitleAR" class="form-control" placeholder="Arabic Page Title" />
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="SeoDescriptionEN" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="SeoDescriptionEN" class="form-control" placeholder="English Page Description" />
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="SeoDescriptionAR" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="SeoDescriptionAR" class="form-control" placeholder="Arabic Page Description" />
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="SeoOgTitleEN" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="SeoOgTitleEN" class="form-control" placeholder="English Facebook Og Title" />
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="SeoOgTitleAR" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="SeoOgTitleAR" class="form-control" placeholder="Arabic Facebook Og Title" />
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="SeoTwitterCardEN" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="SeoTwitterCardEN" class="form-control" placeholder="English Twitter Card" />
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="SeoTwitterCardAR" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="SeoTwitterCardAR" class="form-control" placeholder="Arabic Twitter Card" />
+            </div>
+        </div>
+    }
+    <div class="item form-group">
+        <div class="col-md-6 col-sm-6 offset-md-2">
+            <button type="submit" class="btn btn-success">Save</button>
+            <a asp-controller="PageMinistry" asp-action="Index" asp-route-pageRouteId="@Model.PageRouteId" type="button" class="btn btn-primary">Cancel</a>
+        </div>
+    </div>
+</form>
+
+@section Scripts{
+    <script>
+        /* Enable html editor */
+        $(document).ready(function () {
+            $('.summernote').summernote({
+                height: 200,
+                toolbar: [['style', ['style']], ['font', ['bold', 'underline', 'clear']], ['fontname', ['fontname']], ['color', ['color']], ['para', ['ul', 'ol', 'paragraph']], ['table', ['table']], ['insert', ['link']], ['view', ['fullscreen', 'codeview', 'help']]]
+            });
+            $('#removeImage').click(function () {
+                $('#ImageUrlInput').val('');
+            })
+
+        });
+        $(document).ready(function () {
+            $('.custom-file-input').on('change', function () {
+                var fileName = $(this).val().split('\\').pop();
+                //$(this).next('.custom-file-label').html(fileName);
+                var ext = $(this).val().split('.').pop().toLowerCase();
+                if (ext == 'png' || ext == 'jpg' || ext == 'jpeg' || ext == 'gif') {
+                    $(this).next('.custom-file-label').html(fileName);
+                }
+                else {
+                    alert('Please upload image file only.');
+                    return false;
+                }
+            });
+        });
+                        //$(document).ready(function () {
+                        //    $('.custom-file-input').on('change', function () {
+                        //        var fileName = $(this).val().split('\\').pop();
+                        //        $(this).next('.custom-file-label').html(fileName);
+                        //    });
+                        //});
+    </script>
+}

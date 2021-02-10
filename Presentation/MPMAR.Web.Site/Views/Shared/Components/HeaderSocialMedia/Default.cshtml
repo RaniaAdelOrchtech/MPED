@@ -1,0 +1,16 @@
+﻿@model List<MPMAR.Data.SocialMedia>
+@{
+    ViewData["Title"] = "SocialMediaLinks";
+}
+@{
+    string lang = Context.Request.Query["lang"];
+}
+
+@foreach (var item in Model.Select(i => new { i.SocialMediaName, i.Link }).Distinct())
+{
+    <li class="@item.SocialMediaName.ToLower()">
+        <a href="@item.Link" class="tooltip-ontop socialnewicons" title="" data-original-title="@item.SocialMediaName" target="_blank"><i class="icons icon-@item.SocialMediaName.ToLower()"></i></a>
+    </li>
+
+}
+

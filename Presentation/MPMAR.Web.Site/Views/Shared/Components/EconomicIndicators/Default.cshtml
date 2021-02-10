@@ -1,0 +1,178 @@
+﻿@model MPMAR.Data.EconomicIndicators
+@{
+    string lang = Context.Request.Query["lang"];
+    var linkurl = "";
+    if (ViewBag.IsBlank == "Blank")
+        linkurl = "/indexblank";
+    var defaultWord = (lang == "en") ? "Search Data" : "ابدأ البحث";
+    var link1 = (lang == "en") ? Model.Link1 + linkurl + "?lang=en" : Model.Link1 + linkurl;
+    var link2 = (lang == "en") ? Model.Link2 + linkurl + "?lang=en" : Model.Link2 + linkurl;
+    var link3 = (lang == "en") ? Model.Link3 + linkurl + "?lang=en" : Model.Link3 + linkurl;
+}
+<!-- Section -->
+<section class="section full-width-bg gray-bg">
+
+
+
+
+
+    <div class="col-lg-12 col-md-12 col-sm-12"
+         style="padding-left: 0px;padding-right: 0px;background-color: #fff;">
+
+
+
+
+
+        <p class="animate-onscroll" style="background-color: #fff;padding: 20px;    margin-top: -10px;
+					">
+            @if (lang == "ar" || lang == "" || lang == null)
+            {
+                @Model.MainDiscriptionAr
+            }
+            else
+            {
+                @Model.MainDiscriptionEn
+            }
+        </p>
+
+    </div>
+    <div class="row slider-row"></div>
+
+
+    <div class="row animate-onscroll" style="padding: 0 15px;">
+
+        <!-- Sidebar -->
+        <div class="row slider-row animate-onscroll">
+            <div class="col-lg-4 col-md-4 col-sm-12 animate-onscroll" style="margin-top:30px">
+
+                <!-- Banner Rotator -->
+                <div class="banner-rotator animate-onscroll nogoldhover"
+                     style="background-color: #fff; box-shadow: rgba(0, 0, 0, 0.28) 0px 0px 9px 1px;">
+                    <img src="@Model.ImageUrl1">
+
+                    <div style="padding: 30px;text-align: center; padding-top: 0px;height:236px">
+                        <h1 style="text-align: center; height:30px;font-size :19px;">
+                            @if (lang == "ar" || lang == "" || lang == null)
+                            {
+                                @Model.ImageTitleAr1
+                            }
+                            else
+                            {
+                                @Model.ImageTitleEn1
+                            }
+                        </h1>
+                        <h2 style="text-align: justify;height: 100px;  font-size: 16px;line-height: 1.4;margin-top: 0px;"
+                            class="fontonmobile  EI-P">
+                            @if (lang == "ar" || lang == "" || lang == null)
+                            {
+                                @Model.ImageDiscriptionAr1
+                            }
+                            else
+                            {
+                                @Model.ImageDiscriptionEn1
+                            }
+                        </h2>
+                        <a href="@link1" class="button"
+                           style="background: #c89637;color: #fff;">@defaultWord</a>
+                    </div>
+
+
+                </div>
+                <!-- /Banner Rotator -->
+            </div>
+            <!-- /Sidebar -->
+
+            <div class="col-lg-4 col-md-4 col-sm-12 animate-onscroll" style="margin-top:30px">
+
+                <!-- Banner Rotator -->
+                <div class="banner-rotator animate-onscroll nogoldhover"
+                     style="background-color: #fff; box-shadow: rgba(0, 0, 0, 0.28) 0px 0px 9px 1px;">
+                    <img src="@Model.ImageUrl2">
+
+                    <div style="padding: 30px;text-align: center;padding-top: 0px; height:236px">
+
+                        <h1 style="text-align: center; height:30px; font-size: 19px;">
+                            @if (lang == "ar" || lang == "" || lang == null)
+                            {
+                                @Model.ImageTitleAr2
+                            }
+                            else
+                            {
+                                @Model.ImageTitleEn2
+                            }
+                        </h1>
+                        <h2 style="text-align: justify; height: 100px; font-size: 16px;line-height: 1.4;margin-top: 0px;"
+                            class="fontonmobile  EI-P">
+                            @if (lang == "ar" || lang == "" || lang == null)
+                            {
+                                @Model.ImageDiscriptionAr2
+                            }
+                            else
+                            {
+                                @Model.ImageDiscriptionEn2
+                            }
+                        </h2>
+                        <a href="@link2" class="button"
+                           style="background: #c89637;color: #fff;">@defaultWord</a>
+                    </div>
+
+                </div>
+                <!-- /Banner Rotator -->
+            </div>
+
+            <div class="col-lg-4 col-md-4 col-sm-12 animate-onscroll" style="margin-top:30px">
+
+                <!-- Banner Rotator -->
+                <div class="banner-rotator animate-onscroll nogoldhover" style="background-color: #fff; box-shadow: rgba(0, 0, 0, 0.28) 0px 0px 9px 1px;
+								">
+                    <img src="@Model.ImageUrl3">
+
+                    <div style="padding: 30px;text-align: center;padding-top: 0px;height:236px ">
+
+                        <h1 style="text-align: center; height:30px;font-size: 19px;">
+                            @if (lang == "ar" || lang == "" || lang == null)
+                            {
+                                @Model.ImageTitleAr3
+                            }
+                            else
+                            {
+                                @Model.ImageTitleEn3
+                            }
+                        </h1>
+                        <h2 style="        text-align: justify;
+        font-size: 16px;
+        line-height: 1.4;
+        margin-top: 0px;
+        height: 100px;"
+                            class="fontonmobile  EI-P">
+                            @if (lang == "ar" || lang == "" || lang == null)
+                            {
+                                @Model.ImageDiscriptionAr3
+                            }
+                            else
+                            {
+                                @Model.ImageDiscriptionEn3
+                            }
+                        </h2>
+                        <a href="@link3" class="button"
+                           style="background: #c89637;color: #fff;">
+                            @defaultWord
+                        </a>
+                    </div>
+
+                </div>
+                <!-- /Banner Rotator -->
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- <iframe class="animate-onscroll" id="economic" src="http://212.129.13.21:1986/analytics/indexblank" width="100%"
+        height="100%"
+        style="height: 1600px;margin-top: 15px;margin-bottom: 10px;width: 1706px;
+        margin-right: -283px;"></iframe>  -->
+
+
+</section>
+<!-- /Section -->

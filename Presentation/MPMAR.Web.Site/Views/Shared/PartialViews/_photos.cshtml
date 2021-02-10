@@ -1,0 +1,168 @@
+﻿@model IEnumerable<MPMAR.Data.HomePageModels.HomePagePhoto>
+@{string lang = Context.Request.Query["lang"]; }
+<!-- Section -->
+<section class="section full-width-bg hidehomecoloronmobile">
+
+    <div class="row">
+
+        <div class="col-lg-12 col-md-12 col-sm-12">
+33
+            <div class="row" style="
+						margin-left: -4px;
+						margin-right: -5px;
+					">
+                <div class="col-md-7 fix-slider-disturtion">
+                    <div class="row">
+                        @foreach (var photo in Model)
+                        {
+                            <div class="col-md-6 padding-5 ">
+
+                                <div class="animate-onscroll">
+
+                                    <div class="containerexample">
+                                        <div class="post-image">
+                                            <a href="singlenews5.html">
+                                                <img class="img-responsive min-height-170 hidehomeimgonmobile imageover"
+                                                     src="@photo.ImageUrl" alt="">
+                                                <div class="text-block hidehomeimgonmobile overlayspace">
+                                                    <h4 class="overlaytextcolorbottom">
+                                                        @if (lang == null || lang == "" || lang == "ar")
+                                                        {
+                                                            @photo.ArTitle
+                                                        }
+                                                        else
+                                                        {
+                                                            @photo.EnTitle
+                                                        }
+                                                    </h4>
+                                                </div>
+                                                <div class="overlay">
+                                                    <div class="text">
+                                                        <a href="singlenews5.html">
+                                                            <p class="justfiyslidertext"
+                                                               style="font-size: 14px !important;line-height: 18px;">
+                                                                @if (lang == null || lang == "" || lang == "ar")
+                                                                {
+                                                                    @photo.ArDescription
+                                                                }
+                                                                else
+                                                                {
+                                                                    @photo.EnDescription
+                                                                }
+                                                            </p>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="mobile-spacer-10"></div>
+                        }
+                    </div>
+                    <div class="spacer-10"></div>
+                    <div class="row">
+                        <div class="col-md-12 padding-5 spacebottommobile">
+
+                            <!-- Revolution Slider -->
+
+                            <div class="flexslider main-flexslider animate-onscroll">
+
+                                <ul class="slides">
+
+                                    <li id="main_flex_2">
+
+                                        <div class="slide align-right hidehomeimgonmobile">
+                                            <h2>
+                                                وزيرا التخطيط والإعلام يبحثا موازنة وزارة الدولة للإعلام
+                                            </h2>
+                                            <p>
+                                                أشارت الدكتورة هالة السعيد إلى الدور المهم الذى يلعبه الإعلام
+                                                فى تنمية وتشكيل وعى المجتمع؛ وتأثيره فى الاستراتيجيات
+                                                المختلفة، بالإضافة إلى اعتبار وسائل الإعلام المتعددة مصدرًا
+                                                مهمًا من مصادر التوجيه والتثقيف في أي مجتمع.
+                                            </p>
+                                            <a href="singlenews12.html" class="button big button-arrow">
+                                                اقرأ
+                                                المزيد
+                                            </a>
+                                        </div>
+
+                                    </li>
+
+                                    <li id="main_flex_2" style="background: url(img/MPED-Egypt-perception-of-financing-and-completing-the-project-of-the-international-branch-of-Cairo-University.jpg) no-repeat;">
+                                        <div class="slide align-right hidehomeimgonmobile">
+                                            <h2> وزيرة التخطيط تلتقي برئيس جامعة القاهرة</h2>
+                                            <p>
+                                                استقبلت الدكتورة هالة السعيد، وزيرة التخطيط والتنمية
+                                                الاقتصادية الدكتور محمد عثمان الخشت، رئيس جامعة القاهرة وذلك
+                                                لعرض التصور الخاص بتمويل واستكمال مشروع الفرع الدولي بجامعة
+                                                القاهرة.
+                                            </p>
+                                            <a href="singlenews11.html" class="button big button-arrow">
+                                                اقرأ
+                                                المزيد
+                                            </a>
+                                        </div>
+
+                                    </li>
+
+                                    <li id="main_flex_3">
+
+                                        <div class="slide align-right hidehomeimgonmobile"
+                                             style="padding: 220px 15px;">
+                                            <h2>
+                                                المقاربة الوحيدة للتعامل مع أزمة فيروس كورونا هي حماية أرواح
+                                                المواطنين
+                                            </h2>
+                                            <p>
+                                                كل مؤسسات الدولة تعمل بكامل طاقتها لاستمرار مسيرة النمو
+                                                والتنمية.
+                                            </p>
+                                            <a href="singlenews13.html" class="button big button-arrow"
+                                               style="margin-top: 14px;">
+                                                اقرأ
+                                                المزيد
+                                            </a>
+                                        </div>
+
+                                    </li>
+
+                                </ul>
+
+                            </div>
+
+                            <!-- /Revolution Slider -->
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="row">
+                        <div class="col-md-12 padding-5">
+
+                            <div class="animate-onscroll">
+                                <iframe id="video" class="hidehomeimgonmobile" width="560" height="315"
+                                        src="https://www.youtube.com/embed/-lf0RfOIBuM?autoplay=1&loop=1&autopause=1&mute=1&playlist=-lf0RfOIBuM"
+                                        frameborder="0"
+                                        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                                        allowfullscreen></iframe>
+                                <!-- <video id="video" class="hidehomeimgonmobile" controls="controls" loop
+                                    autoplay="autoplay" muted>
+                                    <source src="img/Home page slider video.mp4" type="video/mp4">
+                                </video> -->
+
+                            </div>
+
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>

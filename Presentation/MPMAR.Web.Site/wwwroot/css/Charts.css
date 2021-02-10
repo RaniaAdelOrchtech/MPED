@@ -1,0 +1,43 @@
+﻿.nav-pills .nav-link.active {
+    background-color: white;
+}
+
+.table.dataTable thead .sorting {
+    background-color: #28A5A3;
+    color: white;
+}
+
+.table.dataTable thead .sorting_asc,
+.table.dataTable thead .sorting_desc {
+    background-color: #688C8B;
+    color: white;
+}
+
+
+input[type="text"] {
+    color: black !important
+}
+
+.swal2-container {
+    zoom: 1.5;
+}
+
+.karimtest {
+    background-color: #e1e1e1;
+    padding: 4px 8px;
+    display: inline-block;
+    border-radius: 5px;
+    margin: 2px 2px;
+    color: #505050;
+    font-weight: 500;
+}
+
+.karimdiv {
+    border-radius: 8px;
+    padding: 10px 14px;
+}
+
+.dt-button {
+    padding: 0;
+    background-color: #f3f4f9
+}

@@ -1,0 +1,135 @@
+﻿@model MPMAR.Business.ViewModels.PhotosAlbumEditViewModel
+@using MPMAR.Common
+@{
+    ViewBag.Title = "Photo Album Details";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+
+    var photoPath = Url.Content("~/Uploads/Images/") + Model.ImageUrl ?? "noImage.png";
+
+    string approvalId = Context.Request.Query["approvalId"];
+    int approvalIdInt = 0;
+    int.TryParse(approvalId, out approvalIdInt);
+
+    var bEUsersPrivilegesViewModel = bEUsersPrivilegesService.ValidateIBEUsersPrivilegesViewService(PrivilegesPageType.StaticPage, this.User.FindFirstValue(ClaimTypes.NameIdentifier), this.User.IsInRole(UserRolesConst.SuperAdmin), StaticPagesIdsConst.PicturesLibrary, approvalIdInt);
+
+}
+
+
+<style>
+    td.h5 {
+        white-space: -moz-pre-wrap !important;
+        white-space: -webkit-pre-wrap;
+        white-space: -pre-wrap;
+        white-space: -o-pre-wrap;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        word-break: break-all;
+        white-space: normal;
+        PADDING: 8px;
+    }
+
+    td.h6 {
+        line-height: 1.4 !important;
+        PADDING: 8px;
+    }
+
+    table, th, td {
+        border: 1px solid black;
+    }
+</style>
+
+
+<div>
+    @if (bEUsersPrivilegesViewModel.CanApprove && bEUsersPrivilegesViewModel.IsFromApprovalPage)
+    {
+        <h4>Static Page >  Photo Archive  > <a asp-controller="PhotosAlbum" asp-action="Index" asp-route-id="@Model.PhotoArchiveVersionId" asp-route-approvalId="@ViewBag.approvalId" asp-route-PageRouteId="@ViewBag.PageRouteId">Photo Album</a> > Detail</h4>
+    }
+    else
+    {
+        <h4><a asp-controller="StaticPageRoute" asp-action="Index">Static Page</a> >  <a asp-controller="PhotoArchive" asp-action="Index" asp-route-id="@Model.PageRouteId" asp-route-pageRouteId="@ViewBag.PageRouteId" asp-route-approvalId="@ViewBag.approvalId">Photo Archive </a> > <a asp-controller="PhotosAlbum" asp-action="Index" asp-route-id="@Model.PhotoArchiveVersionId" asp-route-approvalId="@ViewBag.approvalId" asp-route-PageRouteId="@ViewBag.PageRouteId">Photo Album</a> > Detail</h4>}
+
+</div>
+
+
+<table class="pull-left col-md-12 ">
+    <tbody>
+
+
+
+
+        <tr>
+            <td class="h6"><strong><label asp-for="Order"></label></strong></td>
+            <td class="h5">@Model.Order</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="IsActive"></label></strong></td>
+            <td class="h5">@(Model.IsActive ? "Yes" : "No") </td>
+        </tr>
+
+
+        <tr>
+            <td class="h6"><strong><label asp-for="ImageUrl"></label></strong></td>
+            <td>
+                <img src="@Model.ImageUrl" class="thumpnail-edit-image" asp-append-version="true" />
+            </td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="SeoTitleEN"></label></strong></td>
+            <td class="h5">@Model.SeoTitleEN</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="SeoTitleAR"></label></strong></td>
+            <td class="h5">@Model.SeoTitleAR</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="SeoDescriptionEN"></label></strong></td>
+            <td class="h5">@Model.SeoDescriptionEN</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="SeoDescriptionAR"></label></strong></td>
+            <td class="h5">@Model.SeoDescriptionAR</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="SeoOgTitleEN"></label></strong></td>
+            <td class="h5">@Model.SeoOgTitleEN</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="SeoOgTitleAR"></label></strong></td>
+            <td class="h5">@Model.SeoOgTitleAR</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="SeoTwitterCardEN"></label></strong></td>
+            <td class="h5">@Model.SeoTwitterCardEN</td>
+        </tr>
+
+        <tr>
+            <td class="h6"><strong><label asp-for="SeoTwitterCardAR"></label></strong></td>
+            <td class="h5">@Model.SeoTwitterCardAR</td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+
+<div>
+    <div class="col-md-4 col-sm-4" style="padding-top: 10px;">
+        @if (bEUsersPrivilegesViewModel.IsFromApprovalPage)
+        {
+            <a asp-controller="PhotosAlbum" asp-action="Index" asp-route-id="@Model.PhotoArchiveVersionId" asp-route-approvalId="@ViewBag.approvalId" asp-route-PageRouteId="@ViewBag.PageRouteId" type="button" class="btn btn-success">Back to previous page</a>
+        }
+        else
+        {
+
+            <a asp-controller="PhotosAlbum" asp-action="Index" asp-route-id="@Model.PhotoArchiveVersionId" asp-route-PageRouteId="@ViewBag.PageRouteId" type="button" class="btn btn-success">Back to previous page</a>
+        }
+    </div>
+</div>

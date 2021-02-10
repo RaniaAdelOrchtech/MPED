@@ -1,0 +1,39 @@
+﻿@model MPMAR.Data.PageContact
+@{
+    ViewData["Title"] = "NavigationMenu";
+}
+@{
+    string lang = Context.Request.Query["lang"];
+}
+<div class="col-lg-2 col-md-2 col-sm-6  animate-onscroll">
+    <h4>@(lang == "en" ? Model.EnPageName:Model.ArPageName)</h4>
+    <ul class="menu">
+        <li>
+            <a href="tel:@Model.PhoneNumber">
+                @(lang == "en" ? "Phone : " + Model.PhoneNumber :  "الهاتف : "+ (Model.PhoneNumber.Contains("-") ?Model.PhoneNumber.Split("-")[1]+"-"+Model.PhoneNumber.Split("-")[0]: Model.PhoneNumber) )
+            </a>
+        </li>
+        <li>
+            <a href="~/ContactUs">
+                @(lang == "en" ? "Fax : " + Model.FaxNumber : " فاكس : "+ Model.FaxNumber )
+            </a>
+        </li>
+        <li>
+            <a href="~/ContactUs">
+                @(lang == "en" ? "Title : " + Model.EnAddress :"العنوان : "+ Model.ArAddress  )
+            </a>
+        </li>
+    </ul>
+</div>
+<div class="col-lg-6 col-md-6 col-sm-6 animate-onscroll">
+    <h4>
+        @(lang == "en" ? Model.EnMapTitle : Model.ArMapTitle)
+    </h4>
+    <iframe src="@Model.MapUrl" width="70%" height="240" frameborder="0" style="border:0;" allowfullscreen=""></iframe>
+</div>
+
+<style>
+    .en {
+        direction: ltr;
+    }
+</style>

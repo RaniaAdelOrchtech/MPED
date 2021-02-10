@@ -1,0 +1,156 @@
+﻿@using MPMAR.Common
+@{
+    ViewBag.Title = "Nav Item";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+
+    string approvalId = Context.Request.Query["approvalId"];
+    int approvalIdInt = 0;
+    int.TryParse(approvalId, out approvalIdInt);
+
+    var bEUsersPrivilegesViewModel = bEUsersPrivilegesService.ValidateIBEUsersPrivilegesViewService(PrivilegesPageType.NavItems, this.User.FindFirstValue(ClaimTypes.NameIdentifier), this.User.IsInRole(UserRolesConst.SuperAdmin), approvalId: approvalIdInt);
+}
+<div>
+    <h4>Definitions > Nav Items</h4>
+</div>
+
+@if (bEUsersPrivilegesViewModel.CanApprove && bEUsersPrivilegesViewModel.IsFromApprovalPage)
+{
+    <a asp-action="Approve" asp-route-approvalId="@ViewBag.approvalId" type="button" class="btn btn-primary" onclick="DisableAfterClick(event,this)">Approve</a>
+    <a asp-action="Ignore" asp-route-approvalId="@ViewBag.approvalId" type="button" class="btn btn-primary" onclick="DisableAfterClick(event,this)">Ignore</a>
+}
+else if (!bEUsersPrivilegesViewModel.IsFromApprovalPage)
+{
+    if (bEUsersPrivilegesViewModel.CanSubmit)
+    {
+
+        <a type="button" class="btn btn-success" asp-route-pageRouteId="@ViewBag.pageRouteId" asp-controller="NavItem" asp-action="SubmitChanges">Submit</a>
+    }
+    if (bEUsersPrivilegesViewModel.CanAdd)
+    {
+
+        <a asp-controller="NavItem" asp-action="Create" type="button" class="btn btn-primary index-create-button">Add</a>
+    }
+}
+<table id="data_table" class="table table-striped table-bordered" style="width:100%">
+    <thead>
+        <tr>
+            <th style="width: 25%">English Name</th>
+            <th style="width: 25%">Arabic Name</th>
+            <th style="width: 10%">Order</th>
+            <th style="width: 10%">Is Active</th>
+            <th style="width: 4%"></th>
+            <th style="width: 4%"></th>
+            <th style="width: 8%"></th>
+        </tr>
+    </thead>
+</table>
+@section scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            window.table  =   $('#data_table').DataTable({
+                "ajax": { "url": '@Url.Action("GetNavItems", "NavItem")', "dataSrc": "data" },
+                "columns": [
+                    { "data": "enName",render:  $.fn.dataTable.render.ellipsis()  },
+                    { "data": "arName",render:  $.fn.dataTable.render.ellipsis()  },
+                    { "data": "order" },
+                    { "data": "isActive" },
+                    {
+                        "data": "id", "orderable": false, "render": function (data, type, row) {
+                            var details = '@Url.Action("Details", "NavItem")';
+                            return '<a href="' + details + '?id=' + data +'&navItemId=' + row.navItemId+'&approvalId=' + @ViewBag.approvalId +'" title="Details" class="anchorActionLink"><i class="fa fa-eye"></i></a>';
+                        }
+                    },
+                    {
+                        "data": "id", "orderable": false, "render": function (data, type, row) {
+                            var edit = '@Url.Action("Edit", "NavItem")';
+                            var isConentManager = '@(bEUsersPrivilegesViewModel.CanEdit && !bEUsersPrivilegesViewModel.IsFromApprovalPage)';
+                            return isConentManager  == "True" ?'<a href="' + edit + '?id=' + data +'&navItemId=' + row.navItemId+'" title="Edit" class="anchorActionLink"><i class="fa fa-pencil"></i></a>':'';
+                        }
+                    },
+                    {
+                        "data": "id", "orderable": false, "render": function (data, type, row) {
+                            var statusName = row.statusName;
+                            var isConentManager = '@(bEUsersPrivilegesViewModel.CanDelete && !bEUsersPrivilegesViewModel.IsFromApprovalPage)';
+                            return isConentManager  == "True" ? '<a href="#" title="Delete" data-placement="right" id="deleteItem" class="deleteItem anchorActionLink" data-target="#basic" data-toggle="modal" data-id="' + data + '"><i class="fa fa-trash"></i></a>' +
+                            '<div class="modal fade" id="basic" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">' +
+                            '<div class="modal-dialog">' + '<div class="modal-content">' + '<div class="modal-header">' +
+                            '<h4 class="modal-title">Delete Confirmation</h4>' +
+                                '</div>' + '<div class="modal-body">Are you sure you want to delete?</div>'+('@ViewBag.DisableEditFlage' == 'True'?'<div class="text-warning">NOTE! your old changes do not approved yet, and your new changes will be auto submitted.</div>':'')+'<div class="modal-footer"><button id="btnContinueDelete" type="button" class="btn btn-danger">Delete</button><button data-dismiss="modal" type="button" class="btn btn-primary" id="cancelDeleteID" >Cancel</button></div>' +
+                            '</div></div></div>' :'';
+                        }
+                    },
+                    //{
+                    //    "data": "id", "orderable": false, "render": function (data, type, row) {
+                    //        var statusName = row.statusName;
+                    //        return ((statusName == 'Draft') ? '<a href="#" title="Apply Request" data-placement="right" id="applyItem" class="applyItem customActionLink" data-target="#applyModal" data-toggle="modal" data-id="' + data + '">Apply</a>' +
+                    //            '<div class="modal fade" id="applyModal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">' +
+                    //            '<div class="modal-dialog">' + '<div class="modal-content">' + '<div class="modal-header">' +
+                    //            '<h4 class="modal-title">Apply Request Confirmation</h4>' +
+                    //            '</div>' + '<div class="modal-body">Are you sure you want to apply this edit request?</div><div class="modal-footer"><button id="btnContinueApplyRequest" type="button" class="btn btn-danger">Apply Request</button><button data-dismiss="modal" type="button" class="btn btn-primary">Cancel</button></div>' +
+                    //            '</div></div></div>' :
+                    //            '<a href="#" title="Apply Request" data-placement="right" class="applyItem customActionLink disabledAnchorActionLink" data-toggle="modal">Apply</a>');
+                    //    }
+                    //}
+                ]
+                ,"fnInitComplete": function (oSettings, json) {
+                    var table = $('#data_table').DataTable();
+                    if (table.data().count() <= 10) {
+                       document.getElementById("data_table_paginate").style.display = "none";
+                            document.getElementById("data_table_length").style.display = "none";
+                            document.getElementById("data_table_filter").style.display = "none";
+                    }
+                }
+            });
+        });
+
+        var item_to_delete;
+        var item_to_navItemId;
+        $('#data_table').on('click', '.deleteItem', function () {
+            item_to_delete = $(this).data('id');
+            var data = table.row($(this).parents('tr')).data();
+            console.log("hhhhhh "+data.navItemId)
+        item_to_navItemId = data.navItemId;
+        });
+
+        //var item_to_apply;
+        //$('#data_table').on('click', '.applyItem', function () {
+        //    item_to_apply = $(this).data('id');
+        //});
+
+        $('#data_table').on('click', '#btnContinueDelete', function () {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("Delete", "NavItem")',
+                data: { id: item_to_delete,navItemId:item_to_navItemId },
+                success: function () {
+                    //window.location.reload();
+                },
+                complete: function (data) {
+                    table.ajax.reload();
+                    $('#cancelDeleteID').click()
+                }
+            });
+        });
+
+        $('#data_table').on('click', '#btnContinueApplyRequest', function () {
+            var currentItem = $(this);
+            if (currentItem.prop("disabled")) {
+                e.preventDefault();
+                return;
+            }
+            currentItem.prop("disabled", true)
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("ApplyEditRequest", "NavItem")',
+                data: { id: item_to_apply },
+                success: function () {
+                    window.location.reload();
+                },
+                complete: function (data) {
+                    $('#applyModal').modal('hide');
+                }
+            });
+        });
+    </script>
+}

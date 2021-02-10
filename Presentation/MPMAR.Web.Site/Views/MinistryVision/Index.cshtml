@@ -1,0 +1,139 @@
+﻿@model MinistryVisionViewModel
+@{
+    string lang = Context.Request.Query["lang"];
+    ViewData["Title"] = ViewBag.Title;
+}
+@if (lang != "en")
+{
+    <style>
+        @@media (max-width: 767px) {
+            .media-filters label {
+                margin-bottom: 20px !important;
+                margin-right: 3px !important;
+            }
+
+            #content > section.section.full-width-bg.gray-bg > div > div.col-lg-9.col-md-9.col-sm-8 > div:nth-child(4) > form {
+                margin-bottom: 100px !important;
+            }
+        }
+    </style>
+}
+
+<style>
+    @@_::-webkit-full-page-media, _:future, :root .safari_only {
+        div [id='Ministry Mission'] {
+            margin-top: 0px !important
+        }
+    }
+
+    @@media screen and (min-color-index:0) and(-webkit-min-device-pixel-ratio:0) {
+        @@media {
+            div[id='Ministry Mission'] {
+                margin-top: 0px !important
+            }
+        }
+    }
+
+    @@media not all and (min-resolution:.001dpcm) {
+        @@media {
+            div[id='Ministry Mission'] {
+                margin-top: 0px !important
+            }
+        }
+    }
+</style>
+<div>
+
+    <section id="content">
+
+        <!-- Page Heading -->
+        <section class="section page-heading animate-onscroll">
+            <h1>@ViewBag.Title</h1>
+            <p class="breadcrumb"><a href="@Url.Content("~/")">@(lang == "en" ? "Home" : "الرئيسية") </a> / @ViewBag.Nav / @ViewBag.Title</p>
+
+
+        </section>
+        <!-- Page Heading -->
+        <!-- Section -->
+        <section class="section full-width-bg gray-bg @lang">
+            <div class="row">
+                <div class="col-lg-9 col-md-9 col-sm-8">
+                    @foreach (var ite in Model.PageRoute.Where(i => i.Id != 20))
+                    {
+
+                        <div id="@(ite.SectionName!=Model.PageRoute[0].SectionName?ite.SectionName:"idd")" style="@(ite.SectionName=="Ministry Vision"?"":"margin-top:-135px")">
+                            @if (ite.SectionName != "Ministry Vision")
+                            {
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 topgap">
+                                        <h1 style="background: #fff; padding: 40px 10px;">@(lang == "en" ? ite.EnName : ite.ArName)</h1>
+                                    </div>
+                                </div>
+                            }
+                            @foreach (var item in Model.PageMinistry.Where(i => i.PageRouteId == ite.Id && i.Id != 1017).OrderBy(i => i.Order))
+                            {
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 topgap" style="margin-top: 0px;">
+                                        @if (item.EnName != null && item.EnName != "")
+                                        {
+
+                                            <h3 class="animate-onscroll no-margin-top" style="color: #28A5A3;">@(lang == "en" ? item.EnName : item.ArName)</h3>
+
+                                        }
+                                        @if (item.IsDobulQuote == true)
+                                        {
+                                            <blockquote class="notfullmobile align-right animate-onscroll" style="width: 100%;text-align: center !important;font-size: 18px;">
+                                                @(lang == "en" ? Html.Raw(item.EnContent) : Html.Raw(item.ArContent))
+                                            </blockquote>
+                                        }
+                                        else if (item.EnContent != null && item.EnContent != "")
+                                        {
+                                            <p class="animate-onscroll" style="margin-top:-5px">
+                                                @(lang == "en" ? Html.Raw(item.EnContent) : Html.Raw(item.ArContent))
+                                            </p>
+                                        }
+                                        @if (lang == "en")
+                                        {
+                                            @if (item.EnImageUrl != null && item.EnImageUrl != "")
+                                            {
+                                                <img src="@item.EnImageUrl " alt="" style="opacity: 1;">
+                                            }
+                                        }
+                                        else
+                                        {
+                                            @if (item.ImageUrl != null && item.ImageUrl != "")
+                                            {
+                                                <img src="@item.ImageUrl " alt="" style="opacity: 1;">
+                                            }
+                                        }
+
+
+                                    </div>
+                                </div>
+                            }
+
+
+                        </div>
+                    }
+
+
+                </div>
+
+
+
+                <!-- Sidebar -->
+                @await Component.InvokeAsync("Sidebar")
+                <!-- /Sidebar -->
+
+
+
+
+            </div>
+
+        </section>
+        <!-- /Section -->
+
+    </section>
+    <!-- Back To Top -->
+    <a href="#" id="button-to-top"><i class="icons icon-up-dir"></i></a>
+</div>

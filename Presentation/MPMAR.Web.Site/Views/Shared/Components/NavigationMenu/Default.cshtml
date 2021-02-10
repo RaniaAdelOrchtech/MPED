@@ -1,0 +1,640 @@
+﻿@model List<MPMAR.Data.NavItem>
+
+@{
+    ViewData["Title"] = "NavigationMenu";
+}
+@{
+    string lang = Context.Request.Query["lang"];
+    string langVal = lang == "en" ? "en" : "ar";
+}
+
+<style>
+    /*@@media only screen and (-webkit-min-device-pixel-ratio: 1.5) and (max-height: 1366px) and (min-width: 1024px) {
+            .formnewssearch {
+                margin-right: 0px !important;
+            }
+        }*/
+
+
+    @@media (max-width: 767px) {
+
+
+        .search-headerfix {
+            margin-right: 0 !important;
+            width: 100% !important;
+        }
+    }
+</style>
+
+
+
+
+@*indexheaderfix*@
+@if (langVal == "en")
+{
+    <style>
+        /*.enLang {
+            float: right !important
+        }
+
+        .goleftalgin {
+            left: -6.5% !important
+        }
+
+        @@media (max-width: 767px) {
+            .enLang {
+                float: inherit !important
+            }
+        }*/
+        @@_::-webkit-full-page-media, _:future, :root .safari_only {
+            .desktop-order.row {
+                flex-flow: unset !important;
+            }
+        }
+
+        @@media screen and (min-color-index:0) and(-webkit-min-device-pixel-ratio:0) {
+            @@media {
+                .desktop-order.row {
+                    flex-flow: unset !important;
+                }
+            }
+        }
+
+        @@media not all and (min-resolution:.001dpcm) {
+            @@media {
+                .desktop-order.row {
+                    flex-flow: unset !important;
+                }
+            }
+        }
+
+
+
+        .en-social-icons {
+            direction: rtl !important
+        }
+
+        .langnewheader {
+            float: right !important;
+        }
+
+        .goleftalgin {
+            left: -6.5% !important
+        }
+
+        .newordertwo {
+            order: 2
+        }
+
+        .neworderone {
+            order: 1
+        }
+
+        .neworderthree {
+            order: 3
+        }
+
+        .desktop-order.row {
+            display: flex;
+            flex-flow: wrap;
+        }
+
+        .logosize {
+            float: right !important
+        }
+
+        @@media (max-width: 767px) {
+            .desktop-order.row {
+                display: block !important;
+            }
+
+            .langnewheader {
+                float: left !important;
+            }
+        }
+
+        @@media only screen and (max-width: 991px) {
+            .neworderthree {
+                order: 1
+            }
+        }
+
+        @@media(max-width:767px) {
+            .goleftalgin {
+                left: 1.5% !important;
+            }
+
+            .paddingleftfifteen {
+                padding-left: 10% !important;
+            }
+        }
+        /*@@media only screen (min-width: 992px) {
+            .newsletter-form .newsletter-email {
+                width: 90.5% !important;
+            }
+
+            .langnewheader {
+                float: inherit !important
+            }
+
+            .neworderthree {
+                order: 1;
+            }
+
+            .goleftalgin {
+                left: -0.5% !important;
+            }
+        }*/
+
+        @@media only screen and (min-width: 1024px) and (max-width: 1024px) and (-webkit-min-device-pixel-ratio: 1.5) {
+            .neworderthree {
+                order: 1
+            }
+
+            .goleftalgin {
+                margin-top: 2.5%;
+                left: -7.5%;
+            }
+
+            .socialheadernew {
+                float: right;
+            }
+
+
+
+            .langnewheader {
+                float: left !important;
+            }
+
+            .logosize {
+                width: 80% !important;
+                /* margin-bottom: 5%; */
+            }
+
+            .paddingleftten {
+                padding-left: 10%;
+            }
+        }
+
+        @@media only screen and (-webkit-min-device-pixel-ratio: 1.5) and (max-width: 1440px) and (min-width: 1440px) {
+            .logosize {
+                width: 65% !important;
+            }
+
+            .paddingleftten {
+                padding-left: 0% !important;
+            }
+
+            .langnewheader {
+                float: right !important;
+            }
+
+            .goleftalgin {
+                left: -5.5% !important;
+            }
+        }
+    </style>
+}
+else
+{
+    <style>
+        @@media (max-width: 767px) {
+            .goleftalgin {
+                left: -0% !important;
+            }
+        }
+
+        @@media only screen and (min-width: 1024px) and (max-height: 1366px) and (-webkit-min-device-pixel-ratio: 1.5) {
+            .neworderthree {
+                order: 1
+            }
+
+            .goleftalgin {
+                margin-top: 2.5%;
+                left: -7.5%;
+            }
+
+            .socialheadernew {
+                float: right;
+            }
+
+
+
+            .langnewheader {
+                float: left !important;
+            }
+
+            .logosize {
+                width: 80% !important;
+                /* margin-bottom: 5%; */
+            }
+
+            .paddingleftten {
+                padding-left: 10%;
+            }
+        }
+
+        @@media only screen and (-webkit-min-device-pixel-ratio: 1.5) and (max-width: 1440px) and (min-width: 1440px) {
+            .logosize {
+                width: 65% !important;
+            }
+
+            .langnewheader {
+                float: right !important;
+            }
+
+            .paddingleftten {
+                padding-left: 0% !important;
+            }
+
+            .goleftalgin {
+                left: -8.5% !important;
+            }
+        }
+    </style>
+}
+<style>
+    .newsletter-form {
+        display: BLOCK;
+    }
+
+        .newsletter-form .newsletter-email {
+            width: 88%;
+        }
+
+    .logosize {
+        width: 65%;
+    }
+
+    .goleftalgin {
+        margin-top: 3%;
+        left: -9.5%;
+    }
+
+    .socialheadernew {
+        list-style: none;
+        font-size: large;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding-top: 4%;
+        padding-right: 0;
+    }
+
+    .socialnewicons {
+        background-color: transparent;
+        border: none;
+        color: #fff
+    }
+
+    .langnewheader {
+        color: #fff;
+        float: inherit;
+        padding-top: 4%;
+        font-size: large;
+    }
+
+    .searchtealcolor {
+        background: #1b8a88 !important;
+    }
+
+    @@media only screen and (max-width: 991px) {
+        .socialheadernew {
+            float: right;
+        }
+
+        .newsletter-form.formnewssearch {
+            width: 50%;
+        }
+
+        .langnewheader {
+            float: left;
+        }
+
+        .logosize {
+            width: 100% !important;
+            margin-bottom: 5%;
+        }
+
+        .goleftalgin {
+            left: 1.5%;
+            margin-top: 1.5%;
+        }
+    }
+
+    @@media (max-width: 767px) {
+        .paddingleftfifteen {
+            padding-left: 15%;
+        }
+
+        .newsletter-form .newsletter-email {
+            width: 100%;
+        }
+
+        .langnewheader {
+            float: left;
+        }
+
+        .socialheadernew {
+            float: right;
+        }
+
+        .logosize {
+            width: 100% !important;
+            margin-bottom: 5%;
+        }
+
+        .goleftalgin {
+            left: -5%;
+        }
+    }
+
+
+
+    @@media only screen and (min-width: 1200px) and (max-width: 6000px) {
+        .neworderthree {
+            order: 3
+        }
+    }
+</style>
+@*indexheaderfix end*@
+
+<header id="header" class="animate-onscroll">
+
+    <!-- Main Header -->
+    <div id="main-header" style=@(langVal=="en"? "direction: ltr;":"direction: rtl;")>
+
+        <div class="container">
+
+
+
+
+
+            @*indexheaderfix*@
+
+
+            <div class="row desktop-order">
+
+                <!-- Logo -->
+                <div id="logo" class="col-lg-6 col-md-6 col-sm-7 newordertwo">
+
+                    <a href="/?lang=@langVal"><img src="@ViewBag.LogoUrl" alt="Logo" class="logosize"></a>
+
+                </div>
+                <!-- /Logo -->
+                <!-- Newsletter -->
+                <div class="col-lg-6 col-md-6 col-sm-5 goleftalgin paddingleftfifteen paddingleftten neworderone">
+                    <!-- <img src="img/side.png" alt="sidemenu"> -->
+                    <div class="row desktop-order">
+                        <div class="col-lg-5 col-md-12 col-sm-12 neworderthree">
+                            <form action="/home/GlobalSearch" method="get">
+                                <input name="lang" value="@langVal" hidden />
+                                <div class="newsletter-form search-headerfix">
+
+                                    @if (langVal == "en")
+                                    {
+
+                                        <div class="newsletter-submit">
+                                            <input type="submit" value="">
+                                            <i class="icons icon-search"></i>
+                                        </div>
+                                        <div class="newsletter-email">
+                                            <input class="searchtealcolor" id="globalSearchText" name="searchText" type="text" value="@ViewBag.SearchText">
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="newsletter-email">
+                                            <input class="searchtealcolor" id="globalSearchText" name="searchText" type="text" value="@ViewBag.SearchText">
+                                        </div>
+
+                                        <div class="newsletter-submit">
+                                            <input type="submit" value="">
+                                            <i class="icons icon-search"></i>
+                                        </div>
+                                    }
+
+
+
+                                </div>
+
+                            </form>
+
+                        </div>
+
+                        <div class="col-lg-3 col-md-6 col-sm-6 newordertwo en-social-icons">
+                            <ul class="socialheadernew">
+                                @await Component.InvokeAsync("HeaderSocialMedia")
+                            </ul>
+
+                        </div>
+                        <div class="col-lg-3 col-md-6 col-sm-6 neworderone">
+
+
+                            @if (langVal == "en")
+                            {
+                                <a class="langnewheader" id="langId" href="@(Context.Request.Path.Value+(Context.Request.QueryString.Value.Contains("?")==true? (Context.Request.QueryString.Value.Contains("lang=en")==true? Context.Request.QueryString.Value.ToString().Replace("lang=en","lang=ar"):Context.Request.QueryString.Value.ToString()+"&lang=ar"):"?lang=ar"))">عربي</a>
+                            }
+                            else
+                            {
+                                <a class="langnewheader" id="langId" href="@(Context.Request.Path.Value+(Context.Request.QueryString.Value.Contains("?")==true? (Context.Request.QueryString.Value.Contains("lang=ar")==true? Context.Request.QueryString.Value.ToString().Replace("lang=ar","lang=en"):Context.Request.QueryString.Value.ToString()+"&lang=en"):"?lang=en"))">English</a>
+                            }
+
+                        </div>
+
+                    </div>
+
+                </div>
+                <!-- /Newsletter -->
+
+            </div>
+
+            @*indexheaderfix end*@
+        </div>
+    </div>
+
+
+    <!-- /Main Header -->
+    <!-- Lower Header -->
+    <div id="lower-header">
+
+        <div class="container">
+
+            <div id="menu-button">
+                <div>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <span>@(lang == "en" ? "Menu" : "القائمة")</span>
+            </div>
+
+
+
+
+
+            <ul id="navigation" class="@lang">
+                <li class="home-button current-menu-item">
+                    <a href="/?lang=@langVal"><i class="icons icon-home"></i></a>
+                </li>
+                <li class="current-menu-item">
+                    @if (langVal == "en")
+                    {
+
+                        <a href="/?lang=@langVal" style="
+								text-align: left;
+							"><span>Home</span></a>
+                    }
+                    else
+                    {
+                        <a href="/?lang=@langVal" style="
+								text-align: right;
+							"><span>الرئيسية</span></a>
+                    }
+
+                </li>
+                @{
+                    int MenuCount = Model.Count();
+                    int Nu = 0;
+                }
+
+                @foreach (var Navitem in Model)
+                {
+                    // Navitem.NavItemVersion
+
+                    Nu = Nu + 1;
+                    if (Navitem.ParentNavItemId == null) //Level one items will have null parent id
+                    {
+
+
+                        if (!string.IsNullOrWhiteSpace(Navitem.ArName))
+                        {
+
+                            if (Navitem.PageRoutes != null)
+                            {
+                                var children = Navitem.PageRoutes;
+                                if (children != null && children.Count > 0 || Navitem.NavItemList != null)
+                                {
+                                    <li>
+                                        <span>
+                                            @if (lang == "en")
+                                            {
+                                                @Navitem.EnName
+                                            }
+                                            else
+                                            {
+                                                @Navitem.ArName
+                                            }
+                                        </span>
+                                        <ul>
+                                            @if (Navitem.NavItemList != null)
+                                            {
+                                                <li>
+                                                    <span>
+                                                        @if (lang == "en")
+                                                        {
+                                                            @Navitem.NavItemList.FirstOrDefault().EnName
+                                                        }
+                                                        else
+                                                        {
+                                                            @Navitem.NavItemList.FirstOrDefault().ArName
+                                                        }
+                                                    </span>
+                                                    <ul>
+                                                        @foreach (var itm in Navitem.NavItemList.FirstOrDefault().PageRoutes)
+                                                        {
+
+                                                            <li>
+                                                                <a class="dropdown-item" asp-area="" href="@(Context.Request.Path.Value.Contains(itm.ControllerName) && !@itm.ControllerName.Equals("DynamicPage") ? (itm.SectionName == null ? ((lang != null) ? "?lang=" + lang : "") : ((lang != null) ? "?lang=" + lang : "") + "#" + itm.SectionName) : (Url.Content("~/") + itm.ControllerName + "" + (itm.SectionName == null ? "?id=" + itm.Id + ((lang != null) ? "&lang=" + lang : "") : ((lang != null) ? "?lang=" + lang : "") + "#" + itm.SectionName)))" asp-controller="" asp-action="@(itm.SectionName == null ? "Index" : itm.SectionName )">
+                                                                    @if (lang == "en")
+                                                                    {
+                                                                        @itm.EnName
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        @itm.ArName
+                                                                    }
+                                                                </a>
+                                                            </li>
+                                                        }
+                                                    </ul>
+                                                </li>
+
+                                            }
+                                            @foreach (var itm in children)
+                                            {
+                                                <li>
+                                                    <a class="dropdown-item" asp-area="" href="@(Context.Request.Path.Value.Contains(itm.ControllerName) && !@itm.ControllerName.Equals("DynamicPage") ?  (itm.SectionName == null ?((lang!=null)?"?lang="+lang:""):((lang!=null)?"?lang="+lang:"")+"#"+itm.SectionName):(Url.Content("~/")+itm.ControllerName+""+(itm.SectionName == null ? "?id="+itm.Id+((lang!=null)?"&lang="+lang:"") : ((lang!=null)?"?lang="+lang:"")+"#"+itm.SectionName)))" asp-controller="" asp-action="@(itm.SectionName == null ? "Index" : itm.SectionName )">
+                                                        @if (lang == "en")
+                                                        {
+                                                            @itm.EnName
+                                                        }
+                                                        else
+                                                        {
+                                                            @itm.ArName
+                                                        }
+                                                    </a>
+                                                </li>
+                                            }
+                                        </ul>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li @(Nu == Model.Count() - 1 ? "class='home-button current-menu-item'" : "")>
+
+                                        <span>
+                                            @if (lang == "en")
+                                            {
+                                                @Navitem.EnName
+                                            }
+                                            else
+                                            {
+                                                @Navitem.ArName
+                                            }
+                                        </span>
+
+                                    </li>
+                                }
+                            }
+                            else
+                            {
+                                <li @(Nu == Model.Count() - 1 ? "class='home-button current-menu-item'" : "")>
+                                    <a>
+                                        <span>
+                                            @if (lang == "en")
+                                            {
+                                                @Navitem.EnName
+                                            }
+                                            else
+                                            {
+                                                @Navitem.ArName
+                                            }
+                                        </span>
+                                    </a>
+                                </li>
+                            }
+                        }
+                    }
+
+                }
+
+                <li class="donate-button">
+                    <a href="~/ContactUs?lang=@langVal" style="text-transform: none;">@(lang == "en" ? ViewBag.ContactUsEn : ViewBag.ContactUsAr)</a>
+                </li>
+            </ul>
+
+        </div>
+
+    </div>
+    <!-- /Lower Header -->
+
+
+
+</header>
+
+
+
+
+

@@ -1,0 +1,136 @@
+﻿@model MPMAR.Data.HomePageModels.ViewModels.HP_AffiliatesViewModel
+@using MPMAR.Common
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+
+        string approvalId = Context.Request.Query["approvalId"];
+    int approvalIdInt = 0;
+    int.TryParse(approvalId, out approvalIdInt);
+
+    var bEUsersPrivilegesViewModel = bEUsersPrivilegesService.ValidateIBEUsersPrivilegesViewService(PrivilegesPageType.HPAffiliates, this.User.FindFirstValue(ClaimTypes.NameIdentifier), this.User.IsInRole(UserRolesConst.SuperAdmin), approvalId: approvalIdInt);
+}
+
+@*<h4>Edit Photo</h4>*@
+<div>
+    <h4>Home Page > <a asp-controller="HP_Affiliates" asp-action="Index">Affiliates</a> > Edit</h4>
+</div>
+@if (ViewBag.DisableEditFlage == true && bEUsersPrivilegesViewModel.CanEdit && !bEUsersPrivilegesViewModel.IsFromApprovalPage)
+{
+<div class="alert alert-warning">
+    <strong>NOTE!</strong> Your old changes haven't been approved yet, and your new changes will be auto-submitted.
+</div>
+}
+<form enctype="multipart/form-data" asp-controller="HP_Affiliates" asp-action="Edit" method="post" class="mt-3">
+    <input asp-for="Id" type="hidden" />
+    <input asp-for="ImageUrl" type="hidden" />
+    <input asp-for="IsActive" type="hidden" />
+    <input asp-for="Type" type="hidden" />
+    <input asp-for="IsDeleted" type="hidden" />
+    <input asp-for="VersionStatusEnum" type="hidden" />
+    <input asp-for="HomePageAffiliatesId" type="hidden" />
+    <input asp-for="ChangeActionEnum" type="hidden" />
+    @if (Model.Type == MPMAR.Data.HomePageModels.AffiliatesType.Image)
+    {
+        <div class="form-group row">
+            <label asp-for="ImageFile" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <div class="custom-file">
+                    <input asp-for="ImageFile" class="form-control custom-file-input" />
+                    <label class="custom-file-label">Choose File...</label>
+                    <span asp-validation-for="ImageFile" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <img asp-for="ImageUrl" src="@Model.ImageUrl" style="height:200px;" />
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="ArDescription" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                @Html.TextAreaFor(model => model.ArDescription, new { @class = "form-control" })
+                <span asp-validation-for="ArDescription" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="EnDescription" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                @Html.TextAreaFor(model => model.EnDescription, new { @class = "form-control" })
+                <span asp-validation-for="EnDescription" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="Url" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="@Model.Url" class="form-control" />
+                <span asp-validation-for="Url" class="text-danger"></span>
+            </div>
+        </div>
+    }
+    else
+    {
+        <input asp-for="ImageFile" type="hidden" />
+        <input asp-for="Url" type="hidden" />
+        <div class="form-group row">
+            <label asp-for="ArDescription" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                @Html.TextAreaFor(model => model.ArDescription, new { @class = "form-control" })
+                <span asp-validation-for="ArDescription" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="EnDescription" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                @Html.TextAreaFor(model => model.EnDescription, new { @class = "form-control" })
+                <span asp-validation-for="EnDescription" class="text-danger"></span>
+            </div>
+        </div>
+
+    }
+    <div class="item form-group">
+        <div class="col-md-6 col-sm-6 offset-md-2">
+            <button type="submit" class="btn btn-success">Submit</button>
+            <a asp-controller="HP_Affiliates" asp-action="Index" type="button" class="btn btn-primary">Cancel</a>
+        </div>
+    </div>
+
+</form>
+
+@section Scripts{
+    <script>
+        /* Enable html editor */
+        $(document).ready(function () {
+            $('.summernote').summernote({
+                height: 200,
+                toolbar: [['style', ['style']], ['font', ['bold', 'underline', 'clear']], ['fontname', ['fontname']], ['color', ['color']], ['para', ['ul', 'ol', 'paragraph']], ['table', ['table']], ['insert', ['link']], ['view', ['fullscreen', 'codeview', 'help']]]
+            });
+        });
+
+        $(document).ready(function () {
+            $('.custom-file-input').on('change', function () {
+                var fileName = $(this).val().split('\\').pop();
+                $(this).next('.custom-file-label').html(fileName);
+            });
+
+            $('#PhotoArchiveType').on('change', function () {
+                if ($(this).val() == "Other") {
+                    $('#EnPhotoArchiveType,#ArPhotoArchiveType').attr("readonly", false);
+                    $('#EnPhotoArchiveType').text("");
+                    $('#AnPhotoArchiveType').text("");
+                }
+                else {
+                    $('#EnPhotoArchiveType').val($(this).val().split('$')[0]);
+                    $('#ArPhotoArchiveType').val($(this).val().split('$')[1]);
+                    $('#EnPhotoArchiveType').attr("readonly", "readonly");
+                    $('#ArPhotoArchiveType').attr("readonly", "readonly");
+                }
+            });
+        });
+
+    </script>
+}

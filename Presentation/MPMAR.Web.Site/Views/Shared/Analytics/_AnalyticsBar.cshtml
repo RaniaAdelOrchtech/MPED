@@ -1,0 +1,40 @@
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    var lang = "" + Context.Request.Query["lang"];
+    string langVal = lang == "en" ? "en" : "ar";
+}
+
+@if (ViewBag.IsBlank == "")
+{
+    <section id="content" class="@lang">
+        <!-- Page Heading -->
+        <section class="section page-heading animate-onscroll">
+            @if (lang == null || lang == "" || lang == "ar")
+            {
+                <h1>@ViewBag.Title  </h1>
+                <p class="breadcrumb">
+                    <a href="index.html">الرئيسية</a> / @ViewBag.Nav / @ViewBag.Title
+                    الكلية
+                </p>
+            }
+            else
+            { <h1>@ViewBag.Title</h1>
+            <p class="breadcrumb">
+                <a href="index.html">Home</a> / @ViewBag.Nav / @ViewBag.Title
+            </p>
+
+        }
+
+
+        </section>
+    </section>
+    <!-- Page Heading -->
+
+}
+
+
+
+@await Component.InvokeAsync("EconomicIndicators")
+
+
+
